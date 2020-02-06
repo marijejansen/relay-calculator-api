@@ -34,7 +34,7 @@ namespace RelayCalculator.Api.Controllers
             // TODO: dependency injection
             var mapper = new SwimmerMapper();
             var swimmers = request.Swimmers.Select(s => mapper.Map(s)).ToList();
-            return _calculationService.BestRelayTeams(swimmers, request.RelayType);
+            return _calculationService.BestRelayTeams(swimmers, request.RelayType, request.Course);
         }
 
         [HttpGet]
@@ -59,8 +59,8 @@ namespace RelayCalculator.Api.Controllers
                         Gender = Gender.Female,
                         ShortCourseTimes = new CourseTimes()
                         {
-                            Freestyle50M = TimeSpan.FromSeconds(28.61),
-                            Freestyle100M = TimeSpan.FromMinutes(1) + TimeSpan.FromSeconds(2.88)
+                            Freestyle50M = 28.61,
+                            Freestyle100M = 62.88
                         }
                     },
                     new SwimmerModel()
@@ -71,8 +71,8 @@ namespace RelayCalculator.Api.Controllers
                         Gender = Gender.Male,
                         ShortCourseTimes = new CourseTimes()
                         {
-                            Freestyle50M = TimeSpan.FromSeconds(26.61),
-                            Freestyle100M = TimeSpan.FromMinutes(1) + TimeSpan.FromSeconds(0.21)
+                            Freestyle50M = 26.61,
+                            Freestyle100M = 60.21
                         }
                     },
                     new SwimmerModel()
@@ -83,8 +83,8 @@ namespace RelayCalculator.Api.Controllers
                         Gender = Gender.Female,
                         ShortCourseTimes = new CourseTimes()
                         {
-                            Freestyle50M = TimeSpan.FromSeconds(36.61),
-                            Freestyle100M = TimeSpan.FromMinutes(1) + TimeSpan.FromSeconds(32.21)
+                            Freestyle50M = 36.61,
+                            Freestyle100M = 92.21
                         }
                     },
                     new SwimmerModel()
@@ -95,8 +95,8 @@ namespace RelayCalculator.Api.Controllers
                         Gender = Gender.Male,
                         ShortCourseTimes = new CourseTimes()
                         {
-                            Freestyle50M = TimeSpan.FromSeconds(32.23),
-                            Freestyle100M = TimeSpan.FromMinutes(1) + TimeSpan.FromSeconds(11.91)
+                            Freestyle50M = 32.23,
+                            Freestyle100M = 71.91
                         }
                     },
                     new SwimmerModel()
@@ -107,8 +107,44 @@ namespace RelayCalculator.Api.Controllers
                         Gender = Gender.Male,
                         ShortCourseTimes = new CourseTimes()
                         {
-                            Freestyle50M = TimeSpan.FromSeconds(27.23),
-                            Freestyle100M = TimeSpan.FromMinutes(1) + TimeSpan.FromSeconds(1.91)
+                            Freestyle50M = 27.23,
+                            Freestyle100M = 61.91
+                        }
+                    },
+                    new SwimmerModel()
+                    {
+                        FirstName = "Iemand",
+                        LastName = "Anders",
+                        BirthYear = 1982,
+                        Gender = Gender.Male,
+                        ShortCourseTimes = new CourseTimes()
+                        {
+                            Freestyle50M = 29.46,
+                            Freestyle100M = 64.45
+                        }
+                    },
+                    new SwimmerModel()
+                    {
+                        FirstName = "Geen",
+                        LastName = "Idee",
+                        BirthYear = 1952,
+                        Gender = Gender.Female,
+                        ShortCourseTimes = new CourseTimes()
+                        {
+                            Freestyle50M = 34.91,
+                            Freestyle100M = 81.45
+                        }
+                    },
+                    new SwimmerModel()
+                    {
+                        FirstName = "ABC",
+                        LastName = "DEF",
+                        BirthYear = 1964,
+                        Gender = Gender.Female,
+                        ShortCourseTimes = new CourseTimes()
+                        {
+                            Freestyle50M = 32.01,
+                            Freestyle100M = 73.81
                         }
                     },
                 }

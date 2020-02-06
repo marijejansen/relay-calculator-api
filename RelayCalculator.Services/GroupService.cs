@@ -15,12 +15,7 @@ namespace RelayCalculator.Services
         {
             var totalYears = 0;
 
-            swimmers.ForEach(s => totalYears += DateTime.Now.Year - s.BirthYear);
-
-            //foreach (var index in order)
-            //{
-            //    totalYears += (DateTime.Now.Year - swimmers[index].BirthYear);
-            //}
+            totalYears += order.Sum(num => DateTime.Now.Year - swimmers[num].BirthYear);
 
             if (totalYears < 80)
             {
@@ -117,7 +112,9 @@ namespace RelayCalculator.Services
             return permutation.Select(n => swimmers[n]).Select(s => new RelaySwimmer
             {
                 FirstName = s.FirstName,
+                LastName = s.LastName,
                 Age = DateTime.Today.Year - s.BirthYear
+
             }).ToList();
         }
 
