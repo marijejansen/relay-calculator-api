@@ -12,7 +12,13 @@ namespace RelayCalculator.Services
     {
         public double GetBestTime(int[] permutation, List<Swimmer> swimmers)
         {
-            throw new NotImplementedException();
+            var time = 0.0;
+            foreach (var position in permutation)
+            {
+                time += swimmers[position].ShortCourseTimes.Freestyle200M;
+            }
+
+            return time;
         }
     }
 }

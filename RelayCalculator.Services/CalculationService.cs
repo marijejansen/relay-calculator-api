@@ -58,16 +58,12 @@ namespace RelayCalculator.Services
 
         public RelayTeam GetBestTeam(List<Swimmer> swimmers, List<int[]> possibleTeams, RelayType relayType)
         {
-            var relayCalc = relayType.RelayCalculation;
-
-            // if relayCAlc == null
-
             var bestTime = 0.0;
             var bestTeam = new int[4];
 
             foreach (var team in possibleTeams)
             {
-                var time = relayCalc?.GetBestTime(team, swimmers);
+                var time = relayType.RelayCalculation?.GetBestTime(team, swimmers);
 
                 if (time == null || (!(time < bestTime) && bestTime > 0)) continue;
 
