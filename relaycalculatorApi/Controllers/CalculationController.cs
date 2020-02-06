@@ -111,6 +111,42 @@ namespace RelayCalculator.Api.Controllers
                             Freestyle100M = 61.91
                         }
                     },
+                    new SwimmerModel()
+                    {
+                        FirstName = "Iemand",
+                        LastName = "Anders",
+                        BirthYear = 1982,
+                        Gender = Gender.Male,
+                        ShortCourseTimes = new CourseTimes()
+                        {
+                            Freestyle50M = 29.46,
+                            Freestyle100M = 64.45
+                        }
+                    },
+                    new SwimmerModel()
+                    {
+                        FirstName = "Geen",
+                        LastName = "Idee",
+                        BirthYear = 1952,
+                        Gender = Gender.Female,
+                        ShortCourseTimes = new CourseTimes()
+                        {
+                            Freestyle50M = 34.91,
+                            Freestyle100M = 81.45
+                        }
+                    },
+                    new SwimmerModel()
+                    {
+                        FirstName = "ABC",
+                        LastName = "DEF",
+                        BirthYear = 1964,
+                        Gender = Gender.Female,
+                        ShortCourseTimes = new CourseTimes()
+                        {
+                            Freestyle50M = 32.01,
+                            Freestyle100M = 73.81
+                        }
+                    },
                 }
             };
         }

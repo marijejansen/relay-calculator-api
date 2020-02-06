@@ -40,10 +40,8 @@ namespace RelayCalculator.Services
                 foreach (var age in Constants.AgeGroups)
                 {
                     var teamsAge = teamsGender.Where(p => _groupService.GetAgeGroup(p, swimmers) == age).ToList();
-                    if (!(teamsAge.Count > 0))
-                    {
-                        continue;
-                    }
+                    if (!(teamsAge.Count > 0)) continue;
+                    
                     var bestTeam = GetBestTeam(swimmers, teamsAge, relayType);
 
                     bestTeam.Gender = gender;
