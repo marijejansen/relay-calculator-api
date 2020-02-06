@@ -7,7 +7,7 @@ using RelayCalculator.Services.Models;
 
 namespace RelayCalculator.Api.Models
 {
-    public class Swimmer
+    public class SwimmerModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
