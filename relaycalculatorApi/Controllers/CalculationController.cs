@@ -11,7 +11,7 @@ using RelayCalculator.Services.Models;
 using RelayCalculator.Services.Enums;
 using Distance = RelayCalculator.Services.Enums.Distance;
 using Stroke = RelayCalculator.Services.Enums.Stroke;
-using Swimmer = RelayCalculator.Api.Models.Swimmer;
+using SwimmerModel = RelayCalculator.Api.Models.SwimmerModel;
 
 
 namespace RelayCalculator.Api.Controllers
@@ -49,9 +49,9 @@ namespace RelayCalculator.Api.Controllers
                     Stroke = Stroke.Freestyle,
                     NumberOfSwimmers = 4
                 },
-                Swimmers = new List<Swimmer>()
+                Swimmers = new List<SwimmerModel>()
                 {
-                    new Swimmer()
+                    new SwimmerModel()
                     {
                         FirstName = "Marije",
                         LastName = "Jansen",
@@ -63,7 +63,7 @@ namespace RelayCalculator.Api.Controllers
                             Freestyle100M = TimeSpan.FromMinutes(1) + TimeSpan.FromSeconds(2.88)
                         }
                     },
-                    new Swimmer()
+                    new SwimmerModel()
                     {
                         FirstName = "Martijn",
                         LastName = "Giezen",
@@ -75,7 +75,7 @@ namespace RelayCalculator.Api.Controllers
                             Freestyle100M = TimeSpan.FromMinutes(1) + TimeSpan.FromSeconds(0.21)
                         }
                     },
-                    new Swimmer()
+                    new SwimmerModel()
                     {
                         FirstName = "Elin",
                         LastName = "Giezen",
@@ -87,7 +87,7 @@ namespace RelayCalculator.Api.Controllers
                             Freestyle100M = TimeSpan.FromMinutes(1) + TimeSpan.FromSeconds(32.21)
                         }
                     },
-                    new Swimmer()
+                    new SwimmerModel()
                     {
                         FirstName = "Moskou",
                         LastName = "Jansen",
@@ -99,7 +99,7 @@ namespace RelayCalculator.Api.Controllers
                             Freestyle100M = TimeSpan.FromMinutes(1) + TimeSpan.FromSeconds(11.91)
                         }
                     },
-                    new Swimmer()
+                    new SwimmerModel()
                     {
                         FirstName = "Brussel",
                         LastName = "Jansen",

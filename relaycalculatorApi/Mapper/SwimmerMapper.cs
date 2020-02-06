@@ -10,7 +10,7 @@ namespace RelayCalculator.Api.Mapper
 {
     public class SwimmerMapper
     {
-        public Swimmer Map(Models.Swimmer swimmer)
+        public Swimmer Map(SwimmerModel swimmer)
         {
             return new Swimmer
             {
@@ -45,9 +45,9 @@ namespace RelayCalculator.Api.Mapper
             };
         }
 
-        public Models.Swimmer ReverseMap(Swimmer swimmer)
+        public SwimmerModel ReverseMap(Swimmer swimmer)
         {
-            return new Models.Swimmer
+            return new Models.SwimmerModel
             {
                 BirthYear = swimmer.BirthYear,
                 FirstName = swimmer.FirstName,

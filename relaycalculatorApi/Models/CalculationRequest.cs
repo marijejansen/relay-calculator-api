@@ -9,7 +9,7 @@ namespace RelayCalculator.Api.Models
 {
     public class CalculationRequest
     {
-        public IEnumerable<Swimmer> Swimmers { get; set; }
+        public IEnumerable<SwimmerModel> Swimmers { get; set; }
         public RelayType RelayType { get; set; }
         public Course Course { get; set; }
     }
