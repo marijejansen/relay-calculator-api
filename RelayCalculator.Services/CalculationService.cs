@@ -69,7 +69,8 @@ namespace RelayCalculator.Services
             {
                 var time = relayCalc?.GetBestTime(team, swimmers);
 
-                if (time == null || !(time < bestTime)) continue;
+                if (time == null || (!(time < bestTime) && bestTime > 0)) continue;
+
                 bestTime = time.GetValueOrDefault();
                 bestTeam = team;
             }

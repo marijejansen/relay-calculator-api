@@ -59,8 +59,8 @@ namespace RelayCalculator.Api.Controllers
                         Gender = Gender.Female,
                         ShortCourseTimes = new CourseTimes()
                         {
-                            Freestyle50M = TimeSpan.FromSeconds(28.61),
-                            Freestyle100M = TimeSpan.FromMinutes(1) + TimeSpan.FromSeconds(2.88)
+                            Freestyle50M = 28.61,
+                            Freestyle100M = 62.88
                         }
                     },
                     new SwimmerModel()
@@ -71,8 +71,8 @@ namespace RelayCalculator.Api.Controllers
                         Gender = Gender.Male,
                         ShortCourseTimes = new CourseTimes()
                         {
-                            Freestyle50M = TimeSpan.FromSeconds(26.61),
-                            Freestyle100M = TimeSpan.FromMinutes(1) + TimeSpan.FromSeconds(0.21)
+                            Freestyle50M = 26.61,
+                            Freestyle100M = 60.21
                         }
                     },
                     new SwimmerModel()
@@ -83,8 +83,8 @@ namespace RelayCalculator.Api.Controllers
                         Gender = Gender.Female,
                         ShortCourseTimes = new CourseTimes()
                         {
-                            Freestyle50M = TimeSpan.FromSeconds(36.61),
-                            Freestyle100M = TimeSpan.FromMinutes(1) + TimeSpan.FromSeconds(32.21)
+                            Freestyle50M = 36.61,
+                            Freestyle100M = 92.21
                         }
                     },
                     new SwimmerModel()
@@ -95,8 +95,8 @@ namespace RelayCalculator.Api.Controllers
                         Gender = Gender.Male,
                         ShortCourseTimes = new CourseTimes()
                         {
-                            Freestyle50M = TimeSpan.FromSeconds(32.23),
-                            Freestyle100M = TimeSpan.FromMinutes(1) + TimeSpan.FromSeconds(11.91)
+                            Freestyle50M = 32.23,
+                            Freestyle100M = 71.91
                         }
                     },
                     new SwimmerModel()
@@ -107,8 +107,8 @@ namespace RelayCalculator.Api.Controllers
                         Gender = Gender.Male,
                         ShortCourseTimes = new CourseTimes()
                         {
-                            Freestyle50M = TimeSpan.FromSeconds(27.23),
-                            Freestyle100M = TimeSpan.FromMinutes(1) + TimeSpan.FromSeconds(1.91)
+                            Freestyle50M = 27.23,
+                            Freestyle100M = 61.91
                         }
                     },
                 }

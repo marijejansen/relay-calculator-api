@@ -15,7 +15,7 @@ namespace RelayCalculator.Services
             var time = 0.0;
             foreach (var position in permutation)
             {
-                time += swimmers[position].ShortCourseTimes.Freestyle50M.TotalSeconds;
+                time += swimmers[position].ShortCourseTimes.Freestyle50M;
             }
 
             return time;
