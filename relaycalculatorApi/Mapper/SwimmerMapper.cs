@@ -1,0 +1,61 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using RelayCalculator.Api.Models;
+using RelayCalculator.Services.Models;
+using Swimmer = RelayCalculator.Services.Models.Swimmer;
+
+namespace RelayCalculator.Api.Mapper
+{
+    public class SwimmerMapper
+    {
+        public Swimmer Map(Models.Swimmer swimmer)
+        {
+            return new Swimmer
+            {
+                BirthYear = swimmer.BirthYear,
+                FirstName = swimmer.FirstName,
+                LastName = swimmer.LastName,
+                Gender = swimmer.Gender,
+                ShortCourseTimes = new CourseTimes()
+                {
+                    Freestyle50M = swimmer.ShortCourseTimes.Freestyle50M,
+                    Freestyle100M = swimmer.ShortCourseTimes.Freestyle100M,
+                    Freestyle200M = swimmer.ShortCourseTimes.Freestyle200M,
+                    Backstroke50M = swimmer.ShortCourseTimes.Backstroke50M,
+                    Backstroke100M = swimmer.ShortCourseTimes.Backstroke100M,
+                    Breaststroke50M = swimmer.ShortCourseTimes.Breaststroke50M,
+                    Breaststroke100M = swimmer.ShortCourseTimes.Breaststroke100M,
+                    Butterfly50M = swimmer.ShortCourseTimes.Butterfly50M,
+                    Butterfly100M = swimmer.ShortCourseTimes.Butterfly100M
+                },
+                LongCourseTimes = swimmer.LongCourseTimes != null ? new CourseTimes()
+                {
+                    Freestyle50M = swimmer.LongCourseTimes.Freestyle50M,
+                    Freestyle100M = swimmer.LongCourseTimes.Freestyle100M,
+                    Freestyle200M = swimmer.LongCourseTimes.Freestyle200M,
+                    Backstroke50M = swimmer.LongCourseTimes.Backstroke50M,
+                    Backstroke100M = swimmer.LongCourseTimes.Backstroke100M,
+                    Breaststroke50M = swimmer.LongCourseTimes.Breaststroke50M,
+                    Breaststroke100M = swimmer.LongCourseTimes.Breaststroke100M,
+                    Butterfly50M = swimmer.LongCourseTimes.Butterfly50M,
+                    Butterfly100M = swimmer.LongCourseTimes.Butterfly100M
+                } : new CourseTimes()
+            };
+        }
+
+        public Models.Swimmer ReverseMap(Swimmer swimmer)
+        {
+            return new Models.Swimmer
+            {
+                BirthYear = swimmer.BirthYear,
+                FirstName = swimmer.FirstName,
+                LastName = swimmer.LastName,
+                Gender = swimmer.Gender,
+                ShortCourseTimes = swimmer.ShortCourseTimes,
+                LongCourseTimes = swimmer.LongCourseTimes
+            };
+        }
+    }
+}
