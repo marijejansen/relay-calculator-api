@@ -27,7 +27,7 @@ namespace RelayCalculator.Services
             return "abc";
         }
 
-        public List<RelayTeam> BestRelayTeams(List<Swimmer> swimmers, RelayType relayType)
+        public List<RelayTeam> BestRelayTeams(List<Swimmer> swimmers, RelayType relayType, Course courseType)
         {
             var permutations = _permutationService.GetPermutations(swimmers.Count());
 
@@ -42,7 +42,8 @@ namespace RelayCalculator.Services
                     var teamsAge = teamsGender.Where(p => _groupService.GetAgeGroup(p, swimmers) == age).ToList();
                     if (!(teamsAge.Count > 0)) continue;
                     
-                    var bestTeam = GetBestTeam(swimmers, teamsAge, relayType);
+                    //TODO: get these into a model?
+                    var bestTeam = GetBestTeam(swimmers, teamsAge, relayType, courseType);
 
                     bestTeam.Gender = gender;
                     bestTeam.Age = age;
@@ -54,14 +55,14 @@ namespace RelayCalculator.Services
             return bestTeams;
         }
 
-        public RelayTeam GetBestTeam(List<Swimmer> swimmers, List<int[]> possibleTeams, RelayType relayType)
+        public RelayTeam GetBestTeam(List<Swimmer> swimmers, List<int[]> possibleTeams, RelayType relayType, Course course)
         {
             var bestTime = 0.0;
             var bestTeam = new int[4];
 
             foreach (var team in possibleTeams)
             {
-                var time = relayType.RelayCalculation?.GetBestTime(team, swimmers);
+                var time = relayType.RelayCalculation?.GetBestTime(team, swimmers, course);
 
                 if (time == null || (!(time < bestTime) && bestTime > 0)) continue;
 

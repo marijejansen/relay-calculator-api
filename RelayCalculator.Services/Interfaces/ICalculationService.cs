@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RelayCalculator.Services.Enums;
 using RelayCalculator.Services.Models;
 
 namespace RelayCalculator.Services.Interfaces
@@ -11,8 +12,8 @@ namespace RelayCalculator.Services.Interfaces
     {
         string GetString();
 
-        List<RelayTeam> BestRelayTeams(List<Swimmer> swimmers, RelayType relayType);
+        List<RelayTeam> BestRelayTeams(List<Swimmer> swimmers, RelayType relayType, Course courseType);
 
-        RelayTeam GetBestTeam(List<Swimmer> swimmers, List<int[]> possibleTeams, RelayType relayType);
+        RelayTeam GetBestTeam(List<Swimmer> swimmers, List<int[]> possibleTeams, RelayType relayType, Course course);
     }
 }
