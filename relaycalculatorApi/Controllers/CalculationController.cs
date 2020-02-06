@@ -34,7 +34,7 @@ namespace RelayCalculator.Api.Controllers
             // TODO: dependency injection
             var mapper = new SwimmerMapper();
             var swimmers = request.Swimmers.Select(s => mapper.Map(s)).ToList();
-            return _calculationService.BestRelayTeams(swimmers, request.RelayType);
+            return _calculationService.BestRelayTeams(swimmers, request.RelayType, request.Course);
         }
 
         [HttpGet]
