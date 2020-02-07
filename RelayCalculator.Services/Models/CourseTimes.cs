@@ -16,8 +16,5 @@ namespace RelayCalculator.Services.Models
         public double Breaststroke100M { get; set; }
         public double Butterfly50M { get; set; }
         public double Butterfly100M { get; set; }
-
-
-
     }
 }

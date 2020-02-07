@@ -32,7 +32,9 @@ namespace RelayCalculator.Api
             services.AddSingleton<IPermutationService, PermutationService>();
             services.AddSingleton<IGroupService, GroupService>();
             services.AddSingleton<IBestTeamCalculationService, Freestyle200Relay>();
-            services.AddSingleton<ICrawlSwimTimeService, CrawlSwimTimeService>();
+            services.AddSingleton<ISwimTimeService, SwimTimeService>();
+            services.AddSingleton<IHtmlDocumentService, HtmlDocumentService>();
+            services.AddSingleton<ISearchSwimmerService, SearchSwimmersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

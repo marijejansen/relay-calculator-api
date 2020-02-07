@@ -75,7 +75,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CrawlSwimTimeService.cs" />
+    <Compile Include="Interfaces\IHtmlDocumentService.cs" />
+    <Compile Include="Interfaces\ISearchSwimmerService.cs" />
+    <Compile Include="SwimTimeService.cs" />
     <Compile Include="Freestyle400Relay.cs" />
     <Compile Include="Freestyle200Relay.cs" />
     <Compile Include="CalculationService.cs" />
@@ -86,9 +88,10 @@
     <Compile Include="Enums\Stroke.cs" />
     <Compile Include="Freestyle800Relay.cs" />
     <Compile Include="GroupService.cs" />
+    <Compile Include="HtmlDocumentService.cs" />
     <Compile Include="Interfaces\IBestTeamCalculationService.cs" />
     <Compile Include="Interfaces\ICalculationService.cs" />
-    <Compile Include="Interfaces\ICrawlSwimTimeService.cs" />
+    <Compile Include="Interfaces\ISwimTimeService.cs" />
     <Compile Include="Interfaces\IGroupService.cs" />
     <Compile Include="Interfaces\IPermutationService.cs" />
     <Compile Include="Medley200Relay.cs" />
@@ -101,6 +104,7 @@
     <Compile Include="PermutationService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchSwimmersService.cs" />
     <Compile Include="Service1.cs">
       <SubType>Component</SubType>
     </Compile>

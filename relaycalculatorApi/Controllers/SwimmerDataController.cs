@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RelayCalculator.Services.Enums;
 using RelayCalculator.Services.Interfaces;
@@ -10,25 +11,34 @@ namespace RelayCalculator.Api.Controllers
     [ApiController]
     public class SwimmerDataController : ControllerBase
     {
-        private readonly ICrawlSwimTimeService _crawlSwimTimeService;
+        private readonly ISwimTimeService _swimTimeService;
+        private readonly ISearchSwimmerService _searchSwimmerService;
 
-        public SwimmerDataController(ICrawlSwimTimeService crawlSwimTimeService)
+        public SwimmerDataController(ISwimTimeService crawlSwimTimeService, ISearchSwimmerService searchSwimmerService)
         {
-            _crawlSwimTimeService = crawlSwimTimeService;
+            _swimTimeService = crawlSwimTimeService;
+            _searchSwimmerService = searchSwimmerService;
+        }
+
+        [HttpGet]
+        [Route("searchSwimmers")]
+        public async Task<List<Swimmer>> GetSwimmersByNames(string firstName, string lastName)
+        {
+            return await _searchSwimmerService.FindSwimmersByName(firstName, lastName);
         }
 
         [HttpGet]
         [Route("getTimesShortCourse")]
         public async Task<CourseTimes> GetTimesBySwimmerIdShortCourse(int id, int fromYear)
         {
-            return await _crawlSwimTimeService.SelectTimesByCourse(id, fromYear, Course.Short);
+            return await _swimTimeService.SelectTimesByCourse(id, fromYear, Course.Short);
         }
 
         [HttpGet]
         [Route("getTimesLongCourse")]
         public async Task<CourseTimes> GetTimesBySwimmerIdLongCourse(int id, int fromYear)
         {
-            return await _crawlSwimTimeService.SelectTimesByCourse(id, fromYear, Course.Long);
+            return await _swimTimeService.SelectTimesByCourse(id, fromYear, Course.Long);
         }
     }
 }

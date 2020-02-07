@@ -11,15 +11,20 @@ using System.Diagnostics;
 
 namespace RelayCalculator.Services
 {
-    public class CrawlSwimTimeService : ICrawlSwimTimeService
+    public class SwimTimeService : ISwimTimeService
     {
+        private readonly IHtmlDocumentService _htmlDocumentService;
+
+        public SwimTimeService(IHtmlDocumentService htmlDocumentService)
+        {
+            _htmlDocumentService = htmlDocumentService;
+        }
         public async Task<HtmlDocument> GetSwimmerPageById(int swimmerId)
         {
             var swimmerPage = $"https://www.swimrankings.net/index.php?page=athleteDetail&athleteId={swimmerId}";
-            HtmlDocument htmlDoc = await GetHtmlDocumentByUrl(swimmerPage);
+            HtmlDocument htmlDoc = await _htmlDocumentService.GetHtmlDocumentByUrl(swimmerPage);
             return htmlDoc;
         }
-
 
         public async Task<CourseTimes> SelectTimesByCourse(int swimmerId, int year, Course course)
         {
@@ -27,7 +32,7 @@ namespace RelayCalculator.Services
 
             foreach (var stroke in Constants.SwimRankingsPage.Strokes)
             {
-                HtmlDocument doc = await GetHtmlPerStroke(swimmerId, stroke.Value);
+                HtmlDocument doc = await _htmlDocumentService.GetHtmlPerStroke(swimmerId, stroke.Value);
                 HtmlNodeCollection table = GetTimeNodes(doc, course);
 
                 var bestTime = GetBestTime(table, year);
@@ -79,8 +84,6 @@ namespace RelayCalculator.Services
                         double time = ConvertTimeStringToDouble(stringTime);
 
                         //check for the fastest time
-
-                        //TODO: hoeft niet
                         if (time < bestTime || bestTime <= 0)
                         {
                             bestTime = time;
@@ -96,25 +99,7 @@ namespace RelayCalculator.Services
             }
         }
 
-        //returns the html for the specified id and style
-        public async Task<HtmlDocument> GetHtmlPerStroke(int id, int style)
-        {
-            var url = $"https://www.swimrankings.net/index.php?page=athleteDetail&athleteId={id}&styleId={style}";
-            var htmlDocument = await GetHtmlDocumentByUrl(url);
-            return htmlDocument;
-        }
-
-        // returns a htmldocument by url
-        public async Task<HtmlDocument> GetHtmlDocumentByUrl(string url)
-        {
-            var client = new HttpClient();
-            var response = await client.GetStringAsync(url);
-            var htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(response);
-            return htmlDocument;
-        }
-
-        //takes in a string and returns the time in seconds as a decimal
+        //TODO: ergens anders neerzetten
         public double ConvertTimeStringToDouble(string time)
         {
             double timeInSeconds;
