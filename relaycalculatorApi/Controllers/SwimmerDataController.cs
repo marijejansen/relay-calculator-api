@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using RelayCalculator.Services.Enums;
 using RelayCalculator.Services.Interfaces;
@@ -23,6 +24,7 @@ namespace RelayCalculator.Api.Controllers
         [HttpGet]
         [Route("searchSwimmers")]
         public async Task<List<Swimmer>> GetSwimmersByNames(string firstName, string lastName)
+
         {
             return await _searchSwimmerService.FindSwimmersByName(firstName, lastName);
         }

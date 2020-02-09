@@ -35,6 +35,17 @@ namespace RelayCalculator.Api
             services.AddSingleton<ISwimTimeService, SwimTimeService>();
             services.AddSingleton<IHtmlDocumentService, HtmlDocumentService>();
             services.AddSingleton<ISearchSwimmerService, SearchSwimmersService>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +55,8 @@ namespace RelayCalculator.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("CorsPolicy");
 
             //app.UseHttpsRedirection();
 
@@ -55,6 +68,11 @@ namespace RelayCalculator.Api
             {
                 endpoints.MapControllers();
             });
+
+            app.UseHttpsRedirection();
+
+
+            //app.UseMvc();
         }
     }
 }
