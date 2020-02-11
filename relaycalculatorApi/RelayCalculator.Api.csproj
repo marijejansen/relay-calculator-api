@@ -21,5 +21,11 @@
     <ProjectReference Include="..\RelayCalculator.Services\RelayCalculator.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="RelayCalculator.Api.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
 </Project>
