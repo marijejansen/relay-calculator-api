@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RelayCalculator.Api</name>
+    </assembly>
+    <members>
+        <member name="M:RelayCalculator.Api.Controllers.CalculationController.GetBestRelayTeams(RelayCalculator.Api.Models.CalculationRequest)">
+            <summary>
+            Calculates the fastest team of each possible age group and gender
+            for the given swimmers and relay type.
+            </summary>
+            <returns>
+            Returns a list of all best teams.
+            </returns>
+        </member>
+        <member name="M:RelayCalculator.Api.Controllers.CalculationController.GetCalculationRequest">
+            <summary>
+            Returns a sample calculationrequest for testing
+            </summary>
+            <returns>
+            Returns a calculationrequest
+            </returns>
+        </member>
+        <member name="M:RelayCalculator.Api.Controllers.SwimmerDataController.GetSwimmersByNames(System.String,System.String)">
+            <summary>
+            Search for swimmers by first and last name.
+            </summary>
+            <returns>
+            Returns a list of swimmers that meet the search.
+            </returns>
+        </member>
+        <member name="M:RelayCalculator.Api.Controllers.SwimmerDataController.GetTimesBySwimmerIdShortCourse(System.Int32,System.Int32)">
+            <summary>
+            Gets the fastest times on short course for the swimmer from a given year
+            </summary>
+            <returns>
+            Returns times for all strokes in seconds.
+            </returns>
+        </member>
+        <member name="M:RelayCalculator.Api.Controllers.SwimmerDataController.GetTimesBySwimmerIdLongCourse(System.Int32,System.Int32)">
+            <summary>
+            Gets the fastest times on long course for the swimmer from a given year
+            </summary>
+            <returns>
+            Returns times for all strokes in seconds.
+            </returns>
+        </member>
+    </members>
+</doc>

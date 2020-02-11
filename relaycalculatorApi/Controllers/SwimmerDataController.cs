@@ -21,6 +21,12 @@ namespace RelayCalculator.Api.Controllers
             _searchSwimmerService = searchSwimmerService;
         }
 
+        /// <summary>
+        /// Search for swimmers by first and last name.
+        /// </summary>
+        /// <returns>
+        /// Returns a list of swimmers that meet the search.
+        /// </returns>
         [HttpGet]
         [Route("searchSwimmers")]
         public async Task<List<Swimmer>> GetSwimmersByNames(string firstName, string lastName)
@@ -29,6 +35,12 @@ namespace RelayCalculator.Api.Controllers
             return await _searchSwimmerService.FindSwimmersByName(firstName, lastName);
         }
 
+        /// <summary>
+        /// Gets the fastest times on short course for the swimmer from a given year
+        /// </summary>
+        /// <returns>
+        /// Returns times for all strokes in seconds.
+        /// </returns>
         [HttpGet]
         [Route("getTimesShortCourse")]
         public async Task<CourseTimes> GetTimesBySwimmerIdShortCourse(int id, int fromYear)
@@ -36,6 +48,13 @@ namespace RelayCalculator.Api.Controllers
             return await _swimTimeService.SelectTimesByCourse(id, fromYear, Course.Short);
         }
 
+
+        /// <summary>
+        /// Gets the fastest times on long course for the swimmer from a given year
+        /// </summary>
+        /// <returns>
+        /// Returns times for all strokes in seconds.
+        /// </returns>
         [HttpGet]
         [Route("getTimesLongCourse")]
         public async Task<CourseTimes> GetTimesBySwimmerIdLongCourse(int id, int fromYear)
