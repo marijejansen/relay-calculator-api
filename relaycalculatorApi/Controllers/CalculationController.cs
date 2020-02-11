@@ -27,6 +27,13 @@ namespace RelayCalculator.Api.Controllers
             _calculationService = calculationService;
         }
 
+        /// <summary>
+        /// Calculates the fastest team of each possible age group and gender
+        /// for the given swimmers and relay type.
+        /// </summary>
+        /// <returns>
+        /// Returns a list of all best teams.
+        /// </returns>
         [HttpPost]
         [Route("getBestTeams")]
         public List<RelayTeam> GetBestRelayTeams(CalculationRequest request)
@@ -37,6 +44,12 @@ namespace RelayCalculator.Api.Controllers
             return _calculationService.BestRelayTeams(swimmers, request.RelayType, request.Course);
         }
 
+        /// <summary>
+        /// Returns a sample calculationrequest for testing
+        /// </summary>
+        /// <returns>
+        /// Returns a calculationrequest
+        /// </returns>
         [HttpGet]
         [Route("getCalculationRequest")]
         public CalculationRequest GetCalculationRequest()
@@ -149,14 +162,6 @@ namespace RelayCalculator.Api.Controllers
                     },
                 }
             };
-        }
-
-        [HttpPost]
-        [Route("testpost")]
-        public string Test(string test)
-        {
-            test += _calculationService.GetString();
-            return "TEST " + test + " TEST";
         }
     }
 }

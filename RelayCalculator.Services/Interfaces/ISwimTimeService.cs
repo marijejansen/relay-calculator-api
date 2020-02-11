@@ -5,7 +5,7 @@ using RelayCalculator.Services.Enums;
 
 namespace RelayCalculator.Services.Interfaces
 {
-    public interface ICrawlSwimTimeService
+    public interface ISwimTimeService
     {
         Task<HtmlDocument> GetSwimmerPageById(int swimmerId);
 
@@ -14,10 +14,6 @@ namespace RelayCalculator.Services.Interfaces
         HtmlNodeCollection GetTimeNodes(HtmlDocument doc, Course course);
 
         double GetBestTime(HtmlNodeCollection table, int sinceYear);
-
-        Task<HtmlDocument> GetHtmlPerStroke(int id, int style);
-
-        Task<HtmlDocument> GetHtmlDocumentByUrl(string url);
 
         double ConvertTimeStringToDouble(string time);
     }
