@@ -58,7 +58,6 @@ namespace RelayCalculator.Api
                         Description = "The API endpoints for the RelaySwim Application.",
                     });
 
-                 // Set the comments path for the Swagger JSON and UI.
                  var xmlPath = Path.Combine(AppContext.BaseDirectory, "RelayCalculator.Api.xml");
                 c.IncludeXmlComments(xmlPath);
             });

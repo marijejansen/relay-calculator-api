@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Core;
 using Microsoft.AspNetCore.Mvc;
 using RelayCalculator.Api.Mapper;
 using RelayCalculator.Api.Models;
@@ -35,6 +36,7 @@ namespace RelayCalculator.Api.Controllers
         /// Returns a list of all best teams.
         /// </returns>
         [HttpPost]
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Route("getBestTeams")]
         public List<RelayTeam> GetBestRelayTeams(CalculationRequest request)
         {
@@ -51,6 +53,7 @@ namespace RelayCalculator.Api.Controllers
         /// Returns a calculationrequest
         /// </returns>
         [HttpGet]
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Route("getCalculationRequest")]
         public CalculationRequest GetCalculationRequest()
         {
