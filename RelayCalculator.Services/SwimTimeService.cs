@@ -8,6 +8,8 @@ using System.Globalization;
 using RelayCalculator.Services.Enums;
 using RelayCalculator.Services.Interfaces;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
 
 namespace RelayCalculator.Services
 {
@@ -73,7 +75,7 @@ namespace RelayCalculator.Services
                     var date = tdDate.InnerText;
                     var splitDate = date.Split(';');
                     var yearString = splitDate[2];
-                    int year = Convert.ToInt32(yearString);
+                    var year = Convert.ToInt32(yearString);
 
                     //check if the date falls in the right timespan
                     if (year >= sinceYear)
@@ -81,7 +83,8 @@ namespace RelayCalculator.Services
 
                         //get the time
                         var stringTime = tr.SelectSingleNode(".//a[@class='time']").InnerText;
-                        double time = ConvertTimeStringToDouble(stringTime);
+                        stringTime = Regex.Replace(stringTime, @"[^0-9:.,]", "");
+                        var time = ConvertTimeStringToDouble(stringTime);
 
                         //check for the fastest time
                         if (time < bestTime || bestTime <= 0)
