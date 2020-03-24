@@ -10,6 +10,10 @@ namespace RelayCalculator.Services.Interfaces
 {
     public interface IBestTeamCalculationService
     {
-        double GetBestTime(int[] permutation, List<Swimmer> swimmers, Course course);
+        double GetTime(int[] permutation, List<Swimmer> swimmers, Course course);
+
+        IEnumerable<RelaySwimmer> GetRelaySwimmersByPermutation(int[] permutation, List<Swimmer> swimmers,
+            Course course);
+
     }
 }

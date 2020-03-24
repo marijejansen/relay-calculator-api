@@ -18,14 +18,16 @@ using SwimmerModel = RelayCalculator.Api.Models.SwimmerModel;
 namespace RelayCalculator.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CalculationController : ControllerBase
     {
         private readonly ICalculationService _calculationService;
+        private readonly ISwimmerMapper _swimmerMapper;
 
-        public CalculationController(ICalculationService calculationService)
+        public CalculationController(ICalculationService calculationService, ISwimmerMapper swimmerMapper)
         {
             _calculationService = calculationService;
+            _swimmerMapper = swimmerMapper;
         }
 
         /// <summary>
@@ -36,13 +38,10 @@ namespace RelayCalculator.Api.Controllers
         /// Returns a list of all best teams.
         /// </returns>
         [HttpPost]
-        [ApiExplorerSettings(IgnoreApi = true)]
         [Route("getBestTeams")]
         public List<RelayTeam> GetBestRelayTeams(CalculationRequest request)
         {
-            // TODO: dependency injection
-            var mapper = new SwimmerMapper();
-            var swimmers = request.Swimmers.Select(s => mapper.Map(s)).ToList();
+            var swimmers = request.Swimmers.Select(s => _swimmerMapper.Map(s)).ToList();
             return _calculationService.BestRelayTeams(swimmers, request.RelayType, request.Course);
         }
 
@@ -53,7 +52,6 @@ namespace RelayCalculator.Api.Controllers
         /// Returns a calculationrequest
         /// </returns>
         [HttpGet]
-        [ApiExplorerSettings(IgnoreApi = true)]
         [Route("getCalculationRequest")]
         public CalculationRequest GetCalculationRequest()
         {
@@ -65,6 +63,7 @@ namespace RelayCalculator.Api.Controllers
                     Stroke = Stroke.Freestyle,
                     NumberOfSwimmers = 4
                 },
+                Course = Course.Short,
                 Swimmers = new List<SwimmerModel>()
                 {
                     new SwimmerModel()
@@ -76,7 +75,7 @@ namespace RelayCalculator.Api.Controllers
                         ShortCourseTimes = new CourseTimes()
                         {
                             Freestyle50M = 28.61,
-                            Freestyle100M = 62.88
+                            Freestyle100M = 62.88,
                         }
                     },
                     new SwimmerModel()

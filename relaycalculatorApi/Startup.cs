@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RelayCalculator.Api.Mapper;
 using RelayCalculator.Services;
 using RelayCalculator.Services.Interfaces;
 using Swashbuckle.AspNetCore.Swagger;
@@ -33,6 +34,7 @@ namespace RelayCalculator.Api
             services.AddSingleton<ISwimTimeService, SwimTimeService>();
             services.AddSingleton<IHtmlDocumentService, HtmlDocumentService>();
             services.AddSingleton<ISearchSwimmerService, SearchSwimmersService>();
+            services.AddSingleton<ISwimmerMapper, SwimmerMapper>();
 
             services.AddCors(options =>
             {

@@ -21,11 +21,6 @@ namespace RelayCalculator.Services
             _groupService = groupService;
             _bestTeamCalculationService = bestTeamCalculationService;
         }
-        // for testing
-        public string GetString()
-        {
-            return "abc";
-        }
 
         public List<RelayTeam> BestRelayTeams(List<Swimmer> swimmers, RelayType relayType, Course courseType)
         {
@@ -62,9 +57,9 @@ namespace RelayCalculator.Services
 
             foreach (var team in possibleTeams)
             {
-                var time = relayType.RelayCalculation?.GetBestTime(team, swimmers, course);
+                var time = relayType.RelayCalculation?.GetTime(team, swimmers, course);
 
-                if (time == null || (!(time < bestTime) && bestTime > 0)) continue;
+                if (time == null || !(time > 0) || (!(time < bestTime) && bestTime > 0)) continue;
 
                 bestTime = time.GetValueOrDefault();
                 bestTeam = team;
@@ -72,7 +67,7 @@ namespace RelayCalculator.Services
 
             return new RelayTeam
             {
-                Swimmers = _groupService.GetRelaySwimmersByPermutation(bestTeam, swimmers),
+                Swimmers = relayType.RelayCalculation?.GetRelaySwimmersByPermutation(bestTeam, swimmers, course),
                 Time = bestTime
             };
         }

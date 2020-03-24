@@ -8,7 +8,7 @@ using Swimmer = RelayCalculator.Services.Models.Swimmer;
 
 namespace RelayCalculator.Api.Mapper
 {
-    public class SwimmerMapper
+    public class SwimmerMapper : ISwimmerMapper
     {
         public Swimmer Map(SwimmerModel swimmer)
         {

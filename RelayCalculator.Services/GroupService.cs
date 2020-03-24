@@ -95,28 +95,5 @@ namespace RelayCalculator.Services
                 return Gender.Unknown;
             }
         }
-
-        public List<Swimmer> GetSwimmersByPermutation(int[] permutation, List<Swimmer> swimmers)
-        {
-            var swimmersList = new List<Swimmer>();
-            foreach (var number in permutation)
-            {
-                swimmersList.Add(swimmers[number]);
-            }
-
-            return swimmersList;
-        }
-
-        public List<RelaySwimmer> GetRelaySwimmersByPermutation(int[] permutation, List<Swimmer> swimmers)
-        {
-            return permutation.Select(n => swimmers[n]).Select(s => new RelaySwimmer
-            {
-                FirstName = s.FirstName,
-                LastName = s.LastName,
-                Age = DateTime.Today.Year - s.BirthYear
-
-            }).ToList();
-        }
-
     }
 }

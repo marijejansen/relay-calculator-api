@@ -12,8 +12,5 @@ namespace RelayCalculator.Services.Interfaces
     {
         int GetAgeGroup(int[] order, List<Swimmer> swimmers);
         Gender GetGenderGroup(int[] order, List<Swimmer> swimmers);
-        List<Swimmer> GetSwimmersByPermutation(int[] permutation, List<Swimmer> swimmers);
-        List<RelaySwimmer> GetRelaySwimmersByPermutation(int[] permutation, List<Swimmer> swimmers);
-
     }
 }

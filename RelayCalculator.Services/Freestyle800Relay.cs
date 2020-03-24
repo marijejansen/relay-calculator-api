@@ -11,17 +11,36 @@ namespace RelayCalculator.Services
 {
     class Freestyle800Relay : IBestTeamCalculationService
     {
-        public double GetBestTime(int[] permutation, List<Swimmer> swimmers, Course course)
+        public double GetTime(int[] permutation, List<Swimmer> swimmers, Course course)
         {
             var time = 0.0;
             foreach (var position in permutation)
             {
                 //TODO: anders oplossen?
-                time += course == Course.Long ? swimmers[position].LongCourseTimes.Freestyle200M :
+                var indTime = course == Course.Long ? swimmers[position].LongCourseTimes.Freestyle200M :
                     swimmers[position].ShortCourseTimes.Freestyle200M;
+
+                if (!(indTime > 0))
+                {
+                    return 0;
+                }
+
+                time += indTime;
             }
 
             return time;
+        }
+
+        public IEnumerable<RelaySwimmer> GetRelaySwimmersByPermutation(int[] permutation, List<Swimmer> swimmers, Course course)
+        {
+            return permutation.Select(n => swimmers[n]).Select(s => new RelaySwimmer
+            {
+                FirstName = s.FirstName,
+                LastName = s.LastName,
+                Age = DateTime.Today.Year - s.BirthYear,
+                Time = course == Course.Long ? s.LongCourseTimes.Freestyle200M :
+                    s.ShortCourseTimes.Freestyle200M
+            }).ToList();
         }
     }
 }

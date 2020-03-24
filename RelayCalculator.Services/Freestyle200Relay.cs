@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using RelayCalculator.Services.Enums;
@@ -11,16 +12,36 @@ namespace RelayCalculator.Services
 {
     public class Freestyle200Relay : IBestTeamCalculationService
     {
-        public double GetBestTime(int[] permutation, List<Swimmer> swimmers, Course course)
+        public double GetTime(int[] permutation, List<Swimmer> swimmers, Course course)
         {
             var time = 0.0;
             foreach (var position in permutation)
             {
-                time += course == Course.Long ? swimmers[position].LongCourseTimes.Freestyle50M :
+                var indTime = course == Course.Long ? swimmers[position].LongCourseTimes.Freestyle50M :
                     swimmers[position].ShortCourseTimes.Freestyle50M;
+                if (!(indTime > 0))
+                {
+                    return 0;
+                }
+
+                time += indTime;
             }
 
             return time;
+
+            
+        }
+
+        public IEnumerable<RelaySwimmer> GetRelaySwimmersByPermutation(int[] permutation, List<Swimmer> swimmers, Course course)
+        {
+            return permutation.Select(n => swimmers[n]).Select(s => new RelaySwimmer
+            {
+                FirstName = s.FirstName,
+                LastName = s.LastName,
+                Age = DateTime.Today.Year - s.BirthYear, 
+                Time = course == Course.Long ? s.LongCourseTimes.Freestyle50M :
+                    s.ShortCourseTimes.Freestyle50M
+            }).ToList();
         }
     }
 }
