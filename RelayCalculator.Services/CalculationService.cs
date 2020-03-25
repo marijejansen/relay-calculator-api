@@ -22,8 +22,10 @@ namespace RelayCalculator.Services
             _bestTeamCalculationService = bestTeamCalculationService;
         }
 
-        public List<RelayTeam> BestRelayTeams(List<Swimmer> swimmers, RelayType relayType, Course courseType)
+        public List<RelayTeam> BestRelayTeams(CalculationModel calculationModel)
         {
+            var swimmers = calculationModel.Swimmers;
+
             var permutations = _permutationService.GetPermutations(swimmers.Count());
 
             var bestTeams = new List<RelayTeam>();
@@ -38,7 +40,7 @@ namespace RelayCalculator.Services
                     if (!(teamsAge.Count > 0)) continue;
                     
                     //TODO: get these into a model?
-                    var bestTeam = GetBestTeam(swimmers, teamsAge, relayType, courseType);
+                    var bestTeam = GetBestTeam(teamsAge, calculationModel);
 
                     bestTeam.Gender = gender;
                     bestTeam.Age = age;
@@ -50,24 +52,24 @@ namespace RelayCalculator.Services
             return bestTeams;
         }
 
-        public RelayTeam GetBestTeam(List<Swimmer> swimmers, List<int[]> possibleTeams, RelayType relayType, Course course)
+        public RelayTeam GetBestTeam(List<int[]> possibleTeams, CalculationModel calculationModel)
         {
             var bestTime = 0.0;
             var bestTeam = new int[4];
 
             foreach (var team in possibleTeams)
             {
-                var time = relayType.RelayCalculation?.GetTime(team, swimmers, course);
+                var time = calculationModel.RelayCalculation.GetTime(team, calculationModel.Swimmers, calculationModel.Course);
 
-                if (time == null || !(time > 0) || (!(time < bestTime) && bestTime > 0)) continue;
+                if (!(time > 0) || (!(time < bestTime) && bestTime > 0)) continue;
 
-                bestTime = time.GetValueOrDefault();
+                bestTime = time;
                 bestTeam = team;
             }
 
             return new RelayTeam
             {
-                Swimmers = relayType.RelayCalculation?.GetRelaySwimmersByPermutation(bestTeam, swimmers, course),
+                Swimmers = calculationModel.RelayCalculation.GetRelaySwimmersByPermutation(bestTeam, calculationModel.Swimmers, calculationModel.Course),
                 Time = bestTime
             };
         }

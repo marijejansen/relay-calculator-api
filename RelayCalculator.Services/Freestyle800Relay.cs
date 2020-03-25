@@ -9,7 +9,7 @@ using RelayCalculator.Services.Models;
 
 namespace RelayCalculator.Services
 {
-    class Freestyle800Relay : IBestTeamCalculationService
+    public class Freestyle800Relay : IBestTeamCalculationService
     {
         public double GetTime(int[] permutation, List<Swimmer> swimmers, Course course)
         {

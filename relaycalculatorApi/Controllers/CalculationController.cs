@@ -41,8 +41,12 @@ namespace RelayCalculator.Api.Controllers
         [Route("getBestTeams")]
         public List<RelayTeam> GetBestRelayTeams(CalculationRequest request)
         {
-            var swimmers = request.Swimmers.Select(s => _swimmerMapper.Map(s)).ToList();
-            return _calculationService.BestRelayTeams(swimmers, request.RelayType, request.Course);
+            return _calculationService.BestRelayTeams(new CalculationModel()
+            {
+                Swimmers = request.Swimmers.Select(s => _swimmerMapper.Map(s)).ToList(),
+                Relay = request.Relay,
+                Course = request.Course
+            });
         }
 
         /// <summary>
@@ -57,12 +61,7 @@ namespace RelayCalculator.Api.Controllers
         {
             return new CalculationRequest
             {
-                RelayType = new RelayType
-                {
-                    Distance = Distance.TwoHundred,
-                    Stroke = Stroke.Freestyle,
-                    NumberOfSwimmers = 4
-                },
+                Relay = Relay.Freestyle200,
                 Course = Course.Short,
                 Swimmers = new List<SwimmerModel>()
                 {

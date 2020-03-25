@@ -75,8 +75,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\Relay.cs" />
     <Compile Include="Interfaces\IHtmlDocumentService.cs" />
     <Compile Include="Interfaces\ISearchSwimmerService.cs" />
+    <Compile Include="Models\CalculationModel.cs" />
     <Compile Include="SwimTimeService.cs" />
     <Compile Include="Freestyle400Relay.cs" />
     <Compile Include="Freestyle200Relay.cs" />
@@ -99,7 +101,6 @@
     <Compile Include="Models\CourseTimes.cs" />
     <Compile Include="Models\RelaySwimmer.cs" />
     <Compile Include="Models\RelayTeam.cs" />
-    <Compile Include="Models\RelayType.cs" />
     <Compile Include="Models\Swimmer.cs" />
     <Compile Include="PermutationService.cs" />
     <Compile Include="Program.cs" />

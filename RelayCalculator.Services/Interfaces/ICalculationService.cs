@@ -10,8 +10,8 @@ namespace RelayCalculator.Services.Interfaces
 {
     public interface ICalculationService
     {
-        List<RelayTeam> BestRelayTeams(List<Swimmer> swimmers, RelayType relayType, Course courseType);
+        List<RelayTeam> BestRelayTeams(CalculationModel calculationModel);
 
-        RelayTeam GetBestTeam(List<Swimmer> swimmers, List<int[]> possibleTeams, RelayType relayType, Course course);
+        RelayTeam GetBestTeam(List<int[]> possibleTeams, CalculationModel calculationModel);
     }
 }
