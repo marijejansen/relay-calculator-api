@@ -34,6 +34,7 @@ namespace RelayCalculator.Services
         {
             return permutation.Select((n, index) => new RelaySwimmer
             {
+                Position = index,
                 FirstName = swimmers[n].FirstName,
                 LastName = swimmers[n].LastName,
                 Age = DateTime.Today.Year - swimmers[n].BirthYear,

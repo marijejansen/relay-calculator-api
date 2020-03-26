@@ -43,8 +43,7 @@ namespace RelayCalculator.Services
                     if (bestTeam == null) continue;
 
                     bestTeam.Gender = gender;
-                    bestTeam.Age = age;
-
+                    bestTeam.AgeGroup = age;
                     bestTeams.Add(bestTeam);
                 }
             }
@@ -70,7 +69,8 @@ namespace RelayCalculator.Services
             return bestTime > 0 ? new RelayTeam
             {
                 Swimmers = calculationModel.RelayCalculation.GetRelaySwimmersByPermutation(bestTeam, calculationModel.Swimmers, calculationModel.Course),
-                Time = bestTime
+                Time = bestTime,
+                Age = _groupService.GetAge(bestTeam, calculationModel.Swimmers),
             } : null;
         }
     }

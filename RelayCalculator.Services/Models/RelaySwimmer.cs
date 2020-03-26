@@ -8,6 +8,7 @@ namespace RelayCalculator.Services.Models
 {
     public class RelaySwimmer
     {
+        public int Position { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public double Time { get; set; }

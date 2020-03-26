@@ -11,11 +11,13 @@ namespace RelayCalculator.Services
 {
     public class GroupService : IGroupService
     {
+        public int GetAge(int[] order, List<Swimmer> swimmers)
+        {
+            return order.Sum(num => DateTime.Now.Year - swimmers[num].BirthYear);
+        }
         public int GetAgeGroup(int[] order, List<Swimmer> swimmers)
         {
-            var totalYears = 0;
-
-            totalYears += order.Sum(num => DateTime.Now.Year - swimmers[num].BirthYear);
+            var totalYears = GetAge(order, swimmers);
 
             if (totalYears < 80)
             {

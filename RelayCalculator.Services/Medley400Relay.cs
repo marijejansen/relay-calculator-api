@@ -31,12 +31,13 @@ namespace RelayCalculator.Services
 
         public IEnumerable<RelaySwimmer> GetRelaySwimmersByPermutation(int[] permutation, List<Swimmer> swimmers, Course course)
         {
-            return permutation.Select(n => new RelaySwimmer
+            return permutation.Select((n, index) => new RelaySwimmer
             {
+                Position = index,
                 FirstName = swimmers[n].FirstName,
                 LastName = swimmers[n].LastName,
                 Age = DateTime.Today.Year - swimmers[n].BirthYear,
-                Time = GetTime(swimmers[n], n, course)
+                Time = GetTime(swimmers[n], index, course)
             }).ToList();
         }
 
