@@ -39,8 +39,8 @@ namespace RelayCalculator.Services
                     var teamsAge = teamsGender.Where(p => _groupService.GetAgeGroup(p, swimmers) == age).ToList();
                     if (!(teamsAge.Count > 0)) continue;
                     
-                    //TODO: get these into a model?
                     var bestTeam = GetBestTeam(teamsAge, calculationModel);
+                    if (bestTeam == null) continue;
 
                     bestTeam.Gender = gender;
                     bestTeam.Age = age;
@@ -67,11 +67,11 @@ namespace RelayCalculator.Services
                 bestTeam = team;
             }
 
-            return new RelayTeam
+            return bestTime > 0 ? new RelayTeam
             {
                 Swimmers = calculationModel.RelayCalculation.GetRelaySwimmersByPermutation(bestTeam, calculationModel.Swimmers, calculationModel.Course),
                 Time = bestTime
-            };
+            } : null;
         }
     }
 }

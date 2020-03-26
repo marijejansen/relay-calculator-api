@@ -14,9 +14,10 @@ namespace RelayCalculator.Services
         public double GetTime(int[] permutation, List<Swimmer> swimmers, Course course)
         {
             var time = 0.0;
-            foreach (var i in permutation)
+            for (int i = 0; i < permutation.Length; i++)
             {
-                var indTime = GetTime(swimmers[i], i, course);
+                var number = permutation[i];
+                var indTime = GetTime(swimmers[number], i, course);
                 if (!(indTime > 0))
                 {
                     return 0;
