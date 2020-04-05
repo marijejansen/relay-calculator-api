@@ -34,11 +34,16 @@ namespace RelayCalculator.Services
             {
                 var teamsGender = permutations.Where(p => _groupService.GetGenderGroup(p, swimmers) == gender).ToList();
 
-                foreach (var age in Constants.AgeGroups)
+                var masters = calculationModel.MastersAgeGroups;
+                var groups = !masters ? new List<int>(){0} : Constants.AgeGroups;
+
+                foreach (var age in groups)
                 {
-                    var teamsAge = teamsGender.Where(p => _groupService.GetAgeGroup(p, swimmers) == age).ToList();
+                    var teamsAge = masters
+                        ? teamsGender.Where(p => _groupService.GetAgeGroup(p, swimmers) == age).ToList()
+                        : teamsGender;
                     if (!(teamsAge.Count > 0)) continue;
-                    
+
                     var bestTeam = GetBestTeam(teamsAge, calculationModel);
                     if (bestTeam == null) continue;
 

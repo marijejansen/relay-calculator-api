@@ -17,6 +17,8 @@ namespace RelayCalculator.Services.Models
 
         public Relay Relay { get; set; }
 
+        public bool MastersAgeGroups { get; set; }
+
         [JsonIgnore]
         public IBestTeamCalculationService RelayCalculation
         {

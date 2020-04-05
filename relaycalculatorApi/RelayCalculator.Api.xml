@@ -13,6 +13,15 @@
             Returns a list of all best teams.
             </returns>
         </member>
+        <member name="M:RelayCalculator.Api.Controllers.CalculationController.GetBestMastersRelayTeams(RelayCalculator.Api.Models.CalculationRequest)">
+            <summary>
+            Calculates the fastest team of each possible age group and gender
+            for the given swimmers and relay type.
+            </summary>
+            <returns>
+            Returns a list of all best teams.
+            </returns>
+        </member>
         <member name="M:RelayCalculator.Api.Controllers.CalculationController.GetCalculationRequest">
             <summary>
             Returns a sample calculationrequest for testing

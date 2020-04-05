@@ -31,7 +31,7 @@ namespace RelayCalculator.Api.Controllers
         }
 
         /// <summary>
-        /// Calculates the fastest team of each possible age group and gender
+        /// Calculates the fastest team of each gender group no age groups
         /// for the given swimmers and relay type.
         /// </summary>
         /// <returns>
@@ -46,6 +46,26 @@ namespace RelayCalculator.Api.Controllers
                 Swimmers = request.Swimmers.Select(s => _swimmerMapper.Map(s)).ToList(),
                 Relay = request.Relay,
                 Course = request.Course
+            });
+        }
+
+        /// <summary>
+        /// Calculates the fastest team of each possible age group and gender
+        /// for the given swimmers and relay type.
+        /// </summary>
+        /// <returns>
+        /// Returns a list of all best teams.
+        /// </returns>
+        [HttpPost]
+        [Route("getBestMastersTeams")]
+        public List<RelayTeam> GetBestMastersRelayTeams(CalculationRequest request)
+        {
+            return _calculationService.BestRelayTeams(new CalculationModel()
+            {
+                Swimmers = request.Swimmers.Select(s => _swimmerMapper.Map(s)).ToList(),
+                Relay = request.Relay,
+                Course = request.Course,
+                MastersAgeGroups = true,
             });
         }
 
