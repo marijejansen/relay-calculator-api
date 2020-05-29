@@ -4,14 +4,16 @@
         <name>RelayCalculator.Api</name>
     </assembly>
     <members>
-        <member name="M:RelayCalculator.Api.Controllers.CalculationController.GetBestRelayTeams(RelayCalculator.Api.Models.CalculationRequest)">
+        <member name="T:RelayCalculator.Api.Controllers.CalculationController">
             <summary>
-            Calculates the fastest team of each possible age group and gender
-            for the given swimmers and relay type.
+            Calculation controller
             </summary>
-            <returns>
-            Returns a list of all best teams.
-            </returns>
+        </member>
+        <member name="M:RelayCalculator.Api.Controllers.CalculationController.GetBestRelayTeams(RelayCalculator.Api.Models.CalculationRequest)">
+            <summary>Calculates the fastest team of each gender group no age groups
+            for the given swimmers and relay type.</summary>
+            <param name="request">The request.</param>
+            <returns>Returns a list of all best teams.</returns>
         </member>
         <member name="M:RelayCalculator.Api.Controllers.CalculationController.GetBestMastersRelayTeams(RelayCalculator.Api.Models.CalculationRequest)">
             <summary>

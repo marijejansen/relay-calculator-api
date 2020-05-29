@@ -1,21 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using RelayCalculator.Services.Enums;
-using RelayCalculator.Services.Interfaces;
-
-namespace RelayCalculator.Services.Models
+﻿namespace RelayCalculator.Services.Models
 {
+    using System.Collections.Generic;
+    using System.Text.Json.Serialization;
+    using RelayCalculator.Services.Enums;
+    using RelayCalculator.Services.Interfaces;
+
     public class CalculationModel
     {
-        public List<Swimmer> Swimmers { get; set; }
+        public List<Swimmer> Swimmers
+        {
+            get; 
+            set;
+        }
 
-        public Course Course { get; set; }
+        public Course Course
+        {
+            get; 
+            set;
+        }
 
-        public Relay Relay { get; set; }
+        public Relay Relay
+        {
+            get; 
+            set;
+        }
+
+        public int? CalculateForYear
+        {
+            get;
+            set;
+        }
 
         public bool MastersAgeGroups { get; set; }
 
@@ -24,7 +38,7 @@ namespace RelayCalculator.Services.Models
         {
             get
             {
-                switch (Relay)
+                switch (this.Relay)
                 {
                     case Relay.Freestyle200:
                         return new Freestyle200Relay();

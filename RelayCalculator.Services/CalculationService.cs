@@ -11,41 +11,47 @@ namespace RelayCalculator.Services
 {
     public class CalculationService : ICalculationService
     {
-        private readonly IPermutationService _permutationService;
-        private readonly IGroupService _groupService;
-        private readonly IBestTeamCalculationService _bestTeamCalculationService;
+        private readonly IPermutationService permutationService;
+        private readonly IGroupService groupService;
+        private readonly IBestTeamCalculationService bestTeamCalculationService;
 
         public CalculationService(IPermutationService permutationService, IGroupService groupService, IBestTeamCalculationService bestTeamCalculationService)
         {
-            _permutationService = permutationService;
-            _groupService = groupService;
-            _bestTeamCalculationService = bestTeamCalculationService;
+            this.permutationService = permutationService;
+            this.groupService = groupService;
+            this.bestTeamCalculationService = bestTeamCalculationService;
         }
 
         public List<RelayTeam> BestRelayTeams(CalculationModel calculationModel)
         {
             var swimmers = calculationModel.Swimmers;
 
-            var permutations = _permutationService.GetPermutations(swimmers.Count());
+            var permutations = this.permutationService.GetPermutations(swimmers.Count());
 
             var bestTeams = new List<RelayTeam>();
 
             foreach (var gender in Constants.GenderGroups)
             {
-                var teamsGender = permutations.Where(p => _groupService.GetGenderGroup(p, swimmers) == gender).ToList();
+                var teamsGender = permutations.Where(p => this.groupService.GetGenderGroup(p, swimmers) == gender).ToList();
 
                 var masters = calculationModel.MastersAgeGroups;
-                var groups = !masters ? new List<int>(){0} : Constants.AgeGroups;
+                var groups = !masters ? new List<int>() { 0 } : Constants.AgeGroups;
 
                 foreach (var age in groups)
                 {
                     var teamsAge = masters
-                        ? teamsGender.Where(p => _groupService.GetAgeGroup(p, swimmers) == age).ToList()
+                        ? teamsGender.Where(p => this.groupService.GetAgeGroup(p, swimmers, calculationModel.CalculateForYear) == age).ToList()
                         : teamsGender;
-                    if (!(teamsAge.Count > 0)) continue;
+                    if (!(teamsAge.Count > 0))
+                    {
+                        continue;
+                    }
 
-                    var bestTeam = GetBestTeam(teamsAge, calculationModel);
-                    if (bestTeam == null) continue;
+                    var bestTeam = this.GetBestTeam(teamsAge, calculationModel);
+                    if (bestTeam == null)
+                    {
+                        continue;
+                    }
 
                     bestTeam.Gender = gender;
                     bestTeam.AgeGroup = age;
@@ -65,7 +71,11 @@ namespace RelayCalculator.Services
             {
                 var time = calculationModel.RelayCalculation.GetTime(team, calculationModel.Swimmers, calculationModel.Course);
 
-                if (!(time > 0) || (!(time < bestTime) && bestTime > 0)) continue;
+                if (!(time > 0)
+                    || (!(time < bestTime) && bestTime > 0))
+                {
+                    continue;
+                }
 
                 bestTime = time;
                 bestTeam = team;
@@ -75,8 +85,9 @@ namespace RelayCalculator.Services
             {
                 Swimmers = calculationModel.RelayCalculation.GetRelaySwimmersByPermutation(bestTeam, calculationModel.Swimmers, calculationModel.Course),
                 Time = bestTime,
-                Age = _groupService.GetAge(bestTeam, calculationModel.Swimmers),
-            } : null;
+                Age = this.groupService.GetAge(bestTeam, calculationModel.Swimmers, calculationModel.CalculateForYear),
+            } 
+            : null;
         }
     }
 }

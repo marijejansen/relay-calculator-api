@@ -1,51 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Autofac.Core;
-using Microsoft.AspNetCore.Mvc;
-using RelayCalculator.Api.Mapper;
-using RelayCalculator.Api.Models;
-using RelayCalculator.Services;
-using RelayCalculator.Services.Interfaces;
-using RelayCalculator.Services.Models;
-using RelayCalculator.Services.Enums;
-using Distance = RelayCalculator.Services.Enums.Distance;
-using Stroke = RelayCalculator.Services.Enums.Stroke;
-using SwimmerModel = RelayCalculator.Api.Models.SwimmerModel;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CalculationController.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   Defines the CalculationController type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RelayCalculator.Api.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Microsoft.AspNetCore.Mvc;
+
+    using RelayCalculator.Api.Mapper;
+    using RelayCalculator.Api.Models;
+    using RelayCalculator.Services.Enums;
+    using RelayCalculator.Services.Interfaces;
+    using RelayCalculator.Services.Models;
+
+    using SwimmerModel = RelayCalculator.Api.Models.SwimmerModel;
+
+    /// <summary>
+    /// Calculation controller
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class CalculationController : ControllerBase
     {
-        private readonly ICalculationService _calculationService;
-        private readonly ISwimmerMapper _swimmerMapper;
+        private readonly ICalculationService calculationService;
+        private readonly ISwimmerMapper swimmerMapper;
 
         public CalculationController(ICalculationService calculationService, ISwimmerMapper swimmerMapper)
         {
-            _calculationService = calculationService;
-            _swimmerMapper = swimmerMapper;
+            this.calculationService = calculationService;
+            this.swimmerMapper = swimmerMapper;
         }
 
-        /// <summary>
-        /// Calculates the fastest team of each gender group no age groups
-        /// for the given swimmers and relay type.
-        /// </summary>
-        /// <returns>
-        /// Returns a list of all best teams.
-        /// </returns>
+        /// <summary>Calculates the fastest team of each gender group no age groups
+        /// for the given swimmers and relay type.</summary>
+        /// <param name="request">The request.</param>
+        /// <returns>Returns a list of all best teams.</returns>
         [HttpPost]
         [Route("getBestTeams")]
         public List<RelayTeam> GetBestRelayTeams(CalculationRequest request)
         {
-            return _calculationService.BestRelayTeams(new CalculationModel()
+            return this.calculationService.BestRelayTeams(new CalculationModel()
             {
-                Swimmers = request.Swimmers.Select(s => _swimmerMapper.Map(s)).ToList(),
+                Swimmers = request.Swimmers.Select(s => this.swimmerMapper.Map(s)).ToList(),
                 Relay = request.Relay,
-                Course = request.Course
+                Course = request.Course,
+                CalculateForYear = request.CalculateForYear
             });
         }
 
@@ -60,11 +66,12 @@ namespace RelayCalculator.Api.Controllers
         [Route("getBestMastersTeams")]
         public List<RelayTeam> GetBestMastersRelayTeams(CalculationRequest request)
         {
-            return _calculationService.BestRelayTeams(new CalculationModel()
+            return this.calculationService.BestRelayTeams(new CalculationModel()
             {
-                Swimmers = request.Swimmers.Select(s => _swimmerMapper.Map(s)).ToList(),
+                Swimmers = request.Swimmers.Select(s => this.swimmerMapper.Map(s)).ToList(),
                 Relay = request.Relay,
                 Course = request.Course,
+                CalculateForYear = request.CalculateForYear,
                 MastersAgeGroups = true,
             });
         }
