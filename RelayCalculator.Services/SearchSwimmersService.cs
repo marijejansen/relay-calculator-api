@@ -43,21 +43,25 @@ namespace RelayCalculator.Services
             var dateNode = node.Descendants("td").FirstOrDefault(n => n.HasClass("date"));
             var genderNode = node.Descendants("img").FirstOrDefault();
 
-            if (!(firstNameNode == null || clubNode == null || dateNode == null || genderNode == null))
+            if (firstNameNode == null
+                || clubNode == null
+                || !int.TryParse(dateNode?.InnerText, out var birthYear)
+                || genderNode == null)
             {
-                Swimmer swimmer = new Swimmer
-                {
-                    FirstName = GetName(firstNameNode)?[1],
-                    LastName = GetName(firstNameNode)?[0],
-                    BirthYear = Convert.ToInt32(dateNode.InnerText),
-                    ID = GetID(firstNameNode),
-                    ClubName = GetClub(clubNode),
-                    Gender = GetGender(genderNode)
-                };
-                return swimmer;
+                return null;
             }
 
-            return null;
+            var swimmer = new Swimmer
+                              {
+                                  FirstName = this.GetName(firstNameNode)?[1],
+                                  LastName = this.GetName(firstNameNode)?[0],
+                                  BirthYear = birthYear,
+                                  ID = this.GetID(firstNameNode),
+                                  ClubName = this.GetClub(clubNode),
+                                  Gender = this.GetGender(genderNode)
+                              };
+            return swimmer;
+
         }
         public string[] GetName(HtmlNode node)
         {
