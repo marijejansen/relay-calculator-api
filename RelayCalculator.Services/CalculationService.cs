@@ -40,7 +40,7 @@ namespace RelayCalculator.Services
                 foreach (var age in groups)
                 {
                     var teamsAge = masters
-                        ? teamsGender.Where(p => this.groupService.GetAgeGroup(p, swimmers, calculationModel.CalculateForYear) == age).ToList()
+                        ? teamsGender.Where(p => this.groupService.GetAgeGroupForOrder(p, swimmers, calculationModel.CalculateForYear) == age).ToList()
                         : teamsGender;
                     if (!(teamsAge.Count > 0))
                     {
@@ -65,10 +65,11 @@ namespace RelayCalculator.Services
         public RelayTeam GetBestTeam(List<int[]> possibleTeams, CalculationModel calculationModel)
         {
             var bestTime = 0.0;
-            var bestTeam = new int[4];
+            var bestTeam = new List<Swimmer>();
 
             foreach (var team in possibleTeams)
             {
+                var teamSwimmers = team.Select(i => calculationModel.Swimmers[i]).ToList();
                 var time = calculationModel.RelayCalculation.GetTime(team, calculationModel.Swimmers, calculationModel.Course);
 
                 if (!(time > 0)
@@ -78,14 +79,14 @@ namespace RelayCalculator.Services
                 }
 
                 bestTime = time;
-                bestTeam = team;
+                bestTeam = teamSwimmers;
             }
 
             return bestTime > 0 ? new RelayTeam
             {
-                Swimmers = calculationModel.RelayCalculation.GetRelaySwimmersByPermutation(bestTeam, calculationModel.Swimmers, calculationModel.Course),
+                Swimmers = calculationModel.RelayCalculation.GetRelaySwimmers(bestTeam, calculationModel.Course),
                 Time = bestTime,
-                Age = this.groupService.GetAge(bestTeam, calculationModel.Swimmers, calculationModel.CalculateForYear),
+                Age = this.groupService.GetAge(bestTeam, calculationModel.CalculateForYear),
             } 
             : null;
         }

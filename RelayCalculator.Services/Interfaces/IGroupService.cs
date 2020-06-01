@@ -10,9 +10,9 @@ namespace RelayCalculator.Services.Interfaces
 {
     public interface IGroupService
     {
-        int GetAge(int[] order, List<Swimmer> swimmers, int? forYear);
+        int GetAge(List<Swimmer> swimmers, int? forYear);
 
-        int GetAgeGroup(int[] order, List<Swimmer> swimmers, int? forYear);
+        int GetAgeGroupForOrder(int[] order, List<Swimmer> swimmers, int? forYear);
 
         Gender GetGenderGroup(int[] order, List<Swimmer> swimmers);
     }

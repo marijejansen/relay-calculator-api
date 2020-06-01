@@ -28,16 +28,17 @@ namespace RelayCalculator.Services
 
             return time;
         }
-        public IEnumerable<RelaySwimmer> GetRelaySwimmersByPermutation(int[] permutation, List<Swimmer> swimmers, Course course)
+
+        public IEnumerable<RelaySwimmer> GetRelaySwimmers(List<Swimmer> swimmers, Course course)
         {
-        return permutation.Select(n => swimmers[n]).Select(s => new RelaySwimmer
-        {
-            FirstName = s.FirstName,
-            LastName = s.LastName,
-            Age = DateTime.Today.Year - s.BirthYear,
-            Time = course == Course.Long ? s.LongCourseTimes.Freestyle100M :
-                s.ShortCourseTimes.Freestyle100M
-        }).ToList();
+            return swimmers.Select(s => new RelaySwimmer
+            {
+                FirstName = s.FirstName,
+                LastName = s.LastName,
+                Age = DateTime.Today.Year - s.BirthYear,
+                Time = course == Course.Long ? s.LongCourseTimes.Freestyle100M :
+                    s.ShortCourseTimes.Freestyle100M
+            }).ToList();
         }
     }
 }

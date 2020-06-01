@@ -14,10 +14,10 @@ namespace RelayCalculator.Services
         public double GetTime(int[] permutation, List<Swimmer> swimmers, Course course)
         {
             var time = 0.0;
-            for (int i = 0; i < permutation.Length; i++)
+            for (var i = 0; i < permutation.Length; i++)
             {
                 var number = permutation[i];
-                var indTime = GetTime(swimmers[number], i, course);
+                var indTime = this.GetTime(swimmers[number], i, course);
                 if (!(indTime > 0))
                 {
                     return 0;
@@ -29,15 +29,15 @@ namespace RelayCalculator.Services
             return time;
         }
 
-        public IEnumerable<RelaySwimmer> GetRelaySwimmersByPermutation(int[] permutation, List<Swimmer> swimmers, Course course)
+        public IEnumerable<RelaySwimmer> GetRelaySwimmers(List<Swimmer> swimmers, Course course)
         {
-            return permutation.Select((n, index) => new RelaySwimmer
+            return swimmers.Select((swimmer, index) => new RelaySwimmer
             {
                 Position = index,
-                FirstName = swimmers[n].FirstName,
-                LastName = swimmers[n].LastName,
-                Age = DateTime.Today.Year - swimmers[n].BirthYear,
-                Time = GetTime(swimmers[n], index, course)
+                FirstName = swimmer.FirstName,
+                LastName = swimmer.LastName,
+                Age = DateTime.Today.Year - swimmer.BirthYear,
+                Time = this.GetTime(swimmer, index, course)
             }).ToList();
         }
 

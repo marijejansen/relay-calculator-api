@@ -12,8 +12,6 @@ namespace RelayCalculator.Services.Interfaces
     {
         double GetTime(int[] permutation, List<Swimmer> swimmers, Course course);
 
-        IEnumerable<RelaySwimmer> GetRelaySwimmersByPermutation(int[] permutation, List<Swimmer> swimmers,
-            Course course);
-
+        IEnumerable<RelaySwimmer> GetRelaySwimmers(List<Swimmer> swimmers, Course course);
     }
 }
