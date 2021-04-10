@@ -30,6 +30,7 @@ namespace RelayCalculator.Api.Controllers
     public class CalculationController : ControllerBase
     {
         private readonly ICalculationService calculationService;
+
         private readonly ISwimmerMapper swimmerMapper;
 
         public CalculationController(ICalculationService calculationService, ISwimmerMapper swimmerMapper)

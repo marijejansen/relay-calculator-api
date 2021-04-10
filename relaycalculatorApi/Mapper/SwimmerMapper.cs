@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using RelayCalculator.Api.Models;
+﻿using RelayCalculator.Api.Models;
 using RelayCalculator.Services.Models;
 using Swimmer = RelayCalculator.Services.Models.Swimmer;
 
@@ -18,7 +14,7 @@ namespace RelayCalculator.Api.Mapper
                 FirstName = swimmer.FirstName,
                 LastName = swimmer.LastName,
                 Gender = swimmer.Gender,
-                ShortCourseTimes = new CourseTimes()
+                ShortCourseTimes = swimmer.ShortCourseTimes != null ? new CourseTimes()
                 {
                     Freestyle50M = swimmer.ShortCourseTimes.Freestyle50M,
                     Freestyle100M = swimmer.ShortCourseTimes.Freestyle100M,
@@ -29,7 +25,7 @@ namespace RelayCalculator.Api.Mapper
                     Breaststroke100M = swimmer.ShortCourseTimes.Breaststroke100M,
                     Butterfly50M = swimmer.ShortCourseTimes.Butterfly50M,
                     Butterfly100M = swimmer.ShortCourseTimes.Butterfly100M
-                },
+                } : new CourseTimes(),
                 LongCourseTimes = swimmer.LongCourseTimes != null ? new CourseTimes()
                 {
                     Freestyle50M = swimmer.LongCourseTimes.Freestyle50M,
@@ -47,7 +43,7 @@ namespace RelayCalculator.Api.Mapper
 
         public SwimmerModel ReverseMap(Swimmer swimmer)
         {
-            return new Models.SwimmerModel
+            return new SwimmerModel
             {
                 BirthYear = swimmer.BirthYear,
                 FirstName = swimmer.FirstName,

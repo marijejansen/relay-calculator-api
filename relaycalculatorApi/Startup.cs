@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,8 +8,6 @@ using Microsoft.Extensions.Hosting;
 using RelayCalculator.Api.Mapper;
 using RelayCalculator.Services;
 using RelayCalculator.Services.Interfaces;
-using Swashbuckle.AspNetCore.Swagger;
-
 
 namespace RelayCalculator.Api
 {
@@ -72,7 +69,6 @@ namespace RelayCalculator.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
 
             app.UseCors("CorsPolicy");
 
