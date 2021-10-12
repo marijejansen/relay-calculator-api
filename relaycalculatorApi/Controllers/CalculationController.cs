@@ -103,6 +103,9 @@ namespace RelayCalculator.Api.Controllers
                         {
                             Freestyle50M = 28.61,
                             Freestyle100M = 62.88,
+                            Backstroke50M = 32.99,
+                            Breaststroke50M = 43.23,
+                            Butterfly50M = 33.01
                         }
                     },
                     new SwimmerModel()
@@ -114,7 +117,10 @@ namespace RelayCalculator.Api.Controllers
                         ShortCourseTimes = new CourseTimes()
                         {
                             Freestyle50M = 26.61,
-                            Freestyle100M = 60.21
+                            Freestyle100M = 60.21,
+                            Backstroke50M = 34.19,
+                            Breaststroke50M = 33.23,
+                            Butterfly50M = 35.01
                         }
                     },
                     new SwimmerModel()
@@ -126,7 +132,10 @@ namespace RelayCalculator.Api.Controllers
                         ShortCourseTimes = new CourseTimes()
                         {
                             Freestyle50M = 36.61,
-                            Freestyle100M = 92.21
+                            Freestyle100M = 92.21,
+                            Backstroke50M = 44.19,
+                            Breaststroke50M = 43.23,
+                            Butterfly50M = 32.91
                         }
                     },
                     new SwimmerModel()
@@ -138,7 +147,10 @@ namespace RelayCalculator.Api.Controllers
                         ShortCourseTimes = new CourseTimes()
                         {
                             Freestyle50M = 32.23,
-                            Freestyle100M = 71.91
+                            Freestyle100M = 71.91,
+                            Backstroke50M = 39.27,
+                            Breaststroke50M = 40.03,
+                            Butterfly50M = 39.43
                         }
                     },
                     new SwimmerModel()
@@ -150,7 +162,10 @@ namespace RelayCalculator.Api.Controllers
                         ShortCourseTimes = new CourseTimes()
                         {
                             Freestyle50M = 27.23,
-                            Freestyle100M = 61.91
+                            Freestyle100M = 61.91,
+                            Backstroke50M = 34.67,
+                            Breaststroke50M = 38.23,
+                            Butterfly50M = 32.61
                         }
                     },
                     new SwimmerModel()
@@ -162,7 +177,10 @@ namespace RelayCalculator.Api.Controllers
                         ShortCourseTimes = new CourseTimes()
                         {
                             Freestyle50M = 29.46,
-                            Freestyle100M = 64.45
+                            Freestyle100M = 64.45,
+                            Backstroke50M = 32.33,
+                            Breaststroke50M = 39.99,
+                            Butterfly50M = 30.21
                         }
                     },
                     new SwimmerModel()
@@ -174,7 +192,10 @@ namespace RelayCalculator.Api.Controllers
                         ShortCourseTimes = new CourseTimes()
                         {
                             Freestyle50M = 34.91,
-                            Freestyle100M = 81.45
+                            Freestyle100M = 81.45,
+                            Backstroke50M = 35.32,
+                            Breaststroke50M = 42.55,
+                            Butterfly50M = 40.22
                         }
                     },
                     new SwimmerModel()
@@ -186,7 +207,10 @@ namespace RelayCalculator.Api.Controllers
                         ShortCourseTimes = new CourseTimes()
                         {
                             Freestyle50M = 32.01,
-                            Freestyle100M = 73.81
+                            Freestyle100M = 73.81,
+                            Backstroke50M = 37.47,
+                            Breaststroke50M = 42.55,
+                            Butterfly50M = 33.01
                         }
                     },
                 }
