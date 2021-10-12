@@ -75,7 +75,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Breaststroke200Relay.cs" />
     <Compile Include="Enums\Relay.cs" />
+    <Compile Include="Backstroke200Relay.cs" />
     <Compile Include="Interfaces\IHtmlDocumentService.cs" />
     <Compile Include="Interfaces\ISearchSwimmerService.cs" />
     <Compile Include="Models\CalculationModel.cs" />

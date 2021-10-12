@@ -8,7 +8,7 @@ using RelayCalculator.Services.Models;
 
 namespace RelayCalculator.Services
 {
-    public class Freestyle200Relay : IBestTeamCalculationService
+    public class Backstroke200Relay : IBestTeamCalculationService
     {
         public double GetTime(int[] permutation, List<Swimmer> swimmers, Course course)
         {
@@ -17,9 +17,9 @@ namespace RelayCalculator.Services
             {
                 var indTime = course == Course.Long
                     ? swimmers[position]
-                        .LongCourseTimes.Freestyle50M
+                        .LongCourseTimes.Backstroke50M
                     : swimmers[position]
-                        .ShortCourseTimes.Freestyle50M;
+                        .ShortCourseTimes.Backstroke50M;
                 if (!(indTime > 0))
                 {
                     return 0;
@@ -40,8 +40,8 @@ namespace RelayCalculator.Services
                         LastName = s.LastName,
                         Age = DateTime.Today.Year - s.BirthYear,
                         Time = course == Course.Long
-                            ? s.LongCourseTimes.Freestyle50M
-                            : s.ShortCourseTimes.Freestyle50M
+                            ? s.LongCourseTimes.Backstroke50M
+                            : s.ShortCourseTimes.Backstroke50M
                     })
                 .ToList();
         }

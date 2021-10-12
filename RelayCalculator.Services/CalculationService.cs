@@ -12,7 +12,9 @@ namespace RelayCalculator.Services
     public class CalculationService : ICalculationService
     {
         private readonly IPermutationService permutationService;
+
         private readonly IGroupService groupService;
+
         private readonly IBestTeamCalculationService bestTeamCalculationService;
 
         public CalculationService(IPermutationService permutationService, IGroupService groupService, IBestTeamCalculationService bestTeamCalculationService)

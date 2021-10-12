@@ -14,10 +14,12 @@ namespace RelayCalculator.Services
     public class SearchSwimmersService : ISearchSwimmerService
     {
         private static IHtmlDocumentService _htmlDocumentService;
+
         public SearchSwimmersService(IHtmlDocumentService htmlDocumentService)
         {
             _htmlDocumentService = htmlDocumentService;
         }
+
         public async Task<List<Swimmer>> FindSwimmersByName(string firstName, string lastName)
         {
             var htmlDocument = await _htmlDocumentService.GetSearchResultsPage(firstName, lastName);
