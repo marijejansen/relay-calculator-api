@@ -9,11 +9,11 @@ namespace RelayCalculator.Services.Interfaces
     {
         Task<HtmlDocument> GetSwimmerPageById(int swimmerId);
 
-        Task<CourseTimes> SelectTimesByCourse(int swimmerId, int year, Course course);
+        Task<CourseTimes> SelectTimesByCourse(int swimmerId, int year, Course course, int? numberOfYearsBackIfNoResult);
 
         HtmlNodeCollection GetTimeNodes(HtmlDocument doc, Course course);
 
-        double GetBestTime(HtmlNodeCollection table, int sinceYear);
+        double GetBestTime(HtmlNodeCollection table, int sinceYear, int? numberOfYearsBackIfNoResult);
 
         double ConvertTimeStringToDouble(string time);
     }

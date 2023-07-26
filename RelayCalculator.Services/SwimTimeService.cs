@@ -28,7 +28,7 @@ namespace RelayCalculator.Services
             return htmlDoc;
         }
 
-        public async Task<CourseTimes> SelectTimesByCourse(int swimmerId, int year, Course course)
+        public async Task<CourseTimes> SelectTimesByCourse(int swimmerId, int year, Course course, int? numberOfYearsBackIfNoResult)
         {
             CourseTimes times = new CourseTimes();
 
@@ -37,7 +37,7 @@ namespace RelayCalculator.Services
                 HtmlDocument doc = await _htmlDocumentService.GetHtmlPerStroke(swimmerId, stroke.Value);
                 HtmlNodeCollection table = GetTimeNodes(doc, course);
 
-                var bestTime = GetBestTime(table, year);
+                var bestTime = GetBestTime(table, year, numberOfYearsBackIfNoResult);
 
                 times.GetType().GetProperty(stroke.Key)?.SetValue(times, bestTime);
             };
@@ -63,9 +63,10 @@ namespace RelayCalculator.Services
 
         //takes in a HtmlNodeCollection in which times of a specific course are found and a year from which to search
         //returns a double besttime
-        public double GetBestTime(HtmlNodeCollection table, int sinceYear)
+        public double GetBestTime(HtmlNodeCollection table, int sinceYear, int? numberOfYearsBackIfNoResult)
         {
             double bestTime = 0;
+            double backUpTime = 0;
             try
             {
                 foreach (var tr in table)
@@ -80,21 +81,27 @@ namespace RelayCalculator.Services
                     //check if the date falls in the right timespan
                     if (year >= sinceYear)
                     {
-
                         //get the time
                         var stringTime = tr.SelectSingleNode(".//a[@class='time']").InnerText;
                         stringTime = Regex.Replace(stringTime, @"[^0-9:.,]", "");
                         var time = ConvertTimeStringToDouble(stringTime);
 
                         //check for the fastest time
-                        if (time < bestTime || bestTime <= 0)
-                        {
-                            bestTime = time;
-                        }
+                        if (time < bestTime || bestTime <= 0) bestTime = time;
+
+                    } else if (year >= sinceYear - numberOfYearsBackIfNoResult)
+                    {
+                        //get the time
+                        var stringTime = tr.SelectSingleNode(".//a[@class='time']").InnerText;
+                        stringTime = Regex.Replace(stringTime, @"[^0-9:.,]", "");
+                        var time = ConvertTimeStringToDouble(stringTime);
+
+                        //check for the fastest backup time
+                        if (time < backUpTime || backUpTime <= 0) backUpTime = time;
                     }
                 }
 
-                return Math.Round(bestTime, 2);
+                return bestTime != 0 ? Math.Round(bestTime, 2) : Math.Round(backUpTime, 2);
             }
             catch
             {
