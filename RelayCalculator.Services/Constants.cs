@@ -44,6 +44,9 @@ namespace RelayCalculator.Services
                 {"Butterfly50M", 15},
                 {"Butterfly100M", 16},
                 {"Butterfly200M", 17},
+                {"IndividualMedley200M", 18},
+                {"IndividualMedley400M", 19},
+                {"IndividualMedley100M", 20},
             };
         }
     }
