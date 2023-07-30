@@ -32,7 +32,7 @@ namespace RelayCalculator.Services
         {
             CourseTimes times = new CourseTimes();
             var strokes = (bool)getAllTimes ? Constants.SwimRankingsPage.AllStrokes : Constants.SwimRankingsPage.StrokesForRelays;
-
+            var x = 10;
             foreach (var stroke in strokes)
             {
                 HtmlDocument doc = await _htmlDocumentService.GetHtmlPerStroke(swimmerId, stroke.Value);

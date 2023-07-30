@@ -40,7 +40,7 @@
             Returns a list of swimmers that meet the search.
             </returns>
         </member>
-        <member name="M:RelayCalculator.Api.Controllers.SwimmerDataController.GetTimesBySwimmerIdShortCourse(System.Int32,System.Int32,System.Nullable{System.Int32})">
+        <member name="M:RelayCalculator.Api.Controllers.SwimmerDataController.GetTimesBySwimmerIdShortCourse(System.Int32,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Boolean})">
             <summary>
             Gets the fastest times on short course for the swimmer from a given year
             </summary>
@@ -48,7 +48,7 @@
             Returns times for all strokes in seconds.
             </returns>
         </member>
-        <member name="M:RelayCalculator.Api.Controllers.SwimmerDataController.GetTimesBySwimmerIdLongCourse(System.Int32,System.Int32,System.Nullable{System.Int32})">
+        <member name="M:RelayCalculator.Api.Controllers.SwimmerDataController.GetTimesBySwimmerIdLongCourse(System.Int32,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Boolean})">
             <summary>
             Gets the fastest times on long course for the swimmer from a given year
             </summary>

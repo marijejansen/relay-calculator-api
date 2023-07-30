@@ -43,7 +43,7 @@ namespace RelayCalculator.Services
                 {"Breaststroke200M", 14},
                 {"Butterfly50M", 15},
                 {"Butterfly100M", 16},
-                {"Butterfly100M", 17},
+                {"Butterfly200M", 17},
             };
         }
     }
