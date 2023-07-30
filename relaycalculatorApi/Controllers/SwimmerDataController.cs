@@ -43,9 +43,10 @@ namespace RelayCalculator.Api.Controllers
         /// </returns>
         [HttpGet]
         [Route("getTimesShortCourse")]
-        public async Task<CourseTimes> GetTimesBySwimmerIdShortCourse(int id, int fromYear, int? numberOfYearsBackIfNoResult)
+        public async Task<CourseTimes> GetTimesBySwimmerIdShortCourse(int id, int fromYear,
+            int? numberOfYearsBackIfNoResult, bool? getAllTimes)
         {
-            return await _swimTimeService.SelectTimesByCourse(id, fromYear, Course.Short, numberOfYearsBackIfNoResult);
+            return await _swimTimeService.SelectTimesByCourse(id, fromYear, Course.Short, numberOfYearsBackIfNoResult, getAllTimes);
         }
 
 
@@ -57,9 +58,9 @@ namespace RelayCalculator.Api.Controllers
         /// </returns>
         [HttpGet]
         [Route("getTimesLongCourse")]
-        public async Task<CourseTimes> GetTimesBySwimmerIdLongCourse(int id, int fromYear, int? numberOfYearsBackIfNoResult)
+        public async Task<CourseTimes> GetTimesBySwimmerIdLongCourse(int id, int fromYear, int? numberOfYearsBackIfNoResult, bool? getAllTimes)
         {
-            return await _swimTimeService.SelectTimesByCourse(id, fromYear, Course.Long, numberOfYearsBackIfNoResult);
+            return await _swimTimeService.SelectTimesByCourse(id, fromYear, Course.Long, numberOfYearsBackIfNoResult, getAllTimes);
         }
     }
 }

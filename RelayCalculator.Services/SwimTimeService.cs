@@ -28,11 +28,12 @@ namespace RelayCalculator.Services
             return htmlDoc;
         }
 
-        public async Task<CourseTimes> SelectTimesByCourse(int swimmerId, int year, Course course, int? numberOfYearsBackIfNoResult)
+        public async Task<CourseTimes> SelectTimesByCourse(int swimmerId, int year, Course course, int? numberOfYearsBackIfNoResult, bool? getAllTimes)
         {
             CourseTimes times = new CourseTimes();
+            var strokes = (bool)getAllTimes ? Constants.SwimRankingsPage.AllStrokes : Constants.SwimRankingsPage.StrokesForRelays;
 
-            foreach (var stroke in Constants.SwimRankingsPage.Strokes)
+            foreach (var stroke in strokes)
             {
                 HtmlDocument doc = await _htmlDocumentService.GetHtmlPerStroke(swimmerId, stroke.Value);
                 HtmlNodeCollection table = GetTimeNodes(doc, course);
@@ -89,7 +90,7 @@ namespace RelayCalculator.Services
                         //check for the fastest time
                         if (time < bestTime || bestTime <= 0) bestTime = time;
 
-                    } else if (year >= sinceYear - numberOfYearsBackIfNoResult)
+                    } else if (numberOfYearsBackIfNoResult != null && year >= sinceYear - numberOfYearsBackIfNoResult)
                     {
                         //get the time
                         var stringTime = tr.SelectSingleNode(".//a[@class='time']").InnerText;

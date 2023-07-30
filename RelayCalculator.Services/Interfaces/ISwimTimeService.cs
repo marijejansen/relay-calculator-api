@@ -9,7 +9,7 @@ namespace RelayCalculator.Services.Interfaces
     {
         Task<HtmlDocument> GetSwimmerPageById(int swimmerId);
 
-        Task<CourseTimes> SelectTimesByCourse(int swimmerId, int year, Course course, int? numberOfYearsBackIfNoResult);
+        Task<CourseTimes> SelectTimesByCourse(int swimmerId, int year, Course course, int? numberOfYearsBackIfNoResult, bool? getAllTimes);
 
         HtmlNodeCollection GetTimeNodes(HtmlDocument doc, Course course);
 
