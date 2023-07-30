@@ -31,7 +31,7 @@ namespace RelayCalculator.Services
         public async Task<CourseTimes> SelectTimesByCourse(int swimmerId, int year, Course course, int? numberOfYearsBackIfNoResult, bool? getAllTimes)
         {
             CourseTimes times = new CourseTimes();
-            var strokes = (bool)getAllTimes ? Constants.SwimRankingsPage.AllStrokes : Constants.SwimRankingsPage.StrokesForRelays;
+            var strokes = getAllTimes != null && (bool)getAllTimes ? Constants.SwimRankingsPage.AllStrokes : Constants.SwimRankingsPage.StrokesForRelays;
             var x = 10;
             foreach (var stroke in strokes)
             {
