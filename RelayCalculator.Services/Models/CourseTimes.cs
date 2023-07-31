@@ -22,5 +22,8 @@ namespace RelayCalculator.Services.Models
         public double Butterfly50M { get; set; }
         public double Butterfly100M { get; set; }
         public double? Butterfly200M { get; set; }
+        public double? IndividualMedley100M { get; set; }
+        public double? IndividualMedley200M { get; set; }
+        public double? IndividualMedley400M { get; set; }
     }
 }
