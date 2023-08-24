@@ -1,11 +1,14 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using RelayCalculator.Services.Models;
 using System.Globalization;
 using RelayCalculator.Services.Enums;
 using RelayCalculator.Services.Interfaces;
+using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 
 namespace RelayCalculator.Services

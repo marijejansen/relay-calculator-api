@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29709.97
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelayCalculator.Api", "relaycalculatorApi\RelayCalculator.Api.csproj", "{E6105AA7-970E-4354-AD49-01EA5E837B3A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelayCalculator.Services", "RelayCalculator.Services\RelayCalculator.Services.csproj", "{607A5650-6D22-4FA7-8E43-B77235217268}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RelayCalculator.Api", "relaycalculatorApi\RelayCalculator.Api.csproj", "{E6105AA7-970E-4354-AD49-01EA5E837B3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{E6105AA7-970E-4354-AD49-01EA5E837B3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6105AA7-970E-4354-AD49-01EA5E837B3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6105AA7-970E-4354-AD49-01EA5E837B3A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{607A5650-6D22-4FA7-8E43-B77235217268}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{607A5650-6D22-4FA7-8E43-B77235217268}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{607A5650-6D22-4FA7-8E43-B77235217268}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{607A5650-6D22-4FA7-8E43-B77235217268}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

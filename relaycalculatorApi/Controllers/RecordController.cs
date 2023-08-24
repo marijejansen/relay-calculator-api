@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RelayCalculator.Api.Mapper;
 using RelayCalculator.Services.Interfaces;
 using RelayCalculator.Services.Models;
 using System.Collections.Generic;
