@@ -31,6 +31,7 @@ namespace RelayCalculator.Api
             services.AddSingleton<ISwimTimeService, SwimTimeService>();
             services.AddSingleton<IHtmlDocumentService, HtmlDocumentService>();
             services.AddSingleton<ISearchSwimmerService, SearchSwimmersService>();
+            services.AddSingleton<IRecordService, RecordService>();
             services.AddSingleton<ISwimmerMapper, SwimmerMapper>();
 
             services.AddCors(options =>

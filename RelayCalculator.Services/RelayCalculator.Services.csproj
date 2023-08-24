@@ -76,11 +76,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Breaststroke200Relay.cs" />
+    <Compile Include="Enums\RecordType.cs" />
     <Compile Include="Enums\Relay.cs" />
     <Compile Include="Backstroke200Relay.cs" />
+    <Compile Include="Interfaces\IRecordService.cs" />
     <Compile Include="Interfaces\IHtmlDocumentService.cs" />
     <Compile Include="Interfaces\ISearchSwimmerService.cs" />
     <Compile Include="Models\CalculationModel.cs" />
+    <Compile Include="Models\Record.cs" />
+    <Compile Include="RecordService.cs" />
     <Compile Include="SwimTimeService.cs" />
     <Compile Include="Freestyle400Relay.cs" />
     <Compile Include="Freestyle200Relay.cs" />
