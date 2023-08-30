@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using RelayCalculator.Services.Enums;
-using RelayCalculator.Services.Interfaces;
-using RelayCalculator.Services.Models;
+using RelayCalculator.Api.Services.Enums;
+using RelayCalculator.Api.Services.Interfaces;
+using RelayCalculator.Api.Services.Models;
 
 namespace RelayCalculator.Api.Controllers
 {

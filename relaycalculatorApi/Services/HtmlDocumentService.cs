@@ -1,9 +1,9 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
-using RelayCalculator.Services.Interfaces;
+using RelayCalculator.Api.Services.Interfaces;
 
-namespace RelayCalculator.Services
+namespace RelayCalculator.Api.Services
 {
     public class HtmlDocumentService : IHtmlDocumentService
     {

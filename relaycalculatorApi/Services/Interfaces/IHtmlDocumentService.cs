@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HtmlAgilityPack;
 
-namespace RelayCalculator.Services.Interfaces
+namespace RelayCalculator.Api.Services.Interfaces
 {
     public interface IHtmlDocumentService
     {

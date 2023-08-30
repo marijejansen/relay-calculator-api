@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RelayCalculator.Services.Models
+﻿namespace RelayCalculator.Api.Services.Models
 {
     public class RelaySwimmer
     {

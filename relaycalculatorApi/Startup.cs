@@ -6,8 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RelayCalculator.Api.Mapper;
-using RelayCalculator.Services;
-using RelayCalculator.Services.Interfaces;
+using RelayCalculator.Api.Services;
+using RelayCalculator.Api.Services.Interfaces;
 
 namespace RelayCalculator.Api
 {

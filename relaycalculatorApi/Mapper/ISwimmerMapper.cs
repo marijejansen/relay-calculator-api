@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using RelayCalculator.Api.Models;
-using RelayCalculator.Services.Models;
+﻿using RelayCalculator.Api.Models;
+using RelayCalculator.Api.Services.Models;
 
 namespace RelayCalculator.Api.Mapper
 {

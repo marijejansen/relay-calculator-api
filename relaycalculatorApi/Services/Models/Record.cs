@@ -1,6 +1,6 @@
-﻿using RelayCalculator.Services.Enums;
+﻿using RelayCalculator.Api.Services.Enums;
 
-namespace RelayCalculator.Services.Models
+namespace RelayCalculator.Api.Services.Models
 {
     public class Record
     {

@@ -1,7 +1,8 @@
-﻿namespace RelayCalculator.Api.Models
+﻿using RelayCalculator.Api.Services.Enums;
+
+namespace RelayCalculator.Api.Models
 {
     using System.Collections.Generic;
-    using RelayCalculator.Services.Enums;
 
     public class CalculationRequest
     {

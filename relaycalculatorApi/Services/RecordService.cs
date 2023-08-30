@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
-using RelayCalculator.Services.Interfaces;
-using RelayCalculator.Services.Models;
+using RelayCalculator.Api.Services.Interfaces;
+using RelayCalculator.Api.Services.Models;
 
-namespace RelayCalculator.Services
+namespace RelayCalculator.Api.Services
 {
     public class RecordService : IRecordService
     {

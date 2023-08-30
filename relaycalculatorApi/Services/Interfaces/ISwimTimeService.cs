@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using HtmlAgilityPack;
-using RelayCalculator.Services.Models;
-using RelayCalculator.Services.Enums;
+using RelayCalculator.Api.Services.Enums;
+using RelayCalculator.Api.Services.Models;
 
-namespace RelayCalculator.Services.Interfaces
+namespace RelayCalculator.Api.Services.Interfaces
 {
     public interface ISwimTimeService
     {

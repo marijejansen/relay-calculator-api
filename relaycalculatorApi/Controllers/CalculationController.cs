@@ -7,6 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using RelayCalculator.Api.Services.Enums;
+using RelayCalculator.Api.Services.Interfaces;
+using RelayCalculator.Api.Services.Models;
+
 namespace RelayCalculator.Api.Controllers
 {
     using System.Collections.Generic;
@@ -16,10 +20,6 @@ namespace RelayCalculator.Api.Controllers
 
     using RelayCalculator.Api.Mapper;
     using RelayCalculator.Api.Models;
-    using RelayCalculator.Services.Enums;
-    using RelayCalculator.Services.Interfaces;
-    using RelayCalculator.Services.Models;
-
     using SwimmerModel = RelayCalculator.Api.Models.SwimmerModel;
 
     /// <summary>

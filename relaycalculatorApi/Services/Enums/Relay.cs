@@ -1,4 +1,4 @@
-﻿namespace RelayCalculator.Services.Enums
+﻿namespace RelayCalculator.Api.Services.Enums
 {
     public enum Relay
     {

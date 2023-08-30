@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RelayCalculator.Api.Services.Enums;
+using RelayCalculator.Api.Services.Interfaces;
+using RelayCalculator.Api.Services.Models;
 
-using RelayCalculator.Services.Enums;
-using RelayCalculator.Services.Interfaces;
-using RelayCalculator.Services.Models;
-
-namespace RelayCalculator.Services
+namespace RelayCalculator.Api.Services
 {
     public class Breaststroke200Relay : IBestTeamCalculationService
     {

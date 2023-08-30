@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using RelayCalculator.Api.Services.Enums;
+using RelayCalculator.Api.Services.Interfaces;
 
-using RelayCalculator.Services.Enums;
-using RelayCalculator.Services.Interfaces;
-
-namespace RelayCalculator.Services.Models
+namespace RelayCalculator.Api.Services.Models
 {
     public class CalculationModel
     {

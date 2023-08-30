@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using RelayCalculator.Services.Enums;
-using RelayCalculator.Services.Models;
+using RelayCalculator.Api.Services.Models;
 
-namespace RelayCalculator.Services.Interfaces
+namespace RelayCalculator.Api.Services.Interfaces
 {
     public interface IRecordService
     {

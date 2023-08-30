@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RelayCalculator.Services.Interfaces;
+﻿using System.Collections.Generic;
+using RelayCalculator.Api.Services.Interfaces;
 
-namespace RelayCalculator.Services
+namespace RelayCalculator.Api.Services
 {
     public class PermutationService : IPermutationService
     {

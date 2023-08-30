@@ -1,5 +1,5 @@
-﻿using RelayCalculator.Services.Enums;
-using RelayCalculator.Services.Models;
+﻿using RelayCalculator.Api.Services.Enums;
+using RelayCalculator.Api.Services.Models;
 
 namespace RelayCalculator.Api.Models
 {

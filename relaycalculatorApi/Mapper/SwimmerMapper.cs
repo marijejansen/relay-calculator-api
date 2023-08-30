@@ -1,6 +1,6 @@
 ﻿using RelayCalculator.Api.Models;
-using RelayCalculator.Services.Models;
-using Swimmer = RelayCalculator.Services.Models.Swimmer;
+using RelayCalculator.Api.Services.Models;
+using Swimmer = RelayCalculator.Api.Services.Models.Swimmer;
 
 namespace RelayCalculator.Api.Mapper
 {

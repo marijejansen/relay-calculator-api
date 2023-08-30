@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using RelayCalculator.Services.Models;
+using RelayCalculator.Api.Services.Models;
 
-namespace RelayCalculator.Services.Interfaces
+namespace RelayCalculator.Api.Services.Interfaces
 {
     public interface ICalculationService
     {

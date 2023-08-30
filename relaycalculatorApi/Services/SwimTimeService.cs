@@ -1,17 +1,14 @@
-﻿using HtmlAgilityPack;
-using System;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using RelayCalculator.Services.Models;
+﻿using System;
 using System.Globalization;
-using RelayCalculator.Services.Enums;
-using RelayCalculator.Services.Interfaces;
-using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using HtmlAgilityPack;
+using RelayCalculator.Api.Services.Enums;
+using RelayCalculator.Api.Services.Interfaces;
+using RelayCalculator.Api.Services.Models;
 
-namespace RelayCalculator.Services
+namespace RelayCalculator.Api.Services
 {
     public class SwimTimeService : ISwimTimeService
     {
