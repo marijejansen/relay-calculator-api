@@ -15,10 +15,10 @@ namespace RelayCalculator.Api.Controllers
         }
 
         [HttpGet]
-        [Route("/{swimmerId}")]
+        [Route("{swimmerId}")]
         public Task<SwimmerStatModel> GetSwimmerStats([FromRoute] int swimmerId) { 
 
-            return swimmerStatService.GetSwimmerStats(swimmerId); 
+            return swimmerStatService.GetSwimmerStats(swimmerId, new System.DateTime(2023, 1, 1)); 
 
         }
     }

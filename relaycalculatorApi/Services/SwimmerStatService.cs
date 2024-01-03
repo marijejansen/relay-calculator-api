@@ -61,7 +61,7 @@ namespace RelayCalculator.Api.Services
                 meetsList.Add(meetModel);
             }
 
-            return new SwimmerStatModel() { Meets = meetsList.AsEnumerable<Meet>()};
+            return new SwimmerStatModel() { SwimmerId = swimmerId, Meets = meetsList.AsEnumerable<Meet>()};
         }
 
         private async Task<HtmlDocument> GetSwimmerMeetPage()
