@@ -2,6 +2,7 @@
 {
     public enum Distance
     {
+        TwentyFive = 25,
         Fifty = 50,
         Hundred = 100,
         TwoHundred = 200,

@@ -33,6 +33,7 @@ namespace RelayCalculator.Api
             services.AddSingleton<ISearchSwimmerService, SearchSwimmersService>();
             services.AddSingleton<IRecordService, RecordService>();
             services.AddSingleton<ISwimmerMapper, SwimmerMapper>();
+            services.AddSingleton<ISwimmerStatService, SwimmerStatService>();
 
             services.AddCors(options =>
             {

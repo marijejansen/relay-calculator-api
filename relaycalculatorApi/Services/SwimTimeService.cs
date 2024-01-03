@@ -29,7 +29,6 @@ namespace RelayCalculator.Api.Services
         {
             CourseTimes times = new CourseTimes();
             var strokes = getAllTimes != null && (bool)getAllTimes ? Constants.SwimRankingsPage.AllStrokes : Constants.SwimRankingsPage.StrokesForRelays;
-            var x = 10;
             foreach (var stroke in strokes)
             {
                 HtmlDocument doc = await _htmlDocumentService.GetHtmlPerStroke(swimmerId, stroke.Value);
@@ -81,7 +80,6 @@ namespace RelayCalculator.Api.Services
                     {
                         //get the time
                         var stringTime = tr.SelectSingleNode(".//a[@class='time']").InnerText;
-                        stringTime = Regex.Replace(stringTime, @"[^0-9:.,]", "");
                         var time = ConvertTimeStringToDouble(stringTime);
 
                         //check for the fastest time
@@ -91,7 +89,6 @@ namespace RelayCalculator.Api.Services
                     {
                         //get the time
                         var stringTime = tr.SelectSingleNode(".//a[@class='time']").InnerText;
-                        stringTime = Regex.Replace(stringTime, @"[^0-9:.,]", "");
                         var time = ConvertTimeStringToDouble(stringTime);
 
                         //check for the fastest backup time
@@ -110,6 +107,7 @@ namespace RelayCalculator.Api.Services
         //TODO: ergens anders neerzetten
         public double ConvertTimeStringToDouble(string time)
         {
+            time = Regex.Replace(time, @"[^0-9:.,]", "");
             double timeInSeconds;
             if (time.Contains(":"))
             {
@@ -121,7 +119,7 @@ namespace RelayCalculator.Api.Services
             }
             else
             {
-                timeInSeconds = Convert.ToDouble(time, CultureInfo.InvariantCulture);
+                double.TryParse(time, NumberStyles.Any, CultureInfo.InvariantCulture, out timeInSeconds);
             }
             return timeInSeconds;
         }
