@@ -87,8 +87,11 @@ namespace RelayCalculator.Api.Services
             {
                 if (foundSwimmer && tr.HasClass("meetResult0"))
                 {
-                    var perf = GetSingleRacePerformance(tr);
-                    performancesForMeet.Add(perf);
+                    var performance = GetSingleRacePerformance(tr);
+                    if(performance != null)
+                    {
+                        performancesForMeet.Add(performance);
+                    }
                 }
 
                 else if (tr.HasClass("meetResult1"))
@@ -116,6 +119,7 @@ namespace RelayCalculator.Api.Services
             var styleId = int.Parse(href.Split('&').Last().Split("=")[1]);
 
             var modelWithDistanceAndStroke = GetRacePerformanceWithDistance(styleId);
+            if(modelWithDistanceAndStroke == null) { return null; };
 
             var swimTime = _swimTimeService.ConvertTimeStringToDouble(node.SelectSingleNode(".//td[@class='swimtime']").SelectSingleNode("a").InnerText);
             var percentageNode = node.SelectNodes(".//td[@class='date']");
@@ -268,7 +272,7 @@ namespace RelayCalculator.Api.Services
                         Distance = Enums.Distance.TwentyFive,
                         Stroke = Enums.Stroke.Butterfly,
                     };
-                default: return new RacePerformance();
+                default: return null;
             }
         }
 
