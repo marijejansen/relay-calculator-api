@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using RelayCalculator.Api.Services.Enums;
 
 namespace RelayCalculator.Api.Services
 {
@@ -30,6 +31,16 @@ namespace RelayCalculator.Api.Services
 
             _swimmerId = swimmerId;
             var meetsPage = await GetSwimmerMeetPage();
+            var info = meetsPage.DocumentNode.SelectSingleNode(".//div[@id='athleteinfo']").SelectSingleNode(".//div[@id='name']").InnerText;
+            var name = info.Split("(")[0].Split(",");
+            var firstName = char.ToUpper(name[1].Trim()[0]) + name[1].Trim().ToLower()[1..];
+            var lastName = char.ToUpper(name[0].Trim()[0]) + name[0].Trim().ToLower()[1..];
+            var birthYear = info.Split("(")[1].Split("&")[0];
+            var gender = meetsPage.DocumentNode.SelectSingleNode(".//div[@id='athleteinfo']").SelectSingleNode(".//img")
+                .Attributes["src"].Value.Split(".")[0][^1..];
+            var club = meetsPage.DocumentNode.SelectSingleNode(".//div[@id='nationclub']").InnerHtml.Split("<br>").Last();
+
+            var statModel = new SwimmerStatModel { SwimmerId = swimmerId, FirstName = firstName, LastName = lastName, BirthYear = int.Parse(birthYear), Gender = gender == "2" ? Gender.Female : Gender.Male, ClubName = club};
 
             var meets = meetsPage.DocumentNode.SelectNodes(".//tr[@class='athleteMeet0'] | .//tr[@class='athleteMeet1']");
             var meetsList = new List<Meet>();
@@ -60,7 +71,8 @@ namespace RelayCalculator.Api.Services
                 meetsList.Add(meetModel);
             }
 
-            return new SwimmerStatModel() { SwimmerId = swimmerId, Meets = meetsList.AsEnumerable<Meet>()};
+            statModel.Meets = meetsList.AsEnumerable();
+            return statModel;
         }
 
         private async Task<HtmlDocument> GetSwimmerMeetPage()

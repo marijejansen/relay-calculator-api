@@ -11,6 +11,7 @@ namespace RelayCalculator.Api.Models
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+        public string ClubName { get; set; }
 
         public int BirthYear { get; set; }
 
