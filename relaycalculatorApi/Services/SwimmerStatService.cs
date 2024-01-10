@@ -30,9 +30,8 @@ namespace RelayCalculator.Api.Services
 
             _swimmerId = swimmerId;
             var meetsPage = await GetSwimmerMeetPage();
-            var meetTable = meetsPage.DocumentNode.Descendants("table").FirstOrDefault(n => n.HasClass("athleteMeet"));
 
-            var meets = meetTable.SelectNodes(".//tr[@class='athleteMeet0'] | .//tr[@class='athleteMeet1']");
+            var meets = meetsPage.DocumentNode.SelectNodes(".//tr[@class='athleteMeet0'] | .//tr[@class='athleteMeet1']");
             var meetsList = new List<Meet>();
 
             foreach (var meet in meets)
@@ -44,7 +43,7 @@ namespace RelayCalculator.Api.Services
                 // TODO: allow for other dates
                 if (date < startDate)
                 {
-                    continue;
+                    break;
                 }
 
                 var city = meet.SelectSingleNode(".//td[@class='city']");
@@ -55,7 +54,7 @@ namespace RelayCalculator.Api.Services
                 var meetId = meetQueryPar[1].Split("=")[1];
                 var clubId = meetQueryPar[2].Split("=")[1];
                 var meetPage = await GetMeetPage(meetId, clubId);
-                var meetModel = new Meet() { Course = course, Date = date, MeetId = int.Parse(meetId) }; 
+                var meetModel = new Meet() { Course = course, Date = date, MeetId = int.Parse(meetId), City = city.InnerText }; 
 
                 meetModel.RacePerformances = GetRacePerformanceForMeet(meetPage);
                 meetsList.Add(meetModel);

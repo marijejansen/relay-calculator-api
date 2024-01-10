@@ -7,6 +7,8 @@ namespace RelayCalculator.Api.Models
     public class Meet
     {
         public int MeetId { get; set; }
+        public string City { get; set; }
+        public string MeetName { get; set; }
         public Course Course { get; set; }
         public DateTime Date { get; set; }
         public IEnumerable<RacePerformance> RacePerformances { get; set; }
