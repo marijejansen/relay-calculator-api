@@ -1,6 +1,8 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using Newtonsoft.Json.Linq;
 using RelayCalculator.Api.Services.Interfaces;
 
 namespace RelayCalculator.Api.Services
@@ -21,8 +23,29 @@ namespace RelayCalculator.Api.Services
             return await GetHtmlDocumentByUrl(url);
         }
 
+        public async Task<HtmlDocument> GetRecentMeetsPage()
+        {
+            var url = $"https://www.swimrankings.net/index.php?page=meetSelect&selectPage=RECENT&meetType=1&nationId=273";
+
+            return await GetHtmlDocumentByUrl(url);
+        }
+
+        public async Task<HtmlDocument> GetRecentMeetsPage(DateTime? fromDate)
+        {
+            var selectArg = fromDate != null ? fromDate?.Year + "_m" + fromDate?.Month : "RECENT";
+            var url = $"https://www.swimrankings.net/index.php?page=meetSelect&meetType=1&nationId=273&selectPage={selectArg}";
+            //var url = $"https://www.swimrankings.net/index.php?page=meetSelect&meetType=1&selectPage={selectArg}";
+            return await GetHtmlDocumentByUrl(url);
+        }
+
+        public async Task<HtmlDocument> GetHtmlDocumentByRelativeUrl(string url)
+        {
+            return await this.GetHtmlDocumentByUrl($"https://www.swimrankings.net/index.php{url}");
+        }
+
         public async Task<HtmlDocument> GetHtmlDocumentByUrl(string url)
         {
+            url = url.Replace("&amp;", "&");
             var client = new HttpClient();
             var response = await client.GetStringAsync(url);
             var htmlDocument = new HtmlDocument();

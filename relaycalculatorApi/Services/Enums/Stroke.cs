@@ -6,6 +6,7 @@
         Backstroke,
         Breaststroke,
         Butterfly,
-        Medley
+        Medley,
+        Unknown,
     }
 }

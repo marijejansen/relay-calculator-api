@@ -7,6 +7,7 @@ using HtmlAgilityPack;
 using RelayCalculator.Api.Services.Enums;
 using RelayCalculator.Api.Services.Interfaces;
 using RelayCalculator.Api.Services.Models;
+using RelayCalculator.Api.Utils;
 
 namespace RelayCalculator.Api.Services
 {
@@ -80,7 +81,7 @@ namespace RelayCalculator.Api.Services
                     {
                         //get the time
                         var stringTime = tr.SelectSingleNode(".//a[@class='time']").InnerText;
-                        var time = ConvertTimeStringToDouble(stringTime);
+                        var time = SwimmerUtils.ConvertTimeStringToDouble(stringTime);
 
                         //check for the fastest time
                         if (time < bestTime || bestTime <= 0) bestTime = time;
@@ -89,7 +90,7 @@ namespace RelayCalculator.Api.Services
                     {
                         //get the time
                         var stringTime = tr.SelectSingleNode(".//a[@class='time']").InnerText;
-                        var time = ConvertTimeStringToDouble(stringTime);
+                        var time = SwimmerUtils.ConvertTimeStringToDouble(stringTime);
 
                         //check for the fastest backup time
                         if (time < backUpTime || backUpTime <= 0) backUpTime = time;
@@ -102,26 +103,6 @@ namespace RelayCalculator.Api.Services
             {
                 return bestTime;
             }
-        }
-
-        //TODO: ergens anders neerzetten
-        public double ConvertTimeStringToDouble(string time)
-        {
-            time = Regex.Replace(time, @"[^0-9:.,]", "");
-            double timeInSeconds;
-            if (time.Contains(":"))
-            {
-                var splitted = time.Split(':');
-                var minutes = Convert.ToDouble(splitted[0]);
-                timeInSeconds = minutes * 60;
-                var seconds = Convert.ToDouble(splitted[1], CultureInfo.InvariantCulture);
-                timeInSeconds += seconds;
-            }
-            else
-            {
-                double.TryParse(time, NumberStyles.Any, CultureInfo.InvariantCulture, out timeInSeconds);
-            }
-            return timeInSeconds;
         }
     }
 }

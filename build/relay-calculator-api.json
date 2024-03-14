@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.1124.51302",
-      "templateHash": "427809586291508576"
+      "version": "0.25.53.49325",
+      "templateHash": "1879002492484562691"
     }
   },
   "parameters": {
@@ -18,19 +18,13 @@
     },
     "appServiceSkuCapacity": {
       "type": "int"
-    },
-    "sqlAdministratorLogin": {
-      "type": "string"
-    },
-    "sqlAdministratorLoginPassword": {
-      "type": "string"
     }
   },
   "variables": {
-    "appServicePlanName": "[toLower('relay-calculator-api-asp')]",
-    "apiName": "relay-calculator-api",
-    "sqlName": "relay-calculator-sql",
-    "databaseName": "relay-calculations"
+    "appServicePlanName": "[toLower('relay-calculator-asp')]",
+    "storageAccountName": "[toLower('relaycalculatorstorage')]",
+    "functionName": "[toLower('relaycalculator-function-app')]",
+    "apiName": "relay-calculator-api"
   },
   "resources": [
     {
@@ -60,27 +54,57 @@
       ]
     },
     {
-      "type": "Microsoft.Sql/servers",
-      "apiVersion": "2020-11-01-preview",
-      "name": "[variables('sqlName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-02-01",
+      "name": "[variables('storageAccountName')]",
       "location": "[parameters('location')]",
-      "properties": {
-        "administratorLogin": "[parameters('sqlAdministratorLogin')]",
-        "administratorLoginPassword": "[parameters('sqlAdministratorLoginPassword')]",
-        "version": "12.0"
+      "kind": "StorageV2",
+      "sku": {
+        "name": "Standard_LRS"
       }
     },
     {
-      "type": "Microsoft.Sql/servers/databases",
-      "apiVersion": "2021-05-01-preview",
-      "name": "[format('{0}/{1}', variables('sqlName'), variables('databaseName'))]",
-      "location": "[parameters('location')]",
-      "sku": {
-        "name": "Basic"
-      },
-      "properties": {},
+      "type": "Microsoft.Storage/storageAccounts/tableServices",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/{1}', variables('storageAccountName'), 'default')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Sql/servers', variables('sqlName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/{1}/{2}', variables('storageAccountName'), 'default', 'clubRecords')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/tableServices', variables('storageAccountName'), 'default')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2021-03-01",
+      "name": "[variables('functionName')]",
+      "kind": "functionapp",
+      "location": "[parameters('location')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "httpsOnly": true,
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "clientAffinityEnabled": true,
+        "reserved": true,
+        "siteConfig": {
+          "alwaysOn": true,
+          "appSettings": [
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
       ]
     }
   ]

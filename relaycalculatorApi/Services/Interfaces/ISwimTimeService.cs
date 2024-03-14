@@ -14,7 +14,5 @@ namespace RelayCalculator.Api.Services.Interfaces
         HtmlNodeCollection GetTimeNodes(HtmlDocument doc, Course course);
 
         double GetBestTime(HtmlNodeCollection table, int sinceYear, int? numberOfYearsBackIfNoResult);
-
-        double ConvertTimeStringToDouble(string time);
     }
 }

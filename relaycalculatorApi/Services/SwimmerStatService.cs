@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using RelayCalculator.Api.Services.Enums;
+using RelayCalculator.Api.Utils;
 
 namespace RelayCalculator.Api.Services
 {
@@ -132,7 +133,7 @@ namespace RelayCalculator.Api.Services
             var modelWithDistanceAndStroke = GetRacePerformanceWithDistance(styleId);
             if(modelWithDistanceAndStroke == null) { return null; };
 
-            var swimTime = _swimTimeService.ConvertTimeStringToDouble(node.SelectSingleNode(".//td[@class='swimtime']").SelectSingleNode("a").InnerText);
+            var swimTime = SwimmerUtils.ConvertTimeStringToDouble(node.SelectSingleNode(".//td[@class='swimtime']").SelectSingleNode("a").InnerText);
             var percentageNode = node.SelectNodes(".//td[@class='date']");
             var percentageString = percentageNode != null ? percentageNode.First()?.SelectSingleNode("i")?.InnerText.Replace("%", "") : "0.00";
 
@@ -239,7 +240,7 @@ namespace RelayCalculator.Api.Services
                     return new RacePerformance()
                     {
                         Distance = Enums.Distance.TwoHundred,
-                        Stroke = Enums.Stroke.Breaststroke,
+                        Stroke = Enums.Stroke.Butterfly,
                     };
                 case 18:
                     return new RacePerformance()

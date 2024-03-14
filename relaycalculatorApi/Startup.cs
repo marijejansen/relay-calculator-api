@@ -34,6 +34,8 @@ namespace RelayCalculator.Api
             services.AddSingleton<IRecordService, RecordService>();
             services.AddSingleton<ISwimmerMapper, SwimmerMapper>();
             services.AddSingleton<ISwimmerStatService, SwimmerStatService>();
+            services.AddSingleton<IClubRecordService, ClubRecordService>();
+            services.AddSingleton<IRecentResultsService, RecentResultsService>();
 
             services.AddCors(options =>
             {

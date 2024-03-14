@@ -6,6 +6,7 @@ using HtmlAgilityPack;
 using RelayCalculator.Api.Services.Enums;
 using RelayCalculator.Api.Services.Interfaces;
 using RelayCalculator.Api.Services.Models;
+using RelayCalculator.Api.Utils;
 
 namespace RelayCalculator.Api.Services
 {
@@ -66,15 +67,7 @@ namespace RelayCalculator.Api.Services
         public string[] GetName(HtmlNode node)
         {
             var completeName = node.Descendants("a").FirstOrDefault()?.InnerText;
-            var tempName = completeName?.Split(',');
-
-            var names = new List<string>(2);
-
-            if (tempName == null) return null;
-
-            names.AddRange(tempName.Select(name => name.ToLower().Trim(' ')).Select(nameLow => char.ToUpper(nameLow[0]) + nameLow.Substring(1)));
-
-            return names.ToArray();
+            return SwimmerUtils.GetNameArrayFromString(completeName);
         }
         public int GetID(HtmlNode node)
         {
