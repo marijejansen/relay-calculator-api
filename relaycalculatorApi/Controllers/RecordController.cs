@@ -25,11 +25,11 @@ namespace RelayCalculator.Api.Controllers
         }
 
         [HttpGet]
-        [Route("")]
-        public async Task<List<Swimmer>> GetRecords()
+        [Route("relays")]
+        public async Task<List<Record>> GetRelayRecords()
         {
-            await recordsService.GetRecords();
-            return new List<Swimmer>();
+            var records = await recordsService.GetRelayRecords();
+            return records;
         }
 
         [HttpPost]

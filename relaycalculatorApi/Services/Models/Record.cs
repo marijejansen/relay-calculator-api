@@ -45,5 +45,11 @@ namespace RelayCalculator.Api.Services.Models
             get;
             set;
         }
+
+        public RelayType? RelayType
+        {
+            get;
+            set;
+        }
     }
 }
