@@ -14,6 +14,7 @@ namespace RelayCalculator.Api.Mapper
                 FirstName = swimmer.FirstName,
                 LastName = swimmer.LastName,
                 Gender = swimmer.Gender,
+                ID = swimmer.ID,
                 ShortCourseTimes = swimmer.ShortCourseTimes != null ? new CourseTimes()
                 {
                     Freestyle50M = swimmer.ShortCourseTimes.Freestyle50M,
@@ -49,6 +50,7 @@ namespace RelayCalculator.Api.Mapper
                 FirstName = swimmer.FirstName,
                 LastName = swimmer.LastName,
                 Gender = swimmer.Gender,
+                ID = swimmer.ID,
                 ShortCourseTimes = swimmer.ShortCourseTimes,
                 LongCourseTimes = swimmer.LongCourseTimes
             };

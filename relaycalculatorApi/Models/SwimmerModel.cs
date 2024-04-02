@@ -4,7 +4,8 @@ using RelayCalculator.Api.Services.Models;
 namespace RelayCalculator.Api.Models
 {
     public class SwimmerModel
-    {
+    { 
+        public int ID { get; set; }
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
