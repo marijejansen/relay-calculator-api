@@ -33,6 +33,7 @@ namespace RelayCalculator.Api.Services
         {
             return swimmers.Select(s => new RelaySwimmer
             {
+                ID = s.ID,
                 FirstName = s.FirstName,
                 LastName = s.LastName,
                 Age = DateTime.Today.Year - s.BirthYear,

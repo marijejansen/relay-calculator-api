@@ -31,6 +31,7 @@ namespace RelayCalculator.Api.Services
         {
             return swimmers.Select((swimmer, index) => new RelaySwimmer
             {
+                ID = swimmer.ID,
                 Position = index,
                 FirstName = swimmer.FirstName,
                 LastName = swimmer.LastName,
