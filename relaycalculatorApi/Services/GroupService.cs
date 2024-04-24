@@ -25,7 +25,7 @@ namespace RelayCalculator.Api.Services
                 return 0;
             }
 
-            var totalYears = this.GetAge(teamSwimmers, forYear);
+            var totalYears = this.GetAge(teamSwimmers, calcYear);
 
             if (totalYears < 80)
             {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualBasic;
 using RelayCalculator.Api.Services.Interfaces;
 using RelayCalculator.Api.Services.Models;
 
@@ -22,6 +23,7 @@ namespace RelayCalculator.Api.Services
 
         public List<RelayTeam> BestRelayTeams(CalculationModel calculationModel)
         {
+            if(calculationModel.CalculateForYear == null || calculationModel.CalculateForYear == 0) calculationModel.CalculateForYear = DateAndTime.Now.Year;
             var swimmers = calculationModel.Swimmers;
 
             var permutations = this.permutationService.GetPermutations(swimmers.Count());
