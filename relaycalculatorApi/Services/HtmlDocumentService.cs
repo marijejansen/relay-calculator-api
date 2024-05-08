@@ -33,8 +33,11 @@ namespace RelayCalculator.Api.Services
         public async Task<HtmlDocument> GetRecentMeetsPage(DateTime? fromDate)
         {
             var selectArg = fromDate != null ? fromDate?.Year + "_m" + fromDate?.Month : "RECENT";
-            var url = $"https://www.swimrankings.net/index.php?page=meetSelect&meetType=1&nationId=273&selectPage={selectArg}";
-            //var url = $"https://www.swimrankings.net/index.php?page=meetSelect&meetType=1&selectPage={selectArg}";
+
+            // nederlands
+            //var url = $"https://www.swimrankings.net/index.php?page=meetSelect&meetType=1&nationId=273&selectPage={selectArg}";
+            //world wide
+            var url = $"https://www.swimrankings.net/index.php?page=meetSelect&meetType=1&selectPage={selectArg}";
             return await GetHtmlDocumentByUrl(url);
         }
 

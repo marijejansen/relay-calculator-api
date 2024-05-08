@@ -32,6 +32,14 @@ namespace RelayCalculator.Api.Controllers
             return records;
         }
 
+        [HttpGet]
+        [Route("clubrecords")]
+        public async Task<IEnumerable<ClubRecord>> GetAllClubRecords()
+        {
+            return await clubRecordService.GetAllFromStorage();
+        }
+
+
         [HttpPost]
         [Route("clubrecords")]
         public async Task PostRecord(ClubRecord clubRecord)
@@ -49,7 +57,7 @@ namespace RelayCalculator.Api.Controllers
 
         [HttpPost]
         [Route("updateClubRecords")]
-        public async Task UpdateClubRecords(DateTime fromDate)
+        public async Task<IEnumerable<ClubRecord>> UpdateClubRecords(DateTime fromDate)
         {
             //SwimmerUtils.GetNameArrayFromString("BON-ROSENBRAND van, Lidia");
             //SwimmerUtils.GetNameArrayFromString("JANSEN, Marije");
@@ -61,7 +69,7 @@ namespace RelayCalculator.Api.Controllers
             //SwimmerUtils.ConvertDoubleToTimeString(45.01);
             //SwimmerUtils.ConvertDoubleToTimeString(60.01);
 
-            await recentResultsService.GetRecentResults(fromDate);
+            return await recentResultsService.GetNewRecordsFromSwimrankings(fromDate);
         }
     }
 }

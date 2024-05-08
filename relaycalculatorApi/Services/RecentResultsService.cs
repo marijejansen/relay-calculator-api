@@ -2,10 +2,12 @@
 using RelayCalculator.Api.Services.Interfaces;
 using RelayCalculator.Api.Utils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RelayCalculator.Api.Models;
 using RelayCalculator.Api.Services.Enums;
+using RelayCalculator.Api.Services.Models;
 
 namespace RelayCalculator.Api.Services
 {
@@ -20,7 +22,10 @@ namespace RelayCalculator.Api.Services
             _clubRecordService = clubRecordService;
         }
 
-        public async Task GetRecentResults(DateTime? fromDate) {
+        public async Task<IEnumerable<ClubRecord>> GetNewRecordsFromSwimrankings(DateTime? fromDate)
+        {
+
+            var allNewRecords = new List<ClubRecord>();
 
             do
             {
@@ -85,18 +90,29 @@ namespace RelayCalculator.Api.Services
                                     Time = SwimmerUtils.ConvertTimeStringToDouble(tds.First(t => t.HasClass("swimtime"))
                                         .InnerText)
                                 });
-                                await _clubRecordService.CheckForRecords(swimmerMeetResult);
+                                var newRecords = await _clubRecordService.CheckAndGetNewRecords(swimmerMeetResult);
+                                if (newRecords.Any())
+                                {
+                                    var tasks = newRecords.Select(async record =>
+                                        {
+                                            await _clubRecordService.AddToStorage(record);
+                                        }
+                                    );
+                                    await Task.WhenAll(tasks);
+                                    allNewRecords.AddRange(newRecords);
+                                }
                             }
 
-                            var x = 0;
                         }
                         
                     }
                 }
-
+                
                 fromDate = fromDate?.AddMonths(1);
             }
             while (fromDate != null && fromDate < DateTime.Now);
+
+            return allNewRecords;
         }
 
         private async Task<HtmlDocument> GetClubMeetDocument(HtmlNode meetNode)

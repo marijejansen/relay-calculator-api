@@ -30,15 +30,40 @@ namespace RelayCalculator.Api.Services
         public async Task AddToStorage(ClubRecord clubRecord)
         {
             var entity = new RecordEntity(clubRecord);
-            await _tableClient.AddEntityAsync(entity);
+            await _tableClient.UpsertEntityAsync(entity);
         }
 
-        public async Task CheckForRecords(SwimmerMeetResult swimmerMeetResult)
+        public async Task<IEnumerable<ClubRecord>> GetAllFromStorage()
+        {
+            var newRecords = new List<ClubRecord>();
+            var recordsAsync = _tableClient.QueryAsync<RecordEntity>();
+            await foreach (var record in recordsAsync)
+            {
+                var splitPartionKey = record.PartitionKey.Split("_");
+                var splitRowKey = record.RowKey.Split("_");
+                newRecords.Add(new ClubRecord()
+                {
+                    AgeGroup = int.Parse(splitPartionKey[1]),
+                    Course = (Course)Enum.Parse(typeof(Course), splitPartionKey[2]),
+                    Date = record.RecordDate.Date,
+                    Gender = (Gender)Enum.Parse(typeof(Gender), splitPartionKey[0]),
+                    Stroke = (Stroke)Enum.Parse(typeof(Stroke), splitRowKey[0]),
+                    Distance = (Distance)Enum.Parse(typeof(Distance), splitRowKey[1]),
+                    Time = record.Time,
+                    Name = record.Name
+                });
+            }
+            return newRecords;
+        }
+
+        public async Task<List<ClubRecord>> CheckAndGetNewRecords(SwimmerMeetResult swimmerMeetResult)
         {
             var ageGroup = Math.Floor((double) ((swimmerMeetResult.Date.Year - swimmerMeetResult.BirthYear) / 5)) * 5;
             var partitionKey = $"{swimmerMeetResult.Gender}_{ageGroup}_{swimmerMeetResult.Course}";
             var filter = $"PartitionKey eq '{partitionKey}'";
-            var recordsAsync =  _tableClient.QueryAsync<RecordEntity>(filter);
+            var recordsAsync =  _tableClient.QueryAsync<RecordEntity>(filter); 
+            var newRecords = new List<ClubRecord>();
+
 
             await foreach (var record in recordsAsync)
             {
@@ -49,23 +74,32 @@ namespace RelayCalculator.Api.Services
                     if (((record.Time > 0 && matchingEvent.Time < record.Time) || record.Time == 0) && matchingEvent.Time > 0)
                     {
                         Console.WriteLine(
-                            $"Nieuw record voor {swimmerMeetResult.FirstName} {swimmerMeetResult.LastName} " +
+                            $"{swimmerMeetResult.FirstName} {swimmerMeetResult.LastName} " +
                             $"{SwimmerUtils.GenderToDutchString(swimmerMeetResult.Gender)}{ageGroup}+ " +
-                            $"op de {(int)matchingEvent.SwimEvent.Distance}m {SwimmerUtils.StrokeToDutchString(matchingEvent.SwimEvent.Stroke)} " +
-                            $"{SwimmerUtils.CourseToDutchShorthand(swimmerMeetResult.Course)}: " +
+                            $"{(int)matchingEvent.SwimEvent.Distance}m {SwimmerUtils.StrokeToDutchString(matchingEvent.SwimEvent.Stroke)} " +
+                            $"{SwimmerUtils.CourseToDutchShorthand(swimmerMeetResult.Course).ToLower()}: " +
                             $"van {SwimmerUtils.ConvertDoubleToTimeString(record.Time)} naar {SwimmerUtils.ConvertDoubleToTimeString(matchingEvent.Time)}");
+
+                        newRecords.Add(new ClubRecord()
+                        {
+                            AgeGroup = (int)ageGroup,
+                            Course = swimmerMeetResult.Course,
+                            Date = swimmerMeetResult.Date,
+                            Distance = matchingEvent.SwimEvent.Distance,
+                            Gender = swimmerMeetResult.Gender,
+                            Name = swimmerMeetResult.FirstName + " " + swimmerMeetResult.LastName,
+                            Stroke = matchingEvent.SwimEvent.Stroke,
+                            Time = matchingEvent.Time
+                        });
+                        // update record
                     }
 
-                    //Console.WriteLine(
-                    //    $"{swimmerMeetResult.FirstName} {swimmerMeetResult.LastName} " +
-                    //    $"{SwimmerUtils.GenderToDutchString(swimmerMeetResult.Gender)}{ageGroup}+ " +
-                    //    $"op de {(int)matchingEvent.SwimEvent.Distance}m {SwimmerUtils.StrokeToDutchString(matchingEvent.SwimEvent.Stroke)} " +
-                    //    $"{SwimmerUtils.CourseToDutchShorthand(swimmerMeetResult.Course)}: " +
-                    //    $"tijd: {SwimmerUtils.ConvertDoubleToTimeString(matchingEvent.Time)} (record = {SwimmerUtils.ConvertDoubleToTimeString(record.Time)})");
-
                 }
-                var x = 0;
             }
+
+            return newRecords;
+
+
         }
 
         public async Task GetFromFile()
