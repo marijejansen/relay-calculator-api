@@ -42,7 +42,7 @@ namespace RelayCalculator.Api.Services
             var firstNameNode = node.Descendants("td").FirstOrDefault(n => n.HasClass("name"));
             var clubNode = node.Descendants("td").FirstOrDefault(n => n.HasClass("club"));
             var dateNode = node.Descendants("td").FirstOrDefault(n => n.HasClass("date"));
-            var genderNode = node.Descendants("img").FirstOrDefault();
+            var genderNode = node.Descendants("img").FirstOrDefault(n => n.GetAttributeValue("src", "").Contains("gender"));
 
             if (firstNameNode == null
                 || clubNode == null
