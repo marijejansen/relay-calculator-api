@@ -8,6 +8,7 @@
         TwoHundred = 200,
         FourHundred = 400,
         EightHundred = 800,
-        FifteenHundred = 1500
+        FifteenHundred = 1500,
+        Unknown
     }
 }

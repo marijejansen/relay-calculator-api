@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RelayCalculator.Api.Models;
 using RelayCalculator.Api.Services.Enums;
 
 namespace RelayCalculator.Api.Services
@@ -44,6 +45,204 @@ namespace RelayCalculator.Api.Services
                 {"IndividualMedley400M", 19},
                 {"IndividualMedley100M", 20},
             };
+        }
+
+        public struct Individual
+        {
+            public static readonly List<int> AgeGroups = new List<int> { 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80 };
+            public static readonly List<Gender> GenderGroups = new List<Gender> { Gender.Female, Gender.Male, Gender.Mix };
+            public static readonly List<SwimEvent> AllSwimEventsLongCourse = new List<SwimEvent>() {
+                // freestyle
+                new SwimEvent()
+                {
+                    Distance = Distance.Fifty,
+                    Stroke = Stroke.Freestyle
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.Hundred,
+                    Stroke = Stroke.Freestyle
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.TwoHundred,
+                    Stroke = Stroke.Freestyle
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.FourHundred,
+                    Stroke = Stroke.Freestyle
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.EightHundred,
+                    Stroke = Stroke.Freestyle
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.FifteenHundred,
+                    Stroke = Stroke.Freestyle
+                },
+                // backstroke
+                new SwimEvent()
+                {
+                    Distance = Distance.Fifty,
+                    Stroke = Stroke.Backstroke
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.Hundred,
+                    Stroke = Stroke.Backstroke
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.TwoHundred,
+                    Stroke = Stroke.Backstroke
+                },
+                // breaststroke
+                new SwimEvent()
+                {
+                    Distance = Distance.Fifty,
+                    Stroke = Stroke.Breaststroke
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.Hundred,
+                    Stroke = Stroke.Breaststroke
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.TwoHundred,
+                    Stroke = Stroke.Breaststroke
+                },
+                // butterfly
+                new SwimEvent()
+                {
+                    Distance = Distance.Fifty,
+                    Stroke = Stroke.Butterfly
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.Hundred,
+                    Stroke = Stroke.Butterfly
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.TwoHundred,
+                    Stroke = Stroke.Butterfly
+                },
+                // medley
+                new SwimEvent()
+                {
+                    Distance = Distance.TwoHundred,
+                    Stroke = Stroke.Medley
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.FourHundred,
+                    Stroke = Stroke.Medley
+                },
+            };
+
+            public static readonly List<SwimEvent> AllSwimEventsShortCourse = new List<SwimEvent>()
+            {
+                // freestyle
+                new SwimEvent()
+                {
+                    Distance = Distance.Fifty,
+                    Stroke = Stroke.Freestyle
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.Hundred,
+                    Stroke = Stroke.Freestyle
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.TwoHundred,
+                    Stroke = Stroke.Freestyle
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.FourHundred,
+                    Stroke = Stroke.Freestyle
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.EightHundred,
+                    Stroke = Stroke.Freestyle
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.FifteenHundred,
+                    Stroke = Stroke.Freestyle
+                },
+                // backstroke
+                new SwimEvent()
+                {
+                    Distance = Distance.Fifty,
+                    Stroke = Stroke.Backstroke
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.Hundred,
+                    Stroke = Stroke.Backstroke
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.TwoHundred,
+                    Stroke = Stroke.Backstroke
+                },
+                // breaststroke
+                new SwimEvent()
+                {
+                    Distance = Distance.Fifty,
+                    Stroke = Stroke.Breaststroke
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.Hundred,
+                    Stroke = Stroke.Breaststroke
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.TwoHundred,
+                    Stroke = Stroke.Breaststroke
+                },
+                // butterfly
+                new SwimEvent()
+                {
+                    Distance = Distance.Fifty,
+                    Stroke = Stroke.Butterfly
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.Hundred,
+                    Stroke = Stroke.Butterfly
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.TwoHundred,
+                    Stroke = Stroke.Butterfly
+                },
+                // medley
+                new SwimEvent()
+                {
+                    Distance = Distance.Hundred,
+                    Stroke = Stroke.Medley
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.TwoHundred,
+                    Stroke = Stroke.Medley
+                },
+                new SwimEvent()
+                {
+                    Distance = Distance.FourHundred,
+                    Stroke = Stroke.Medley
+                },
+            };
+
         }
     }
 }

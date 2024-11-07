@@ -7,6 +7,6 @@ namespace RelayCalculator.Api.Services.Interfaces
 {
     public interface IRecentResultsService
     {
-        Task<IEnumerable<ClubRecord>> GetNewRecordsFromSwimrankings(DateTime? fromDate);
+        Task<IEnumerable<ClubRecord>> GetNewRecordsFromSwimrankings(DateTime? fromDate, bool fromList = false);
     }
 }

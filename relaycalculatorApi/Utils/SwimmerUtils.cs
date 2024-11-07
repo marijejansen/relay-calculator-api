@@ -77,6 +77,75 @@ namespace RelayCalculator.Api.Utils
             }
         }
 
+        public static Stroke GetStrokeFromStringDutch(string eventString)
+        {
+            var stroke = "";
+
+            try
+            {
+                stroke = eventString.Split(' ')[1];
+            }
+            catch
+            {
+                var x = 1;
+            }
+
+            switch (stroke.Trim().ToLower())
+            {
+                case "vrij":
+                case "vrije":
+                case "vrije slag":
+                    return Stroke.Freestyle;
+                case "rug":
+                case "rugslag":
+                    return Stroke.Backstroke;
+                case "school":
+                case "schoolslag":
+                    return Stroke.Breaststroke;
+                case "vlinder":
+                case "vlinderslag":
+                    return Stroke.Butterfly;
+                case "wissel":
+                case "wisselslag":
+                    return Stroke.Medley;
+                default:
+                    return Stroke.Unknown;
+
+            }
+        }
+
+        public static Distance GetDistanceFromStringDutch(string eventString)
+        {
+            var distance = "";
+
+            try
+            {
+                distance = eventString.Split(' ')[0];
+            }
+            catch
+            {
+                var x = 1;
+            }
+            switch (distance)
+            {
+                case "50":
+                    return Distance.Fifty;
+                case "100":
+                    return Distance.Hundred;
+                case "200":
+                    return Distance.TwoHundred;
+                case "400":
+                    return Distance.FourHundred;
+                case "800":
+                    return Distance.EightHundred;
+                case "1500":
+                    return Distance.FifteenHundred;
+                default:
+                    return Distance.TwentyFive;
+
+            }
+        }
+
         public static double ConvertTimeStringToDouble(string time)
         {
             time = Regex.Replace(time, @"[^0-9:.,]", "");
@@ -121,6 +190,35 @@ namespace RelayCalculator.Api.Utils
                 return Course.Long;
 
             return Course.Short;
+        }
+
+        public static double GetTimeFromTimeString(string timeString)
+        {
+            if (timeString == "") return 0;
+            var split = timeString.Split(new string[] { ".", ",", ":" }, StringSplitOptions.RemoveEmptyEntries);
+            var hunSec = int.Parse(split[split.Length - 1]);
+            if (!int.TryParse(split[split.Length - 2], out _))
+            {
+                var x = 10;
+            }
+            var sec = int.Parse(split[split.Length - 2]);
+
+            double time = sec + ((double)hunSec / 100);
+
+            if (split.Length == 3)
+            {
+                time += (int.Parse(split[0]) * 60);
+            }
+            return time;
+        }
+
+        public static DateTime GetDateFromDateStringShort(string dateString)
+        {
+            if (dateString == "") return DateTime.Now;
+            var split = dateString.Split("/");
+            var x = new DateTime(int.Parse(split[2].Split(" ")[0]), int.Parse(split[1]), int.Parse(split[0]), 0, 0, 0, DateTimeKind.Utc);
+            //var y = new DateTime(int.Parse(split[2].Split(" ")[0]), int.Parse(split[1]), int.Parse(split[0]));
+            return x;
         }
 
         public static DateTime GetDateFromDateString(string dateString)

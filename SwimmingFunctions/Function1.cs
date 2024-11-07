@@ -7,10 +7,13 @@ using System.Net.Mail;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using System.Net.Http;
+using System.Threading.Tasks;
+using HtmlAgilityPack;
 
 namespace SwimmingFunctions
 {
-    public class ClubRecords
+    public class SwimmingFunctions
     {
         //[FunctionName("CheckForClubRecords")]
         //public void Run([TimerTrigger("0 0 0 * * *")]TimerInfo myTimer, ILogger log)
@@ -18,27 +21,42 @@ namespace SwimmingFunctions
         //    log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
         //}
 
-        [FunctionName("CheckForClubRecords")]
-        public IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
+        //[FunctionName("CheckForClubRecords")]
+        //public IActionResult Run(
+        //    [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
+        //{
+        //    MailMessage mailMessage = new MailMessage();
+        //    mailMessage.From = new MailAddress("marije.wz@zpcamersfoort.nl");
+        //    mailMessage.To.Add("marije.jansen@mailbox.org");
+        //    mailMessage.Subject = "Test";
+        //    mailMessage.Body = "Dit is een test";
+
+        //    SmtpClient smtpClient = new SmtpClient();
+        //    smtpClient.Host = "outlook.office365.com";
+        //    smtpClient.Port = 993;
+        //    smtpClient.UseDefaultCredentials = false;
+        //    smtpClient.Credentials = new NetworkCredential("marije.wz@zpcamersfoort.nl", "0CeYCs4*b%!KpA");
+        //    smtpClient.EnableSsl = true;
+
+
+        //    smtpClient.Send(mailMessage);
+
+        //    return new OkObjectResult("gelukt");
+        //}
+
+        [FunctionName("CheckPage")]
+        //public IActionResult Run([TimerTrigger("0 */5 * * * *")] TimerInfo myTimer, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
         {
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress("marije.wz@zpcamersfoort.nl");
-            mailMessage.To.Add("marije.jansen@mailbox.org");
-            mailMessage.Subject = "Test";
-            mailMessage.Body = "Dit is een test";
+            //log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
-            SmtpClient smtpClient = new SmtpClient();
-            smtpClient.Host = "outlook.office365.com";
-            smtpClient.Port = 993;
-            smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential("marije.wz@zpcamersfoort.nl", "0CeYCs4*b%!KpA");
-            smtpClient.EnableSsl = true;
-            
+            var comparePageService = new ComparePageService();
+            var same = await comparePageService.GetPageAndCompare("https://belgrade2024.org/", "belgrade2024");
 
-            smtpClient.Send(mailMessage);
+            return new OkObjectResult("doei");
 
-            return new OkObjectResult("gelukt");
         }
+
+
     }
 }

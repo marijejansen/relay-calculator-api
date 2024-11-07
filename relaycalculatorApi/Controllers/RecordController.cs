@@ -5,6 +5,7 @@ using RelayCalculator.Api.Services.Interfaces;
 using RelayCalculator.Api.Services.Models;
 using System;
 using RelayCalculator.Api.Utils;
+using System.Linq;
 
 namespace RelayCalculator.Api.Controllers
 {
@@ -14,14 +15,16 @@ namespace RelayCalculator.Api.Controllers
     {
         private readonly IRecordService recordsService;
         private readonly IClubRecordService clubRecordService;
+        private readonly IClubRecordFileService clubRecordFileService;
         private readonly IRecentResultsService recentResultsService;
 
 
-        public RecordController(IRecordService recordsService, IClubRecordService clubRecordService, IRecentResultsService recentResultsService)
+        public RecordController(IRecordService recordsService, IClubRecordService clubRecordService, IRecentResultsService recentResultsService, IClubRecordFileService clubRecordFileService)
         {
             this.recordsService = recordsService;
             this.clubRecordService = clubRecordService;
             this.recentResultsService = recentResultsService;
+            this.clubRecordFileService = clubRecordFileService; 
         }
 
         [HttpGet]
@@ -51,25 +54,33 @@ namespace RelayCalculator.Api.Controllers
         [Route("getfromfile")]
         public async Task GetFromFile()
         {
-            await clubRecordService.GetFromFile();
-            //await recentResultsService.GetRecentResults();
+            //await clubRecordFileService.GetRecordsFromFile();
+            //var recordsToBeUpdated = await clubRecordService.CompareHistoryWithStorageRecords();
+            //await clubRecordService.UpdateRecordsInStorage(recordsToBeUpdated);
+            //await clubRecordFileService.CreateRecordFileFromHistory();
+            //await clubRecordFileService.GetClubRecordsHistoryFromFile();
+            //await clubRecordFileService.CreateHistoryFileFromRecords(new List<ClubRecord>());
+
         }
 
         [HttpPost]
         [Route("updateClubRecords")]
-        public async Task<IEnumerable<ClubRecord>> UpdateClubRecords(DateTime fromDate)
+        public async Task<IEnumerable<ClubRecord>> UpdateClubRecords(DateTime fromDate, bool? fromList)
         {
-            //SwimmerUtils.GetNameArrayFromString("BON-ROSENBRAND van, Lidia");
-            //SwimmerUtils.GetNameArrayFromString("JANSEN, Marije");
-            //SwimmerUtils.GetNameArrayFromString("LAAN van der, Christina");
-            //SwimmerUtils.ConvertDoubleToTimeString(123.34);
-            //SwimmerUtils.ConvertDoubleToTimeString(27.34);
-            //SwimmerUtils.ConvertDoubleToTimeString(345.34);
-            //SwimmerUtils.ConvertDoubleToTimeString(345.3);
-            //SwimmerUtils.ConvertDoubleToTimeString(45.01);
-            //SwimmerUtils.ConvertDoubleToTimeString(60.01);
+            var records = (await recentResultsService.GetNewRecordsFromSwimrankings(fromDate, fromList ?? false)).ToList();
 
-            return await recentResultsService.GetNewRecordsFromSwimrankings(fromDate);
+            if (records.Any())
+            {
+                Console.WriteLine("update these records? Y/N");
+                var updateRecords = Console.ReadLine();
+                if(updateRecords?.ToLower() == "y")
+                {
+                    await clubRecordFileService.CreateHistoryFileFromRecords(records.ToList());
+                    await clubRecordService.UpdateRecordsInStorage(records);
+                }
+            }
+
+            return records;
         }
     }
 }

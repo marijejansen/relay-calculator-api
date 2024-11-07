@@ -1,13 +1,10 @@
-﻿using Azure;
-using Azure.Data.Tables;
+﻿using Azure.Data.Tables;
 using RelayCalculator.Api.Models;
 using RelayCalculator.Api.Services.Entities;
 using RelayCalculator.Api.Services.Enums;
 using RelayCalculator.Api.Services.Interfaces;
 using RelayCalculator.Api.Services.Models;
-using Spire.Xls;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,21 +15,19 @@ namespace RelayCalculator.Api.Services
 {
     public class ClubRecordService : IClubRecordService
     {
-        readonly private TableClient _tableClient;
-        public ClubRecordService() {
+        private readonly TableClient _tableClient;
+        private readonly IClubRecordFileService _clubRecordFileService;
+
+        public ClubRecordService(IClubRecordFileService clubRecordFileService) {
             var connectionString = "DefaultEndpointsProtocol=https;AccountName=relaycalculatorstorage;AccountKey=RPHQsrFZbfUbRtwMqnk1OOZDG5mQBXVPaakvVm5U7O1uKZNG/PPaYFxbTG6wtKindAUbOI+ZVUIH+ASt507mXg==;EndpointSuffix=core.windows.net";
             var tableName = "clubRecords";
             _tableClient = new TableClient(connectionString, tableName);
             // Create the table if it doesn't already exist to verify we've successfully authenticated.
             _tableClient.CreateIfNotExists();
+            _clubRecordFileService = clubRecordFileService;
         }
 
-        public async Task AddToStorage(ClubRecord clubRecord)
-        {
-            var entity = new RecordEntity(clubRecord);
-            await _tableClient.UpsertEntityAsync(entity);
-        }
-
+        // gets all records from storage
         public async Task<IEnumerable<ClubRecord>> GetAllFromStorage()
         {
             var newRecords = new List<ClubRecord>();
@@ -56,7 +51,32 @@ namespace RelayCalculator.Api.Services
             return newRecords;
         }
 
-        public async Task<List<ClubRecord>> CheckAndGetNewRecords(SwimmerMeetResult swimmerMeetResult)
+        public async Task UpdateRecordsInStorage(IEnumerable<ClubRecord> clubRecords)
+        {
+            // filter only one record per gender + age + course + stroke + distance
+            var filteredRecords = clubRecords.GroupBy(r => new { r.Gender, r.AgeGroup, r.Course, r.Stroke, r.Distance })
+                .Select(rec => rec.OrderBy(record => record.Time).First());
+
+            var tasks = filteredRecords.Select(async record =>
+                {
+                    await AddToStorage(record);
+                }
+            );
+
+            await Task.WhenAll(tasks);
+        }
+
+        // adds a single record to storage
+        public async Task AddToStorage(ClubRecord clubRecord)
+        {
+            var entity = new RecordEntity(clubRecord);
+            await _tableClient.UpsertEntityAsync(entity);
+        }
+
+        // Update records in storage
+
+        // gets new records from meet results
+        public async Task<List<ClubRecord>> GetNewRecordsFromMeetResults(SwimmerMeetResult swimmerMeetResult)
         {
             var ageGroup = Math.Floor((double) ((swimmerMeetResult.Date.Year - swimmerMeetResult.BirthYear) / 5)) * 5;
             var partitionKey = $"{swimmerMeetResult.Gender}_{ageGroup}_{swimmerMeetResult.Course}";
@@ -67,169 +87,68 @@ namespace RelayCalculator.Api.Services
 
             await foreach (var record in recordsAsync)
             {
-                var matchingEvent = swimmerMeetResult.EventResults.FirstOrDefault(e =>
+                var newResult = swimmerMeetResult.EventResults.FirstOrDefault(e =>
                     $"{e.SwimEvent.Stroke}_{(int)e.SwimEvent.Distance}" == record.RowKey);
-                if (matchingEvent != null)
+                if (newResult != null)
                 {
-                    if (((record.Time > 0 && matchingEvent.Time < record.Time) || record.Time == 0) && matchingEvent.Time > 0)
+                    if (((record.Time > 0 && newResult.Time < record.Time && record.Time - newResult.Time > 0.001) || record.Time == 0) && newResult.Time > 0)
                     {
                         Console.WriteLine(
                             $"{swimmerMeetResult.FirstName} {swimmerMeetResult.LastName} " +
                             $"{SwimmerUtils.GenderToDutchString(swimmerMeetResult.Gender)}{ageGroup}+ " +
-                            $"{(int)matchingEvent.SwimEvent.Distance}m {SwimmerUtils.StrokeToDutchString(matchingEvent.SwimEvent.Stroke)} " +
+                            $"{(int)newResult.SwimEvent.Distance}m {SwimmerUtils.StrokeToDutchString(newResult.SwimEvent.Stroke)} " +
                             $"{SwimmerUtils.CourseToDutchShorthand(swimmerMeetResult.Course).ToLower()}: " +
-                            $"van {SwimmerUtils.ConvertDoubleToTimeString(record.Time)} naar {SwimmerUtils.ConvertDoubleToTimeString(matchingEvent.Time)}");
+                            $"van {SwimmerUtils.ConvertDoubleToTimeString(record.Time)} naar {SwimmerUtils.ConvertDoubleToTimeString(newResult.Time)}");
 
                         newRecords.Add(new ClubRecord()
                         {
                             AgeGroup = (int)ageGroup,
                             Course = swimmerMeetResult.Course,
                             Date = swimmerMeetResult.Date,
-                            Distance = matchingEvent.SwimEvent.Distance,
+                            Distance = newResult.SwimEvent.Distance,
                             Gender = swimmerMeetResult.Gender,
                             Name = swimmerMeetResult.FirstName + " " + swimmerMeetResult.LastName,
-                            Stroke = matchingEvent.SwimEvent.Stroke,
-                            Time = matchingEvent.Time
+                            Stroke = newResult.SwimEvent.Stroke,
+                            Time = newResult.Time
                         });
-                        // update record
                     }
 
                 }
             }
 
             return newRecords;
-
-
         }
 
-        public async Task GetFromFile()
+        public async Task<IEnumerable<ClubRecord>> CompareHistoryWithStorageRecords()
         {
-            Workbook workbook = new Workbook();
-            workbook.LoadFromFile("Clubrecords actueel.xlsx");
+            var allHistoryRecords = await _clubRecordFileService.GetClubRecordsHistoryFromFile();
+            var bestRecords = await GetAllFromStorage();
 
-            int[] ages = {20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75};
-            Gender[] genders = { Gender.Female, Gender.Male };
+            var recordsToBeUpdated = new List<ClubRecord>();
 
-            foreach(Gender gender in genders) {
-                var start = gender == Gender.Female ? 0 : 12;
-                var end = gender == Gender.Female ? 12 : 22;
-                for (int a = start; a < end; a++)
+            foreach (var record in bestRecords)
+            {
+                var historyRecordsMatch = allHistoryRecords.Where(hisRec =>
+                    hisRec.AgeGroup == record.AgeGroup &&
+                    hisRec.Gender == record.Gender &&
+                    hisRec.Course == record.Course &&
+                    hisRec.Distance == record.Distance &&
+                    hisRec.Stroke == record.Stroke).ToList();
+                if (historyRecordsMatch.Any())
                 {
-                    var sheet = workbook.Worksheets[a];
-
-                    for (int x = 0; x < 2; x++)
+                    //var lastFromHistoryFilter = historyRecordsMatch.Max(hisRec => hisRec.Date);
+                    var fastestFromHistory = historyRecordsMatch.OrderBy(hist => hist.Time).First();
+                    if (Math.Abs(fastestFromHistory.Time - record.Time) > 0.001)
                     {
-                        var course = x == 0 ? Course.Long : Course.Short;
-                        var startCol = x == 0 ? 0 : 5;
-
-                        for (int i = 2; i < 24; i++)
-                        {
-                            var swimEvent = sheet.Rows[i].Columns[startCol].Value;
-                            var time = sheet.Rows[i].Columns[startCol + 1].Value;
-                            var name = sheet.Rows[i].Columns[startCol + 2].Value;
-                            var date = sheet.Rows[i].Columns[startCol + 3].Value;
-                            if (swimEvent == "")
-                            {
-                                continue;
-                            }
-
-                            try
-                            {
-                                var entity = new RecordEntity(new ClubRecord
-                                {
-                                    AgeGroup = ages[a % 12],
-                                    Course = course,
-                                    Gender = gender,
-                                    Name = name,
-                                    Distance = GetDistance(swimEvent),
-                                    Stroke = GetStroke(swimEvent),
-                                    Time = GetTime(time),
-                                    Date = GetDate(date)
-                                });
-                                await _tableClient.UpsertEntityAsync(entity);
-
-                            }
-                            catch (Exception ex)
-                            {
-                                throw new Exception($"age: {ages[1 - 12]} {swimEvent} {course}");
-                            }
-                        }
+                        Console.WriteLine($"difference found for: {record.Gender}{record.AgeGroup} {record.Course}: {(int)record.Distance}{SwimmerUtils.StrokeToDutchString(record.Stroke)} => " +
+                                          $"{record.Name} ({SwimmerUtils.ConvertDoubleToTimeString(record.Time)}) {record.Date} + {fastestFromHistory.Name} ({SwimmerUtils.ConvertDoubleToTimeString(fastestFromHistory.Time)}) {fastestFromHistory.Date}");
+                        recordsToBeUpdated.Add(fastestFromHistory);
                     }
+
                 }
             }
-
-            //var x = sheet.ExportDataTable();
-
-            var y = 0;
-            //var entity = new RecordEntity(clubRecord);
-            //await _tableClient.AddEntityAsync(entity);
+            return recordsToBeUpdated;
         }
 
-        private Distance GetDistance(string eventString)
-        {
-            var distance = eventString.Split(' ')[0];
-            switch(distance)
-            {
-                case "50":
-                    return Distance.Fifty;
-                case "100":
-                    return Distance.Hundred;
-                case "200":
-                    return Distance.TwoHundred;
-                case "400":
-                    return Distance.FourHundred;
-                case "800":
-                    return Distance.EightHundred;
-                case "1500":
-                    return Distance.FifteenHundred;
-                default:
-                    return Distance.TwentyFive;
-
-            }
-        }
-        private Stroke GetStroke(string eventString)
-        {
-            var stroke = eventString.Split(' ')[1];
-            switch (stroke)
-            {
-                case "vrij":
-                    return Stroke.Freestyle;
-                case "rug":
-                    return Stroke.Backstroke;
-                case "school":
-                    return Stroke.Breaststroke;
-                case "vlinder":
-                    return Stroke.Butterfly;
-                case "wisselslag":
-                case "wissel":
-                    return Stroke.Medley;
-                default:
-                    return Stroke.Unknown;
-
-            }
-        }
-
-        private DateTime GetDate(string dateString)
-        {
-            if (dateString == "") return DateTime.Now;
-            var split = dateString.Split("/");
-            return new DateTime(int.Parse(split[2].Split(" ")[0]), int.Parse(split[1]), int.Parse(split[0]));
-        }
-
-        private double GetTime(string timeString)
-        {
-            if (timeString == "") return 0;
-            var split = timeString.Split(new string[] { ".", "," }, StringSplitOptions.RemoveEmptyEntries);
-            var hunSec = int.Parse(split[split.Length-1]);
-            var sec = int.Parse(split[split.Length - 2]);
-
-            double time = sec + ((double)hunSec / 100);
-
-            if(split.Length == 3)
-            {
-                time += (int.Parse(split[0]) * 60);
-            }
-            return time;
-        }
     }
 }
