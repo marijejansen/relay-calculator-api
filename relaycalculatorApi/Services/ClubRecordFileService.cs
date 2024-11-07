@@ -15,6 +15,11 @@ namespace RelayCalculator.Api.Services
 {
     public class ClubRecordFileService : IClubRecordFileService
     {
+        //private readonly IClubRecordService _clubRecordService;
+        //public ClubRecordFileService(IClubRecordService clubRecordService)
+        //{
+        //    _clubRecordService = clubRecordService;
+        //}
         // gets all the records from the history file
         public Task<List<ClubRecord>> GetClubRecordsHistoryFromFile()
         {
@@ -74,6 +79,8 @@ namespace RelayCalculator.Api.Services
                     }
                 }
             }
+
+            var asdasdx = records.Where(rec => rec.Distance == Distance.FourHundred && rec.Stroke == Stroke.Medley);
             return Task.FromResult(records);
         }
 
@@ -131,6 +138,81 @@ namespace RelayCalculator.Api.Services
             }
 
             return Task.FromResult(clubRecords);
+        }
+
+        public Task CreateRecordFileFromRecords(List<ClubRecord> records)
+        {
+            Workbook workbook = new Workbook();
+            workbook.Worksheets.Clear();
+
+            List<int> ages = Constants.Individual.AgeGroups;
+
+            Course[] courses = { Course.Short, Course.Long };
+            Gender[] genders = { Gender.Female, Gender.Male };
+
+            foreach (int age in ages)
+            {
+                var filteredRecordsAge = records.Where(rec => rec.AgeGroup == age).ToList();
+
+                var ageGroup = $"{age}-{age + 4}";
+                foreach (Course course in courses)
+                {
+                    var filteredRecordsCourse = filteredRecordsAge.Where(rec => rec.Course == course).ToList();
+                    foreach (Gender gender in genders)
+                    {
+                        var filteredRecordsGender = filteredRecordsCourse.Where(rec => rec.Gender == gender).ToList();
+
+                        var worksheetName =
+                            $"{age}-{age + 4} {(course == Course.Short ? "kb" : "lb")} {(gender == Gender.Female ? "dames" : "heren")}";
+                        Worksheet worksheet = workbook.CreateEmptySheet(worksheetName);
+                        worksheet.Range["A1"].Text = worksheetName;
+                        worksheet.Range["A1"].Style.Font.IsBold = true;
+
+
+                        var rowNumber = 3;
+
+                        var swimEvents = course == Course.Short
+                            ? Constants.Individual.AllSwimEventsShortCourse
+                            : Constants.Individual.AllSwimEventsLongCourse;
+                        foreach (SwimEvent swimEvent in swimEvents)
+                        {
+                            worksheet.Range[$"A{rowNumber}"].Text =
+                                $"{(int) swimEvent.Distance} {SwimmerUtils.StrokeToDutchString(swimEvent.Stroke)}";
+
+                            var recordsForEvent = filteredRecordsGender?.Where(rec =>
+                                rec.Distance == swimEvent.Distance && rec.Stroke == swimEvent.Stroke).ToList();
+                            if (!recordsForEvent.Any())
+                            {
+                                rowNumber += 2;
+                                continue;
+                            }
+
+                            
+                            var record = recordsForEvent?.OrderBy(rec => rec.Date)?.Last();
+
+                            worksheet.Range[$"B{rowNumber}"].Text = SwimmerUtils.ConvertDoubleToTimeString(record.Time);
+                            worksheet.Range[$"C{rowNumber}"].Text = record.Name;
+                            worksheet.Range[$"D{rowNumber}"].DateTimeValue = record.Date;
+
+                            worksheet.Columns[0].ColumnWidth = 15;
+                            worksheet.Columns[1].ColumnWidth = 15;
+                            worksheet.Columns[2].ColumnWidth = 15;
+                            worksheet.Columns[3].ColumnWidth = 15;
+                            rowNumber += 2;
+
+                        }
+
+                    }
+                }
+
+            }
+
+            var now = DateTime.Now;
+            workbook.SaveToFile($"{now.Year}-{now.Month}-{now.Day}=Clubrecords actueel.xlsx", ExcelVersion.Version2013);
+            workbook.Worksheets.RemoveAt(workbook.Worksheets.Count - 1);
+
+            return Task.CompletedTask;
+
         }
 
         public async Task CreateHistoryFileFromRecords(List<ClubRecord> newRecords)

@@ -9,6 +9,7 @@ namespace RelayCalculator.Api.Services.Interfaces
     {
         Task<List<ClubRecord>> GetRecordsFromFile();
         Task<List<ClubRecord>> GetClubRecordsHistoryFromFile();
+        Task CreateRecordFileFromRecords(List<ClubRecord> records);
         Task CreateHistoryFileFromRecords(List<ClubRecord> newRecords);
         Task CreateRecordFileFromHistory();
     }

@@ -73,8 +73,6 @@ namespace RelayCalculator.Api.Services
             await _tableClient.UpsertEntityAsync(entity);
         }
 
-        // Update records in storage
-
         // gets new records from meet results
         public async Task<List<ClubRecord>> GetNewRecordsFromMeetResults(SwimmerMeetResult swimmerMeetResult)
         {
@@ -145,6 +143,11 @@ namespace RelayCalculator.Api.Services
                         recordsToBeUpdated.Add(fastestFromHistory);
                     }
 
+                }
+                else if(record.Time > 0)
+                {
+                    recordsToBeUpdated.Add(record); 
+                    Console.WriteLine($"No record found in history for: {record.Gender}{record.AgeGroup} {record.Course}: {(int)record.Distance}{SwimmerUtils.StrokeToDutchString(record.Stroke)}");
                 }
             }
             return recordsToBeUpdated;

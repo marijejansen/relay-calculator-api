@@ -54,12 +54,18 @@ namespace RelayCalculator.Api.Controllers
         [Route("getfromfile")]
         public async Task GetFromFile()
         {
+            // make sure the history file is uptodate with the storage records
+            //var recordsToUpdate = await clubRecordService.CompareHistoryWithStorageRecords();
+            //await clubRecordFileService.CreateHistoryFileFromRecords(recordsToUpdate.ToList());
+
+            // use the records in the storage to create a records file
+            var recordsFromStorage = await clubRecordService.GetAllFromStorage();
+            await clubRecordFileService.CreateRecordFileFromRecords(recordsFromStorage.ToList());
+
             //await clubRecordFileService.GetRecordsFromFile();
             //var recordsToBeUpdated = await clubRecordService.CompareHistoryWithStorageRecords();
             //await clubRecordService.UpdateRecordsInStorage(recordsToBeUpdated);
-            //await clubRecordFileService.CreateRecordFileFromHistory();
             //await clubRecordFileService.GetClubRecordsHistoryFromFile();
-            //await clubRecordFileService.CreateHistoryFileFromRecords(new List<ClubRecord>());
 
         }
 
@@ -67,6 +73,7 @@ namespace RelayCalculator.Api.Controllers
         [Route("updateClubRecords")]
         public async Task<IEnumerable<ClubRecord>> UpdateClubRecords(DateTime fromDate, bool? fromList)
         {
+            // nieuwe records vanaf september staan er nog niet in
             var records = (await recentResultsService.GetNewRecordsFromSwimrankings(fromDate, fromList ?? false)).ToList();
 
             if (records.Any())
@@ -77,6 +84,9 @@ namespace RelayCalculator.Api.Controllers
                 {
                     await clubRecordFileService.CreateHistoryFileFromRecords(records.ToList());
                     await clubRecordService.UpdateRecordsInStorage(records);
+                    
+                    var allRecords = await clubRecordService.GetAllFromStorage();
+                    await clubRecordFileService.CreateRecordFileFromRecords(allRecords.ToList());
                 }
             }
 
