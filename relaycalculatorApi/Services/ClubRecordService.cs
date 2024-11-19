@@ -117,6 +117,11 @@ namespace RelayCalculator.Api.Services
             return newRecords;
         }
 
+        public async Task<List<ClubRecord>> GetNewRelayRecordsFromRelayResults(RelayMeetResult relayMeetResult)
+        {
+            return new List<ClubRecord>() { };
+        }
+
         public async Task<IEnumerable<ClubRecord>> CompareHistoryWithStorageRecords()
         {
             var allHistoryRecords = await _clubRecordFileService.GetClubRecordsHistoryFromFile();

@@ -105,15 +105,17 @@ namespace RelayCalculator.Api.Services
 
             Console.WriteLine($"{date} - {title}");
 
-            var trs = meetDocument.DocumentNode.Descendants("table").First(t => t.HasClass("meetResult")).Descendants("tr");
-            //var raceResults = meetDocument.DocumentNode.Descendants("tr").Where(node => node.GetAttributeValue("class", "").Contains("meetResult1") || node.GetAttributeValue("class", "").Contains("meetResult0"));
+            var individualTrs = meetDocument.DocumentNode.Descendants("table").First(t => t.HasClass("meetResult")).Descendants("tr");
+
+            var relayTable = meetDocument.DocumentNode.Descendants("table").FirstOrDefault(table => table.Descendants().Any(t => t.ChildNodes.Descendants("th").Any(th => th.InnerText.Contains("Relay"))));
+            var relayTrs = relayTable?.ChildNodes.Where(t => t.HasClass("meetResult0") || t.HasClass("meetResult1"));
 
             var swimmerMeetResult = new SwimmerMeetResult { Course = SwimmerUtils.GetCourseFromString(course), Date = SwimmerUtils.GetDateFromDateString(date) };
 
             var allNewRecords = new List<ClubRecord>();
+            var namesList = new List<string[]>();
 
-
-            foreach (var item in trs)
+            foreach (var item in individualTrs)
             {
                 if (item.GetAttributeValue("class", "").Contains("meetResultHead"))
                 {
@@ -129,15 +131,9 @@ namespace RelayCalculator.Api.Services
                     var nameArray = SwimmerUtils.GetNameArrayFromString(nameNode.Descendants("a").First().InnerText);
                     swimmerMeetResult.FirstName = nameArray[1];
                     swimmerMeetResult.LastName = nameArray[0];
-                    try
-                    {
-                        swimmerMeetResult.BirthYear = int.Parse(nameNode.InnerText.Split("- ").Last());
-                    }
-                    catch (Exception)
-                    {
-                        var acs = 1;
-                    }
-                    continue;
+
+                    swimmerMeetResult.BirthYear = int.Parse(nameNode.InnerText.Split("- ").Last());
+                    namesList.Add(new string[]{ swimmerMeetResult.FirstName, swimmerMeetResult.LastName, swimmerMeetResult.BirthYear.ToString() });
                 }
 
                 var tds = item.Descendants("td").ToList();
@@ -160,6 +156,55 @@ namespace RelayCalculator.Api.Services
                     }
                 }
             }
+
+            var relayRecords = new List<RelayMeetResult>();
+            if (relayTrs != null)
+            {
+                foreach (var r in relayTrs)
+                {
+                    var tds = r.Descendants("td").ToList();
+
+                    var genderText = tds.First(td => td.HasClass("name")).InnerText;
+                    var gender = SwimmerUtils.GetGenderFromString(genderText);
+                    var relayText = tds.Last(td => td.HasClass("name")).InnerText;
+                    var relay = SwimmerUtils.GetRelayEventFromString(relayText);
+                    if(gender == Gender.Unknown || relay == null){continue;}
+
+                    var timeString = tds.First(td => td.HasClass("swimtime")).InnerText;
+                    var time = SwimmerUtils.ConvertTimeStringToDouble(timeString);
+
+                    var names = tds.Last().InnerText.Split(",");
+                    var namesString = "";
+                    var totalYears = 0;
+
+                    foreach (var name in names)
+                    {
+                        var splittedName = name.Trim().Replace("&nbsp;", " ").Split(" ");
+                        var firstName = splittedName[^1];
+                        var lastName = string.Join(" ", splittedName[..^1]);
+                        var nameFromList = namesList.First(n => n[1] == lastName && n[0][0] == firstName[0]);
+                        namesString += nameFromList[0] + " " + nameFromList[1] + "; ";
+                        totalYears += swimmerMeetResult.Date.Year - int.Parse(nameFromList[2]);
+                    }
+
+                    namesString = namesString.Substring(0, namesString.Length - 2);
+
+                    var relayResult = new RelayMeetResult()
+                    {
+                        AgeGroup = SwimmerUtils.GetRelayAgeGroupForTotalAge(totalYears),
+                        Course = swimmerMeetResult.Course,
+                        Date = swimmerMeetResult.Date,
+                        Gender = gender,
+                        Names = namesString,
+                        RelayResult = new RelayResult {Relay = (Relay) relay, Time = time}
+                    };
+
+                    relayRecords.Add(relayResult);
+                }
+
+
+            }
+
             return allNewRecords;
         }
 

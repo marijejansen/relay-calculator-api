@@ -51,6 +51,9 @@ namespace RelayCalculator.Api.Utils
                 case "women":
                 case "dames":
                     return Gender.Female;
+                case "mixed":
+                case "gemengd":
+                    return Gender.Mix;
                 default: return Gender.Unknown;
             }
         }
@@ -74,6 +77,37 @@ namespace RelayCalculator.Api.Utils
                     return new SwimEvent { Distance = (Distance)distance, Stroke = Stroke.Medley };
                 default:
                     return new SwimEvent { };
+            }
+        }
+
+        public static Relay? GetRelayEventFromString(string eventString)
+        {
+            var splitted = eventString.Split(' ');
+            var distance = int.Parse(splitted[2].Replace("m", ""));
+            var stroke = splitted[3].ToLower();
+            switch (stroke.ToLower())
+            {
+                case "freestyle":
+                case "vrije":
+                    return distance switch
+                    {
+                        50 => Relay.Freestyle200,
+                        100 => Relay.Freestyle400,
+                        200 => Relay.Freestyle800,
+                        _ => null  // Return null for unsupported distances
+                    };
+
+                case "medley":
+                case "wisselslag":
+                    return distance switch
+                    {
+                        50 => Relay.Medley200,
+                        100 => Relay.Medley400,
+                        _ => null  // Return null for unsupported distances
+                    };
+
+                default:
+                    return null; // Return null if stroke is unsupported
             }
         }
 
@@ -274,6 +308,16 @@ namespace RelayCalculator.Api.Utils
                     return "LB";
                 default: return "";
             }
+        }
+
+        public static int GetRelayAgeGroupForTotalAge(int totalYears)
+        {
+            if (totalYears >= 100 && totalYears < 120)
+            {
+                return 100;
+            }
+
+            return ((int)totalYears / 40) * 40;
         }
     }
 }
