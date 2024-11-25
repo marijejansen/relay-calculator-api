@@ -12,5 +12,7 @@ namespace RelayCalculator.Api.Services.Interfaces
         Task CreateRecordFileFromRecords(List<ClubRecord> records);
         Task CreateHistoryFileFromRecords(List<ClubRecord> newRecords);
         Task CreateRecordFileFromHistory();
+        List<ClubRecord> GetRelayHistoryFromFile();
+        void WriteRelaysHistoryIntoExcel(List<ClubRecord> relayRecords);
     }
 }

@@ -10,7 +10,8 @@ namespace RelayCalculator.Api.Services.Entities
         public RecordEntity() { }
         public RecordEntity(ClubRecord clubRecord)
         {
-            PartitionKey = $"{clubRecord.Gender}_{clubRecord.AgeGroup}_{clubRecord.Course}";
+            var prefix = clubRecord.IsRelay ? "R_" : "";
+            PartitionKey = $"{prefix}{clubRecord.Gender}_{clubRecord.AgeGroup}_{clubRecord.Course}";
             RowKey = $"{clubRecord.Stroke}_{(int)clubRecord.Distance}";
             Name = clubRecord.Name;
             if (clubRecord.Time > 0) Time = clubRecord.Time;

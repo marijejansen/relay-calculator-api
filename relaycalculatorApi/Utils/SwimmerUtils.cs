@@ -111,6 +111,46 @@ namespace RelayCalculator.Api.Utils
             }
         }
 
+
+        public static Stroke GetStrokeFromRelayString(string relayString)
+        {
+            var stroke = "";
+
+            try
+            {
+                stroke = relayString.Split(" ")[^1];
+
+            }
+            catch
+            {
+                var why = "";
+            }
+
+            switch (stroke.Trim().ToLower())
+            {
+                case "vrij":
+                case "vrije":
+                case "vrije slag":
+                    return Stroke.Freestyle;
+                case "rug":
+                case "rugslag":
+                    return Stroke.Backstroke;
+                case "school":
+                case "schoolslag":
+                    return Stroke.Breaststroke;
+                case "vlinder":
+                case "vlinderslag":
+                    return Stroke.Butterfly;
+                case "wissel":
+                case "wisselslag":
+                    return Stroke.Medley;
+                default:
+                    return Stroke.Unknown;
+
+            }
+
+        }
+
         public static Stroke GetStrokeFromStringDutch(string eventString)
         {
             var stroke = "";
@@ -243,7 +283,7 @@ namespace RelayCalculator.Api.Utils
             {
                 time += (int.Parse(split[0]) * 60);
             }
-            return time;
+            return Math.Round(time, 2);
         }
 
         public static DateTime GetDateFromDateStringShort(string dateString)
@@ -308,6 +348,20 @@ namespace RelayCalculator.Api.Utils
                     return "LB";
                 default: return "";
             }
+        }
+
+        public static string RelayDistanceAndStrokeToDutchString(Distance distance, Stroke stroke)
+        {
+            var distanceInt = (int) distance / 4;
+            if (stroke == Stroke.Freestyle)
+            {
+                return $"4 x {distanceInt} vrij";
+            } else if (stroke == Stroke.Medley)
+            {
+                return $"4x {distanceInt} wissel";
+            }
+
+            return "";
         }
 
         public static int GetRelayAgeGroupForTotalAge(int totalYears)

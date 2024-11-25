@@ -35,15 +35,18 @@ namespace RelayCalculator.Api.Services
             await foreach (var record in recordsAsync)
             {
                 var splitPartionKey = record.PartitionKey.Split("_");
+                var isRelay = splitPartionKey[0] == "R";
+                var startIndex = isRelay ? 1 : 0;
                 var splitRowKey = record.RowKey.Split("_");
                 newRecords.Add(new ClubRecord()
                 {
-                    AgeGroup = int.Parse(splitPartionKey[1]),
-                    Course = (Course)Enum.Parse(typeof(Course), splitPartionKey[2]),
+                    AgeGroup = int.Parse(splitPartionKey[startIndex+1]),
+                    Course = (Course)Enum.Parse(typeof(Course), splitPartionKey[startIndex+2]),
                     Date = record.RecordDate.Date,
-                    Gender = (Gender)Enum.Parse(typeof(Gender), splitPartionKey[0]),
+                    Gender = (Gender)Enum.Parse(typeof(Gender), splitPartionKey[startIndex]),
                     Stroke = (Stroke)Enum.Parse(typeof(Stroke), splitRowKey[0]),
                     Distance = (Distance)Enum.Parse(typeof(Distance), splitRowKey[1]),
+                    IsRelay = isRelay,
                     Time = record.Time,
                     Name = record.Name
                 });

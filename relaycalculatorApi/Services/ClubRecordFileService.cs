@@ -361,8 +361,228 @@ namespace RelayCalculator.Api.Services
 
 
             var now = DateTime.Now;
+            //workbook.Worksheets.RemoveAt(workbook.Worksheets.Count - 1);
             workbook.SaveToFile($"{now.Year}-{now.Month}-{now.Day}=Clubrecords actueel.xlsx", ExcelVersion.Version2013);
-            workbook.Worksheets.RemoveAt(workbook.Worksheets.Count - 1);
+        }
+
+        public List<ClubRecord> GetRelayHistoryFromFile()
+        {
+            Workbook workbook = new Workbook();
+            workbook.LoadFromFile("2024-11-25=Clubrecords historie.xlsx");
+
+            var genders = new Gender[]{Gender.Female, Gender.Male, Gender.Mix};
+            var courses = new Course[] {Course.Long, Course.Short};
+            var records = new List<ClubRecord>();
+
+            foreach (var gender in genders)
+            {
+                foreach (var course in courses)
+                {
+                    var genderString = gender == Gender.Female ? "dames" : gender == Gender.Male ? "heren" : "MIX";
+                    var worksheetName = $"Estafette {SwimmerUtils.CourseToDutchShorthand(course).ToLower()} {genderString}";
+                    var sheet = workbook.Worksheets[worksheetName];
+
+                    var relayStored = "";
+                    var ageStored = "";
+
+                    for (int i = 2; i < sheet.Rows.Length; i++)
+                    {
+                        var swimEvent = sheet.Rows[i]?.Columns[0].Value;
+                        if (swimEvent != "")
+                        {
+                            relayStored = swimEvent;
+                        }
+                        var ageGroup = sheet.Rows[i].Columns[1].Value;
+                        if (ageGroup != "")
+                        {
+                            ageStored = ageGroup;
+                        }
+                        var time = sheet.Rows[i].Columns[2].Value;
+                        if(time == "") continue;
+                        var names = sheet.Rows[i].Columns[3].Value;
+                        var date = sheet.Rows[i].Columns[4].Value;
+                        
+
+                        records.Add(new ClubRecord
+                        {
+                            AgeGroup = int.Parse(ageStored.Split("+")[0]),
+                            Course = course,
+                            Date = SwimmerUtils.GetDateFromDateStringShort(date),
+                            Distance = (Distance)(int.Parse(relayStored.Split("x")[1].Trim().Split(" ")[0]) * 4),
+                            Gender = gender,
+                            IsRelay = true,
+                            Name = names,
+                            Time = SwimmerUtils.GetTimeFromTimeString(time),
+                            Stroke = SwimmerUtils.GetStrokeFromRelayString(relayStored)
+                        });
+
+                    }
+                }
+            }
+
+            var x = 10 + 5;
+            return records;
+        }
+
+        public void WriteRelaysHistoryIntoExcel(List<ClubRecord> relayRecords)
+        {
+            Workbook workbook = new Workbook();
+            workbook.LoadFromFile("2024-11-7=Clubrecords history.xlsx");
+
+            var genderAndCourseGroups = relayRecords.GroupBy(r => new { r.Gender, r.Course });
+            foreach (var genderAgeGroup in genderAndCourseGroups)
+            {
+                var gender = genderAgeGroup.FirstOrDefault().Gender;
+                var course = genderAgeGroup.First().Course;
+                var genderString = gender == Gender.Female ? "dames" : gender == Gender.Male ? "heren" : "MIX";
+                var worksheetName = $"Estafette {SwimmerUtils.CourseToDutchShorthand(course).ToLower()} {genderString}";
+
+                Worksheet newWorksheet = workbook.CreateEmptySheet(worksheetName);
+                newWorksheet.Range["A1"].Text = worksheetName;
+                newWorksheet.Range["A1"].Style.Font.IsBold = true;
+
+                var rowNumber = 3;
+
+                var strokeGroups = genderAgeGroup.GroupBy(r => new { r.Stroke, r.Distance });
+
+                foreach (var group in strokeGroups)
+                {
+                    newWorksheet.Range[$"A{rowNumber}"].Text =
+                        SwimmerUtils.RelayDistanceAndStrokeToDutchString(group.FirstOrDefault().Distance, group.FirstOrDefault().Stroke);
+                    var ageGroups = group.GroupBy(r => r.AgeGroup);
+                    foreach (var ageGroup in ageGroups)
+                    {
+                        newWorksheet.Range[$"B{rowNumber}"].Text = $"{ageGroup.FirstOrDefault().AgeGroup}+";
+
+                        foreach (var record in ageGroup)
+                        {
+                            newWorksheet.Range[$"C{rowNumber}"].Text =
+                                SwimmerUtils.ConvertDoubleToTimeString(record.Time);
+                            newWorksheet.Range[$"D{rowNumber}"].Text = record.Name;
+                            newWorksheet.Range[$"E{rowNumber}"].DateTimeValue = record.Date;
+
+                            newWorksheet.Columns[0].ColumnWidth = 15;
+                            newWorksheet.Columns[1].ColumnWidth = 10;
+                            newWorksheet.Columns[2].ColumnWidth = 10;
+                            newWorksheet.Columns[3].ColumnWidth = 60;
+                            newWorksheet.Columns[4].ColumnWidth = 15;
+
+                            rowNumber++;
+                        }
+
+                        rowNumber++;
+                    }
+
+                    rowNumber++;
+                }
+            }
+
+
+            var now = DateTime.Now;
+            workbook.SaveToFile($"TEST {now.Year}-{now.Month}-{now.Day}=Clubrecords historie.xlsx", ExcelVersion.Version2013);
+        }
+
+        // REMOVE, only one time code
+        public void GetRelaysIntoExcel()
+        {
+            Workbook workbook = new Workbook();
+            workbook.LoadFromFile("Clubrecords history_backup.xls");
+
+            Workbook workbook2 = new Workbook();
+            workbook2.LoadFromFile("2024-11-7=Clubrecords history.xlsx");
+
+            int[] sheetIndexes = { 44, 45, 46, 47, 48, 49 };
+
+            var allRecords = new List<ClubRecord>();
+
+            foreach (var sheetIndex in sheetIndexes)
+            {
+                var records = new List<ClubRecord>();
+                var sheet = workbook.Worksheets[sheetIndex];
+                var course = sheetIndex % 2 == 0 ? Course.Long : Course.Short;
+                var gender = sheetIndex - 44 < 2 ? Gender.Female : sheetIndex - 44 < 4 ? Gender.Male : Gender.Mix;
+
+
+                for (int i = 0; i < sheet.Rows.Length; i++)
+                {
+                    var swimEvent = sheet.Rows[i]?.Columns[0].Value;
+                    var ageGroup = sheet.Rows[i].Columns[1].Value;
+                    var time = sheet.Rows[i].Columns[2].Value;
+                    if (swimEvent == "" && ageGroup == "" || time == "") continue;
+                    var names = sheet.Rows[i].Columns[3].Value;
+                    var date = sheet.Rows[i].Columns[4].Value;
+                    var namesCleaned = string.Join(";", names.Split(',').Select(name =>
+                    {
+                        if (name.Contains("("))
+                        {
+                            //name.Split(" ");
+                            return string.Join(" ", name.Split(" ")[..^1]);
+
+                        }
+
+                        return name;
+                    }));
+
+                    records.Add(new ClubRecord
+                    {
+                        AgeGroup = int.Parse(ageGroup.Split("")[0]),
+                        Course = course,
+                        Date = SwimmerUtils.GetDateFromDateStringShort(date),
+                        Distance = (Distance) (int.Parse(swimEvent.Split("x")[1].Split(" ")[0]) * 4),
+                        Gender = gender,
+                        IsRelay = true,
+                        Name = namesCleaned,
+                        Time = SwimmerUtils.GetTimeFromTimeString(time),
+                        Stroke = SwimmerUtils.GetStrokeFromStringDutch(swimEvent)
+                    });
+
+                }
+
+                var genderString = gender == Gender.Female ? "dames" : gender == Gender.Male ? "heren" : "MIX";
+                var worksheetName = $"Estafette {SwimmerUtils.CourseToDutchShorthand(course).ToLower()} {genderString}";
+                Worksheet newWorksheet = workbook2.CreateEmptySheet(worksheetName);
+                newWorksheet.Range["A1"].Text = worksheetName;
+                newWorksheet.Range["A1"].Style.Font.IsBold = true;
+
+                var rowNumber = 3;
+
+                var strokeGroups = records.GroupBy(r => new {r.Stroke, r.Distance});
+
+                foreach (var group in strokeGroups)
+                {
+                        newWorksheet.Range[$"A{rowNumber}"].Text =
+                            SwimmerUtils.RelayDistanceAndStrokeToDutchString(group.FirstOrDefault().Distance, group.FirstOrDefault().Stroke);
+                    var ageGroups = group.GroupBy(r => r.AgeGroup);
+                    foreach (var ageGroup in ageGroups)
+                    {
+                        newWorksheet.Range[$"B{rowNumber}"].Text = $"{ageGroup.FirstOrDefault().AgeGroup}+";
+
+                        foreach (var record in ageGroup)
+                        {
+                            newWorksheet.Range[$"C{rowNumber}"].Text =
+                                SwimmerUtils.ConvertDoubleToTimeString(record.Time);
+                            newWorksheet.Range[$"D{rowNumber}"].Text = record.Name;
+                            newWorksheet.Range[$"E{rowNumber}"].DateTimeValue = record.Date;
+
+                            newWorksheet.Columns[0].ColumnWidth = 15;
+                            newWorksheet.Columns[1].ColumnWidth = 10;
+                            newWorksheet.Columns[2].ColumnWidth = 10;
+                            newWorksheet.Columns[3].ColumnWidth = 60;
+                            newWorksheet.Columns[4].ColumnWidth = 15;
+
+                            rowNumber++;
+                        }
+
+                        rowNumber++;
+                    }
+
+                    rowNumber++;
+                }
+
+            }
+
+            var now = DateTime.Now;
+            workbook2.SaveToFile($"{now.Year}-{now.Month}-{now.Day}=Clubrecords historie.xlsx", ExcelVersion.Version2013);
         }
     }
 }

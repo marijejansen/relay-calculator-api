@@ -51,5 +51,11 @@ namespace RelayCalculator.Api.Services.Models
             get;
             set;
         }
+
+        public bool IsRelay
+        {
+            get; 
+            set;
+        }
     }
 }
