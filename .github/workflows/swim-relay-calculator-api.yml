@@ -1,8 +1,7 @@
-name: Build and deploy .NET Core application to Web App swim-relay-calculator-api with API Management Service RelayCalculatorApi-RelayCalculatorApi
-
 permissions:
   contents: write
-  workflow: write
+
+name: Build and deploy .NET Core application to Web App swim-relay-calculator-api with API Management Service RelayCalculatorApi-RelayCalculatorApi
 
 on:
   push:
