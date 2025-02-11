@@ -2,6 +2,7 @@ name: Build and deploy .NET Core application to Web App swim-relay-calculator-ap
 
 permissions:
   contents: write
+  workflow: write
 
 on:
   push:
