@@ -19,6 +19,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="Spire.XLS" Version="14.2.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="7.2.0" />
 	<ResolvedFileToPublish Include="MastersRecords.lef">
 		<RelativePath>MastersRecords.lef</RelativePath>
 	</ResolvedFileToPublish>  
