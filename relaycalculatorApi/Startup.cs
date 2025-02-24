@@ -65,6 +65,17 @@ namespace RelayCalculator.Api
                  var xmlPath = Path.Combine(AppContext.BaseDirectory, "RelayCalculator.Api.xml");
                 c.IncludeXmlComments(xmlPath);
             });
+
+
+            string connectionString = Environment.GetEnvironmentVariable("StorageConnectionString");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                connectionString = Configuration.GetConnectionString("StorageConnectionString");
+            }
+
+            services.AddSingleton(connectionString);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

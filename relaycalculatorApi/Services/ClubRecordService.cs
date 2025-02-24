@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RelayCalculator.Api.Utils;
+using Microsoft.Extensions.Configuration;
 
 
 namespace RelayCalculator.Api.Services
@@ -18,8 +19,8 @@ namespace RelayCalculator.Api.Services
         private readonly TableClient _tableClient;
         private readonly IClubRecordFileService _clubRecordFileService;
 
-        public ClubRecordService(IClubRecordFileService clubRecordFileService) {
-            var connectionString = "DefaultEndpointsProtocol=https;AccountName=relaycalculatorstorage;AccountKey=RPHQsrFZbfUbRtwMqnk1OOZDG5mQBXVPaakvVm5U7O1uKZNG/PPaYFxbTG6wtKindAUbOI+ZVUIH+ASt507mXg==;EndpointSuffix=core.windows.net";
+        public ClubRecordService(IClubRecordFileService clubRecordFileService, IConfiguration configuration) {
+            string connectionString = configuration.GetConnectionString("StorageConnectionString"); 
             var tableName = "clubRecords";
             _tableClient = new TableClient(connectionString, tableName);
             // Create the table if it doesn't already exist to verify we've successfully authenticated.
