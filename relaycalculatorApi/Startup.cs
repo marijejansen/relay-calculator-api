@@ -70,6 +70,11 @@ namespace RelayCalculator.Api
             string connectionString = Environment.GetEnvironmentVariable("StorageConnectionString")
                                       ?? Configuration.GetConnectionString("StorageConnectionString");
 
+            // TEST
+            Console.WriteLine("ASPNETCORE_ENVIRONMENT: " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+            var connectionStringTEST = Configuration["ConnectionStrings:StorageConnectionString"];
+            Console.WriteLine("Connection String from ConnectionStrings: " + connectionString);
+
             if (string.IsNullOrEmpty(connectionString))
             {
                 throw new ArgumentNullException(nameof(connectionString), "Storage connection string cannot be null.");
