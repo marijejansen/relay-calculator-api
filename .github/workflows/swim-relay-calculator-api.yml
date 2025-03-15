@@ -33,17 +33,10 @@ jobs:
         with:
           include-prerelease: True
           dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
-    
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.RelayCalculatorApi_SPN }}
-    
-      - name: Get StorageConnectionString from Azure
-        id: get-connection-string
+          
+      - name: Set Storage Connection String as Environment Variable
         run: |
-          $connectionString = az webapp config appsettings list --name "${{ env.AZURE_WEBAPP_NAME }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --query "[?name=='StorageConnectionString'].value" -o tsv
-          echo "StorageConnectionString=$connectionString" >> $GITHUB_ENV
+          echo "StorageConnectionString=${{ secrets.STORAGECONNECTIONSTRING }}" >> $GITHUB_ENV  # Set secret as env variable
       
       - name: Setup SwashBuckle .NET Core
         uses: actions/setup-dotnet@v4
