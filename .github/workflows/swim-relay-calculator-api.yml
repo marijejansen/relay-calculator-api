@@ -35,9 +35,11 @@ jobs:
           dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
           
       - name: Set Storage Connection String as Environment Variable
+        shell: bash
         run: |
           echo "StorageConnectionString=${{ secrets.STORAGECONNECTIONSTRING }}" >> $GITHUB_ENV  # Set secret as env variable
       - name: Debug Storage Connection String
+        shell: bash
         run: |
           echo "StorageConnectionString=$StorageConnectionString"  # Debug the environment variable
       
