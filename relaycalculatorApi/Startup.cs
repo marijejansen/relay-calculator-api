@@ -67,11 +67,12 @@ namespace RelayCalculator.Api
             });
 
 
-            string connectionString = Environment.GetEnvironmentVariable("StorageConnectionString");
+            string connectionString = Environment.GetEnvironmentVariable("StorageConnectionString")
+                                      ?? Configuration.GetConnectionString("StorageConnectionString");
 
             if (string.IsNullOrEmpty(connectionString))
             {
-                connectionString = Configuration.GetConnectionString("StorageConnectionString");
+                throw new ArgumentNullException(nameof(connectionString), "Storage connection string cannot be null.");
             }
 
             services.AddSingleton(connectionString);
