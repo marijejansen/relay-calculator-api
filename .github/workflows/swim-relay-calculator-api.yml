@@ -37,6 +37,9 @@ jobs:
       - name: Set Storage Connection String as Environment Variable
         run: |
           echo "StorageConnectionString=${{ secrets.STORAGECONNECTIONSTRING }}" >> $GITHUB_ENV  # Set secret as env variable
+      - name: Debug Storage Connection String
+        run: |
+          echo "StorageConnectionString=$StorageConnectionString"  # Debug the environment variable
       
       - name: Setup SwashBuckle .NET Core
         uses: actions/setup-dotnet@v4
