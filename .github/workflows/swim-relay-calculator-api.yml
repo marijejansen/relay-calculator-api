@@ -42,7 +42,7 @@ jobs:
       - name: Get StorageConnectionString from Azure
         id: get-connection-string
         run: |
-          $connectionString = az webapp config appsettings list --name "${{ env.AZURE_APIM_SERVICENAME }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --query "[?name=='StorageConnectionString'].value" -o tsv
+          $connectionString = az webapp config appsettings list --name "${{ env.AZURE_WEBAPP_NAME }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --query "[?name=='StorageConnectionString'].value" -o tsv
           echo "StorageConnectionString=$connectionString" >> $GITHUB_ENV
       
       - name: Setup SwashBuckle .NET Core
