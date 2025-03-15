@@ -111,6 +111,45 @@ namespace RelayCalculator.Api.Utils
             }
         }
 
+        public static Distance GetDistanceFromRelay(Relay? relay)
+        {
+            switch (relay)
+            {
+                case Relay.Backstroke200:
+                case Relay.Medley200:
+                case Relay.Freestyle200:
+                case Relay.Breaststroke200:
+                    return Distance.TwoHundred;
+                case Relay.Freestyle400:
+                case Relay.Medley400:
+                    return Distance.FourHundred;
+                case Relay.Freestyle800:
+                    return Distance.EightHundred;
+                default:
+                    return 0;
+            }
+        }
+
+        public static Stroke GetStrokeFromRelay(Relay? relay)
+        {
+            switch (relay)
+            {
+                case Relay.Backstroke200:
+                    return Stroke.Backstroke;
+                case Relay.Medley200:
+                case Relay.Medley400:
+                    return Stroke.Medley;
+                case Relay.Freestyle200:
+                case Relay.Freestyle400:
+                case Relay.Freestyle800:
+                    return Stroke.Freestyle;
+                case Relay.Breaststroke200:
+                    return Stroke.Breaststroke;
+                default:
+                    return Stroke.Unknown;
+            }
+        }
+
 
         public static Stroke GetStrokeFromRelayString(string relayString)
         {

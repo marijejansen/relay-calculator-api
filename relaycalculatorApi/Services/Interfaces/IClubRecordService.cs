@@ -10,6 +10,7 @@ namespace RelayCalculator.Api.Services.Interfaces
         Task AddToStorage(ClubRecord clubRecord);
         Task<IEnumerable<ClubRecord>> GetAllFromStorage();
         Task<List<ClubRecord>> GetNewRecordsFromMeetResults(SwimmerMeetResult swimmerMeetResult);
+        Task<List<ClubRecord>> GetNewRelayRecordsFromRelayMeetResult(RelayMeetResult relayMeetResult);
         Task UpdateRecordsInStorage(IEnumerable<ClubRecord> clubRecords);
         Task<IEnumerable<ClubRecord>> CompareHistoryWithStorageRecords();
     }

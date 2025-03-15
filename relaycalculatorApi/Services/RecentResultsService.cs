@@ -10,6 +10,7 @@ using RelayCalculator.Api.Services.Enums;
 using RelayCalculator.Api.Services.Models;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
+using System.IO.Pipelines;
 
 namespace RelayCalculator.Api.Services
 {
@@ -22,7 +23,7 @@ namespace RelayCalculator.Api.Services
             548413, 602611, 602743, 602913, 603262, 603265, 603091, 603214, 603312, 603406, 603403, 603585, 603823, 603990, 604277, 604235, 604686, 605250, 605817, 606074, 607759, 608060, 608623, 609334,
             609785, 609918, 610071, 609871, 610317, 610350, 610369, 610481, 611090, 611153, 611770, 612225, 612333, 613274, 612831, 613849, 614443, 614837, 615014, 615489, 615694, 615247, 616234, 616839,
             615823, 615980, 616614, 616500, 615534, 616820, 616816, 616831, 616864, 617023, 617887, 617903, 618072, 618844, 619926, 619990};
-        private readonly List<int> _meetIds2014to2019international = new List<int> { 617723, 610321, 610871, 613162, 603443, 604260, 604944, 595984, 597524, 597895, 590570, 582586,};
+        private readonly List<int> _meetIds2014to2019international = new List<int> { 617723, 610321, 610871, 613162, 603443, 604260, 604944, 595984};
         private readonly List<int> _meetIds2020to2022 = new List<int> { 620148, 620753, 621149, 621320, 621332, 621663, 622911, 626693, 626698, 627058, 627054, 627824, 630372, 630540, 630603, 631305, 631182,
             631899, 632920, 632118, 632485, 632563, 632584, 632927, 633095, 633104, 633025, 633542, 633737, 633353, 634432, 634877 };
         private readonly List<int> _meetsIds2023to2024sep = new List<int> { 635237, 636259, 636671, 636794, 637130, 638215, 637828, 638877, 638502, 639052, 639545, 639808, 639850, 639913, 639997, 640773, 640334,
@@ -41,7 +42,9 @@ namespace RelayCalculator.Api.Services
 
             if (fromList)
             {
-                var allMeets = _meetIds2015to2019.Concat(_meetIds2014to2019international).Concat(_meetIds2020to2022).Concat(_meetsIds2023to2024sep);
+                /*var allMeets = */_meetIds2015to2019.Concat(_meetIds2014to2019international).Concat(_meetIds2020to2022).Concat(_meetsIds2023to2024sep);
+                //var allMeets = _meetIds2014to2019international.Concat(_meetIds2020to2022).Concat(_meetsIds2023to2024sep);
+                var allMeets = new []{ 647047, 647049, 647060, 646752, 647149, 647471, 647504, 647480 };
 
                 foreach (var meetId in allMeets)
                 {
@@ -157,9 +160,9 @@ namespace RelayCalculator.Api.Services
                 }
             }
 
-            var relayRecords = new List<RelayMeetResult>();
             if (relayTrs != null)
             {
+                var relayResults = new List<RelayMeetResult>();
                 foreach (var r in relayTrs)
                 {
                     var tds = r.Descendants("td").ToList();
@@ -171,6 +174,7 @@ namespace RelayCalculator.Api.Services
                     if(gender == Gender.Unknown || relay == null){continue;}
 
                     var timeString = tds.First(td => td.HasClass("swimtime")).InnerText;
+                    if(timeString == "" || timeString == "NT") continue;
                     var time = SwimmerUtils.ConvertTimeStringToDouble(timeString);
 
                     var names = tds.Last().InnerText.Split(",");
@@ -182,7 +186,18 @@ namespace RelayCalculator.Api.Services
                         var splittedName = name.Trim().Replace("&nbsp;", " ").Split(" ");
                         var firstName = splittedName[^1];
                         var lastName = string.Join(" ", splittedName[..^1]);
-                        var nameFromList = namesList.First(n => n[1] == lastName && n[0][0] == firstName[0]);
+                        var nameFromList = namesList.FirstOrDefault(n => n[1] == lastName && n[0][0] == firstName[0]);
+                        if (nameFromList == null)
+                        {
+                            var linkToSwimmer = tds.Last().Descendants("a").Where(a => a.InnerText == name.Trim()).FirstOrDefault()?.ChildAttributes("href").FirstOrDefault()?.Value;
+                            var doc =  await _htmlDocumentService.GetHtmlDocumentByRelativeUrl(linkToSwimmer);
+                            var info = doc.DocumentNode.SelectSingleNode(".//div[@id='athleteinfo']").SelectSingleNode(".//div[@id='name']").InnerText;
+                            var birthYear = info.Split("(")[1].Split("&")[0];
+                            firstName = info.Split("(")[0].Split(",")[1].Trim();
+
+                            nameFromList =  new[] { firstName, lastName, birthYear };
+
+                        }
                         namesString += nameFromList[0] + " " + nameFromList[1] + "; ";
                         totalYears += swimmerMeetResult.Date.Year - int.Parse(nameFromList[2]);
                     }
@@ -196,11 +211,19 @@ namespace RelayCalculator.Api.Services
                         Date = swimmerMeetResult.Date,
                         Gender = gender,
                         Names = namesString,
-                        RelayResult = new RelayResult {Relay = (Relay) relay, Time = time}
+                        Distance = SwimmerUtils.GetDistanceFromRelay(relay),
+                        Stroke = SwimmerUtils.GetStrokeFromRelay(relay),
+                        Time = time
                     };
 
-                    relayRecords.Add(relayResult);
+                    var newRecords = await _clubRecordService.GetNewRelayRecordsFromRelayMeetResult(relayResult);
+                    if (newRecords.Any())
+                    {
+                        allNewRecords.AddRange(newRecords);
+                    }
+                    //relayResults.Add(relayResult);
                 }
+
 
 
             }

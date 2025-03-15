@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Linq;
 using RelayCalculator.Api.Models;
 using RelayCalculator.Api.Utils;
+using System.Collections;
+using System.Reflection;
 
 
 namespace RelayCalculator.Api.Services
@@ -24,7 +26,7 @@ namespace RelayCalculator.Api.Services
         public Task<List<ClubRecord>> GetClubRecordsHistoryFromFile()
         {
             Workbook workbook = new Workbook();
-            workbook.LoadFromFile("Clubrecords history.xlsx");
+            workbook.LoadFromFile("2024-11-25=Clubrecords historie.xlsx");
 
             int[] ages = { 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75 };
             Course[] courses = { Course.Short, Course.Long };
@@ -221,7 +223,10 @@ namespace RelayCalculator.Api.Services
             workbook.Worksheets.Clear();
 
             var oldHistoryRecords = await GetClubRecordsHistoryFromFile();
-            var allRecords = oldHistoryRecords.Concat(newRecords);
+            var allRecords = oldHistoryRecords.Concat(newRecords).ToList();
+
+            var relayRecords = allRecords?.Where(rec => rec.IsRelay).ToList();
+            allRecords.RemoveAll(rec => rec.IsRelay);
 
             List<int> ages = Constants.Individual.AgeGroups;
 
@@ -289,9 +294,54 @@ namespace RelayCalculator.Api.Services
                 }
             }
 
+            var genderAndCourseGroups = relayRecords.GroupBy(r => new { r.Gender, r.Course });
+            foreach (var genderAgeGroup in genderAndCourseGroups)
+            {
+                var genderString = genderAgeGroup.FirstOrDefault().Gender == Gender.Female ? "dames" : genderAgeGroup.FirstOrDefault().Gender == Gender.Male ? "heren" : "MIX";
+                var worksheetName = $"Estafette {SwimmerUtils.CourseToDutchShorthand(genderAgeGroup.FirstOrDefault().Course).ToLower()} {genderString}";
+
+                Worksheet newWorksheet = workbook.CreateEmptySheet(worksheetName);
+                newWorksheet.Range["A1"].Text = worksheetName;
+                newWorksheet.Range["A1"].Style.Font.IsBold = true;
+
+                var rowNumber = 3;
+
+                var strokeGroups = genderAgeGroup.GroupBy(r => new { r.Stroke, r.Distance });
+
+                foreach (var group in strokeGroups)
+                {
+                    newWorksheet.Range[$"A{rowNumber}"].Text =
+                        SwimmerUtils.RelayDistanceAndStrokeToDutchString(group.FirstOrDefault().Distance, group.FirstOrDefault().Stroke);
+                    var ageGroups = group.GroupBy(r => r.AgeGroup);
+                    foreach (var ageGroup in ageGroups)
+                    {
+                        newWorksheet.Range[$"B{rowNumber}"].Text = $"{ageGroup.FirstOrDefault().AgeGroup}+";
+
+                        foreach (var record in ageGroup)
+                        {
+                            newWorksheet.Range[$"C{rowNumber}"].Text =
+                                SwimmerUtils.ConvertDoubleToTimeString(record.Time);
+                            newWorksheet.Range[$"D{rowNumber}"].Text = record.Name;
+                            newWorksheet.Range[$"E{rowNumber}"].DateTimeValue = record.Date;
+
+                            newWorksheet.Columns[0].ColumnWidth = 15;
+                            newWorksheet.Columns[1].ColumnWidth = 10;
+                            newWorksheet.Columns[2].ColumnWidth = 10;
+                            newWorksheet.Columns[3].ColumnWidth = 60;
+                            newWorksheet.Columns[4].ColumnWidth = 15;
+
+                            rowNumber++;
+                        }
+
+                        rowNumber++;
+                    }
+
+                    rowNumber++;
+                }
+            }
 
             var now = DateTime.Now;
-            workbook.SaveToFile($"{now.Year}-{now.Month}-{now.Day}=Clubrecords history.xlsx", ExcelVersion.Version2013);
+            workbook.SaveToFile($"{now.Year}-{now.Month}-{now.Day}=Clubrecords historie.xlsx", ExcelVersion.Version2013);
             workbook.Worksheets.RemoveAt(workbook.Worksheets.Count - 1);
         }
 
@@ -416,6 +466,46 @@ namespace RelayCalculator.Api.Services
                             Stroke = SwimmerUtils.GetStrokeFromRelayString(relayStored)
                         });
 
+                    }
+                }
+            }
+
+            var ageGroups = new[] { 80, 100, 120, 160, 200, 240, 280, 320 };
+            var distances = new[] {Distance.TwoHundred, Distance.FourHundred, Distance.EightHundred};
+            var strokes = new[] {Stroke.Freestyle, Stroke.Medley};
+            foreach (var agegroup in ageGroups)
+            {
+                foreach (var gender in genders)
+                {
+                    foreach (var course in courses)
+                    {
+                        foreach (var stroke in strokes)
+                        {
+                            foreach (var distance in distances)
+                            {
+                                var rec = records.Find(r => r.IsRelay &&
+                                                            r.Distance == distance &&
+                                                            r.AgeGroup == agegroup &&
+                                                            r.Gender == gender &&
+                                                            r.Course == course &&
+                                                            r.Stroke == stroke);
+                                if (rec == null)
+                                {
+                                    records.Add(new ClubRecord()
+                                    {
+                                        AgeGroup = agegroup,
+                                        Course = course,
+                                        Date = DateTime.Now,
+                                        Distance = distance,
+                                        Gender = gender,
+                                        IsRelay = true,
+                                        Name = "",
+                                        Stroke = stroke,
+                                        Time = 0
+                                    });
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -27,7 +27,7 @@ namespace RelayCalculator.Api.Services
             _tableClient.CreateIfNotExists();
             _clubRecordFileService = clubRecordFileService;
         }
-
+        
         // gets all records from storage
         public async Task<IEnumerable<ClubRecord>> GetAllFromStorage()
         {
@@ -115,6 +115,50 @@ namespace RelayCalculator.Api.Services
                         });
                     }
 
+                }
+            }
+
+            return newRecords;
+        }
+
+        public async Task<List<ClubRecord>> GetNewRelayRecordsFromRelayMeetResult(RelayMeetResult relayMeetResult)
+        {
+            var partitionKey = $"R_{relayMeetResult.Gender}_{relayMeetResult.AgeGroup}_{relayMeetResult.Course}";
+            var filter = $"PartitionKey eq '{partitionKey}'";
+            var recordsAsync = _tableClient.QueryAsync<RecordEntity>(filter);
+            var newRecords = new List<ClubRecord>();
+            if (recordsAsync == null)
+            {
+                var x = 16;
+            }
+            await foreach (var record in recordsAsync)
+            {
+                if (record.RowKey != $"{relayMeetResult.Stroke}_{(int)relayMeetResult.Distance}") continue;
+
+                if (relayMeetResult.Time < record.Time)
+                {
+                    if (relayMeetResult.Date < record.RecordDate)
+                    {
+                        Console.WriteLine("############ Found better time than record for older relay:");
+                    }
+                    Console.WriteLine(
+                        $"{relayMeetResult.Names} " +
+                        $"{SwimmerUtils.GenderToDutchString(relayMeetResult.Gender)}{relayMeetResult.AgeGroup}+ " +
+                        $"{(int)relayMeetResult.Distance}m {SwimmerUtils.StrokeToDutchString(relayMeetResult.Stroke)} " +
+                        $"{SwimmerUtils.CourseToDutchShorthand(relayMeetResult.Course).ToLower()}: " +
+                        $"van {SwimmerUtils.ConvertDoubleToTimeString(record.Time)} naar {SwimmerUtils.ConvertDoubleToTimeString(relayMeetResult.Time)}");
+                    newRecords.Add(new ClubRecord()
+                    {
+                        AgeGroup = relayMeetResult.AgeGroup,
+                        Course = relayMeetResult.Course,
+                        Date = relayMeetResult.Date,
+                        Distance = relayMeetResult.Distance,
+                        Gender = relayMeetResult.Gender,
+                        IsRelay = true,
+                        Name = relayMeetResult.Names,
+                        Stroke = relayMeetResult.Stroke,
+                        Time = relayMeetResult.Time,
+                    });
                 }
             }
 
