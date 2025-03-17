@@ -70,10 +70,6 @@ namespace RelayCalculator.Api
             string connectionString = Environment.GetEnvironmentVariable("StorageConnectionString")
                                       ?? Configuration.GetConnectionString("StorageConnectionString");
 
-            // TEST
-            Console.WriteLine("ASPNETCORE_ENVIRONMENT: " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
-            var connectionStringTEST = Configuration["ConnectionStrings:StorageConnectionString"];
-            Console.WriteLine("Connection String from ConnectionStrings: " + connectionString);
 
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -113,7 +109,13 @@ namespace RelayCalculator.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "RelaySwim Api V1");
             });
 
+
             //app.UseMvc();
         }
     }
+}
+
+public class StorageSettings
+{
+    public string ConnectionString { get; set; }
 }
