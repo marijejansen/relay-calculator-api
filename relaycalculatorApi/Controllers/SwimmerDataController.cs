@@ -7,6 +7,9 @@ using RelayCalculator.Api.Services.Models;
 
 namespace RelayCalculator.Api.Controllers
 {
+    /// <summary>
+    /// SwimmerData Controller
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class SwimmerDataController : ControllerBase
