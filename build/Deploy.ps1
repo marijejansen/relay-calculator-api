@@ -7,7 +7,7 @@ $login = "marijejansen"
 $password = "abc123ABC!"
 
 New-AzResourceGroup -Name $rgName -Location $location
-# Build-Bicep -Path $bicepFile
+az bicep build --file $bicepFile
 New-AzResourceGroupDeployment `
     -ResourceGroupName $rgName `
     -TemplateFile $templateFile `

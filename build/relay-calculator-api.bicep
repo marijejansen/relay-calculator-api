@@ -28,6 +28,29 @@ resource api 'Microsoft.Web/sites@2020-06-01' = {
   }
   properties: {
     serverFarmId: appServicePlan.id
+    siteConfig: {
+      connectionStrings: [
+        {
+          name: 'StorageConnectionString'
+          connectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageaccount.name};AccountKey=${listKeys(storageaccount.id, storageaccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+          type: 'Custom'
+        }
+      ]
+      use32BitWorkerProcess: false
+    }
+  }
+}
+
+resource apimService 'Microsoft.ApiManagement/service@2021-08-01' = {
+  name: apiName
+  location: location
+  sku: {
+    name: 'Developer'
+    capacity: 1
+  }
+  properties: {
+    publisherEmail: 'jansen.marije@gmail.com'
+    publisherName: 'M. Jansen'
   }
 }
 
@@ -48,7 +71,7 @@ resource storageaccount_tableService 'Microsoft.Storage/storageAccounts/tableSer
 resource storageaccount_tableService_table 'Microsoft.Storage/storageAccounts/tableServices/tables@2021-08-01' = {
   name: 'clubRecords'
   parent: storageaccount_tableService
-} 
+}
 
 resource azFunctionApp 'Microsoft.Web/sites@2021-03-01' = {
   name: functionName
