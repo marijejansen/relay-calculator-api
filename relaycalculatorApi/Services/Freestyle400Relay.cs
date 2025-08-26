@@ -14,14 +14,14 @@ namespace RelayCalculator.Api.Services
             var time = 0.0;
             foreach (var position in permutation)
             {
-                var indTime = course == Course.Long ? swimmers[position].LongCourseTimes.Freestyle100M :
-                    swimmers[position].ShortCourseTimes.Freestyle100M;
-                if (!(indTime > 0))
+                var indTime = course == Course.Long ? swimmers[position]?.LongCourseTimes?.Freestyle100M :
+                    swimmers[position].ShortCourseTimes?.Freestyle100M;
+                if (!(indTime > 0) || indTime == null)
                 {
                     return 0;
                 }
 
-                time += indTime;
+                time += (double)indTime;
             }
 
             return time;
@@ -35,8 +35,8 @@ namespace RelayCalculator.Api.Services
                 FirstName = s.FirstName,
                 LastName = s.LastName,
                 Age = DateTime.Today.Year - s.BirthYear,
-                Time = course == Course.Long ? s.LongCourseTimes.Freestyle100M :
-                    s.ShortCourseTimes.Freestyle100M
+                Time = course == Course.Long ? s.LongCourseTimes?.Freestyle100M :
+                    s.ShortCourseTimes?.Freestyle100M
             }).ToList();
         }
     }

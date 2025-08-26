@@ -13,14 +13,14 @@ namespace RelayCalculator.Api.Services
 {
     public class RecordService : IRecordService
     {
-        private static IHtmlDocumentService _htmlDocumentService;
+        private static IHtmlDocumentService? _htmlDocumentService;
 
         public RecordService(IHtmlDocumentService htmlDocumentService)
         {
             _htmlDocumentService = htmlDocumentService;
         }
 
-        public async Task<List<Record>> GetRelayRecords()
+        public List<Record> GetRelayRecords()
         {
             var file = $"MastersRecords.lef";
             var document = new XmlDocument();
@@ -59,16 +59,16 @@ namespace RelayCalculator.Api.Services
             return relayRecords;
         }
 
-        private async Task<List<Record>> DownloadRecords()
-        {
-            HtmlDocument doc =
-                await _htmlDocumentService.GetHtmlDocumentByUrl(
-                    "https://mastersprint.nl/download/#");
+        //private async Task<List<Record>> DownloadRecords()
+        //{
+        //    HtmlDocument doc =
+        //        await _htmlDocumentService.GetHtmlDocumentByUrl(
+        //            "https://mastersprint.nl/download/#");
 
-            var button = doc.DocumentNode.Descendants("a").Where(node => node.GetAttributeValue("class", "").Contains("download-on-click")).ToList();
+        //    var button = doc.DocumentNode.Descendants("a").Where(node => node.GetAttributeValue("class", "").Contains("download-on-click")).ToList();
 
-            return new List<Record>();
-        }
+        //    return new List<Record>();
+        //}
 
         private List<XmlNode> GetRecordGroupList(XmlNodeList nodeList, EventType eventType)
         {

@@ -7,6 +7,6 @@ namespace RelayCalculator.Api.Services.Interfaces
     {
         List<RelayTeam> BestRelayTeams(CalculationModel calculationModel);
 
-        RelayTeam GetBestTeam(List<int[]> possibleTeams, CalculationModel calculationModel);
+        RelayTeam? GetBestTeam(List<int[]> possibleTeams, CalculationModel calculationModel);
     }
 }

@@ -35,8 +35,8 @@ namespace RelayCalculator.Api.Controllers
         [Route("relays")]
         public async Task<List<Record>> GetRelayRecords()
         {
-            var records = await recordsService.GetRelayRecords();
-            return records;
+            var records = recordsService.GetRelayRecords();
+            return await Task.FromResult(records);
         }
 
         //[HttpGet]

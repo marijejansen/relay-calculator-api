@@ -23,7 +23,7 @@ namespace RelayCalculator.Api.Services
             return possibleNumbers;
         }
 
-        public List<int[]> CreatePermutations(List<int> possibleNumbers, List<int> newList = null, List<int[]> totalList = null)
+        public List<int[]> CreatePermutations(List<int> possibleNumbers, List<int>? newList = null, List<int[]>? totalList = null)
         {
             newList = newList ?? new List<int>();
             totalList = totalList ?? new List<int[]>();

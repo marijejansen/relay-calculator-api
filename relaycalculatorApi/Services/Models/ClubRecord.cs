@@ -5,7 +5,7 @@ namespace RelayCalculator.Api.Services.Models
 {
     public class ClubRecord
     {
-        public string Name { 
+        public string? Name { 
             get; 
             set; 
         }

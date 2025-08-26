@@ -6,7 +6,7 @@ namespace RelayCalculator.Api.Models
 
     public class CalculationRequest
     {
-        public IEnumerable<SwimmerModel> Swimmers
+        public IEnumerable<SwimmerModel>? Swimmers
         {
             get; 
             set;

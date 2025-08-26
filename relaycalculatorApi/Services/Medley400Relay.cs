@@ -16,12 +16,12 @@ namespace RelayCalculator.Api.Services
             {
                 var number = permutation[i];
                 var indTime = this.GetTime(swimmers[number], i, course);
-                if (!(indTime > 0))
+                if (!(indTime > 0) || indTime == null)
                 {
                     return 0;
                 }
 
-                time += indTime;
+                time += (double)indTime;
             }
 
             return time;
@@ -40,7 +40,7 @@ namespace RelayCalculator.Api.Services
             }).ToList();
         }
 
-        private double GetTime(Swimmer swimmer, int index, Course course)
+        private double? GetTime(Swimmer swimmer, int index, Course course)
         {
             switch (course)
             {
@@ -48,13 +48,13 @@ namespace RelayCalculator.Api.Services
                     switch (index)
                     {
                         case 0:
-                            return swimmer.LongCourseTimes.Backstroke100M;
+                            return swimmer.LongCourseTimes?.Backstroke100M;
                         case 1:
-                            return swimmer.LongCourseTimes.Breaststroke100M;
+                            return swimmer.LongCourseTimes?.Breaststroke100M;
                         case 2:
-                            return swimmer.LongCourseTimes.Butterfly100M;
+                            return swimmer.LongCourseTimes?.Butterfly100M;
                         case 3:
-                            return swimmer.LongCourseTimes.Freestyle100M;
+                            return swimmer.LongCourseTimes?.Freestyle100M;
                         default:
                             return 999;
                     }
@@ -63,13 +63,13 @@ namespace RelayCalculator.Api.Services
                     switch (index)
                     {
                         case 0:
-                            return swimmer.ShortCourseTimes.Backstroke100M;
+                            return swimmer.ShortCourseTimes?.Backstroke100M;
                         case 1:
-                            return swimmer.ShortCourseTimes.Breaststroke100M;
+                            return swimmer.ShortCourseTimes?.Breaststroke100M;
                         case 2:
-                            return swimmer.ShortCourseTimes.Butterfly100M;
+                            return swimmer.ShortCourseTimes?.Butterfly100M;
                         case 3:
-                            return swimmer.ShortCourseTimes.Freestyle100M;
+                            return swimmer.ShortCourseTimes?.Freestyle100M;
                         default:
                             return 999;
                     }

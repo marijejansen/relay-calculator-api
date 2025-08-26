@@ -32,6 +32,11 @@
             Returns a calculationrequest
             </returns>
         </member>
+        <member name="T:RelayCalculator.Api.Controllers.SwimmerDataController">
+            <summary>
+            SwimmerData Controller
+            </summary>
+        </member>
         <member name="M:RelayCalculator.Api.Controllers.SwimmerDataController.GetSwimmersByNames(System.String,System.String)">
             <summary>
             Search for swimmers by first and last name.

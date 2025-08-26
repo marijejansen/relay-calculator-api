@@ -49,7 +49,7 @@ namespace RelayCalculator.Api.Services
                         for (int x = 0; x < sheet.Rows.Length; x++)
                         {
                             var columnsForRow = sheet.Rows[x].Columns;
-                            if (columnsForRow.Length == 1) continue;
+                            if (columnsForRow == null || columnsForRow.Length == 1) continue;
                             var eventName = columnsForRow[0].Value;
                             if (eventName != "")
                             {
@@ -58,7 +58,7 @@ namespace RelayCalculator.Api.Services
                                 distance = SwimmerUtils.GetDistanceFromStringDutch(eventName);
                                 stroke = eventStroke;
                             }
-                            var eventTime = columnsForRow?[1]?.Value;
+                            var eventTime = columnsForRow[1]?.Value;
                             if (string.IsNullOrEmpty(eventTime)) continue;
                             //var time = GetTime(eventTime);
                             var name = columnsForRow[2].Value;

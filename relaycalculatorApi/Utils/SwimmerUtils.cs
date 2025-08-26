@@ -11,11 +11,9 @@ namespace RelayCalculator.Api.Utils
 {
     public static class SwimmerUtils
     {
-        public static string[] GetNameArrayFromString(string name)
+        public static string[]? GetNameArrayFromString(string? name)
         {
-            // Bon-rosenbrand van, Lidia
-            // Bon-rosenbrand van der, Lidia
-            var tempName = name.ToLower()?.Split(',');
+            var tempName = name?.ToLower()?.Split(',');
 
             if (tempName == null) return null;
 
@@ -162,7 +160,6 @@ namespace RelayCalculator.Api.Utils
             }
             catch
             {
-                var why = "";
             }
 
             switch (stroke.Trim().ToLower())
@@ -200,7 +197,6 @@ namespace RelayCalculator.Api.Utils
             }
             catch
             {
-                var x = 1;
             }
 
             switch (stroke.Trim().ToLower())
@@ -237,7 +233,6 @@ namespace RelayCalculator.Api.Utils
             }
             catch
             {
-                var x = 1;
             }
             switch (distance)
             {
@@ -312,7 +307,7 @@ namespace RelayCalculator.Api.Utils
             var hunSec = int.Parse(split[split.Length - 1]);
             if (!int.TryParse(split[split.Length - 2], out _))
             {
-                var x = 10;
+                return 0;
             }
             var sec = int.Parse(split[split.Length - 2]);
 

@@ -12,7 +12,7 @@ namespace RelayCalculator.Api.Services
 {
     public class SearchSwimmersService : ISearchSwimmerService
     {
-        private static IHtmlDocumentService _htmlDocumentService;
+        private readonly IHtmlDocumentService _htmlDocumentService;
 
         public SearchSwimmersService(IHtmlDocumentService htmlDocumentService)
         {
@@ -37,7 +37,7 @@ namespace RelayCalculator.Api.Services
             return selectSwimmers;
         }
 
-        public Swimmer GetSwimmerDetailsFromHtmlNode(HtmlNode node)
+        public Swimmer? GetSwimmerDetailsFromHtmlNode(HtmlNode node)
         {
             var firstNameNode = node.Descendants("td").FirstOrDefault(n => n.HasClass("name"));
             var clubNode = node.Descendants("td").FirstOrDefault(n => n.HasClass("club"));
@@ -64,7 +64,7 @@ namespace RelayCalculator.Api.Services
             return swimmer;
 
         }
-        public string[] GetName(HtmlNode node)
+        public string[]? GetName(HtmlNode node)
         {
             var completeName = node.Descendants("a").FirstOrDefault()?.InnerText;
             return SwimmerUtils.GetNameArrayFromString(completeName);

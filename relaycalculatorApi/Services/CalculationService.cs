@@ -25,6 +25,7 @@ namespace RelayCalculator.Api.Services
         {
             if(calculationModel.CalculateForYear == null || calculationModel.CalculateForYear == 0) calculationModel.CalculateForYear = DateAndTime.Now.Year;
             var swimmers = calculationModel.Swimmers;
+            if (swimmers == null || swimmers.Count == 0) { return new List<RelayTeam>(); }
 
             var permutations = this.permutationService.GetPermutations(swimmers.Count());
 
@@ -62,10 +63,12 @@ namespace RelayCalculator.Api.Services
             return bestTeams;
         }
 
-        public RelayTeam GetBestTeam(List<int[]> possibleTeams, CalculationModel calculationModel)
+        public RelayTeam? GetBestTeam(List<int[]> possibleTeams, CalculationModel calculationModel)
         {
             var bestTime = 0.0;
             var bestTeam = new List<Swimmer>();
+
+            if(calculationModel == null || calculationModel.Swimmers == null || calculationModel.RelayCalculation == null) { return null; };
 
             foreach (var team in possibleTeams)
             {

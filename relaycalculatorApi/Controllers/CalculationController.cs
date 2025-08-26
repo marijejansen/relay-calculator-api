@@ -49,7 +49,7 @@ namespace RelayCalculator.Api.Controllers
         {
             return this.calculationService.BestRelayTeams(new CalculationModel()
             {
-                Swimmers = request.Swimmers.Select(s => this.swimmerMapper.Map(s)).ToList(),
+                Swimmers = request.Swimmers?.Select(s => this.swimmerMapper.Map(s)).ToList(),
                 Relay = request.Relay,
                 Course = request.Course,
                 CalculateForYear = request.CalculateForYear
@@ -69,7 +69,7 @@ namespace RelayCalculator.Api.Controllers
         {
             return this.calculationService.BestRelayTeams(new CalculationModel()
             {
-                Swimmers = request.Swimmers.Select(s => this.swimmerMapper.Map(s)).ToList(),
+                Swimmers = request.Swimmers?.Select(s => this.swimmerMapper.Map(s)).ToList(),
                 Relay = request.Relay,
                 Course = request.Course,
                 CalculateForYear = request.CalculateForYear,

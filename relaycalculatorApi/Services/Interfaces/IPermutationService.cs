@@ -8,8 +8,8 @@ namespace RelayCalculator.Api.Services.Interfaces
 
         List<int> GetListNumbers(int number);
 
-        List<int[]> CreatePermutations(List<int> possibleNumbers, List<int> newList = null,
-            List<int[]> totalList = null);
+        List<int[]> CreatePermutations(List<int> possibleNumbers, List<int>? newList = null,
+            List<int[]>? totalList = null);
 
     }
 }

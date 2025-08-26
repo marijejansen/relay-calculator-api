@@ -44,9 +44,9 @@ namespace RelayCalculator.Api.Utils
         public static RelayType? GetRelayTypeForRecord(XmlNode node)
         {
             var swimStyleNode = GetSwimStyleNode(node);
-            var distance = swimStyleNode.GetAttributeValue("distance");
+            var distance = swimStyleNode?.GetAttributeValue("distance");
 
-            switch (swimStyleNode.GetAttributeValue("stroke"))
+            switch (swimStyleNode?.GetAttributeValue("stroke"))
             {
                 case "FREE" when distance == "50":
                     return RelayType.Freestyle200;
@@ -201,7 +201,7 @@ namespace RelayCalculator.Api.Utils
             return false;
         }
 
-        public static XmlNode GetAgeGroupNode(XmlNode node)
+        public static XmlNode? GetAgeGroupNode(XmlNode node)
         {
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -214,7 +214,7 @@ namespace RelayCalculator.Api.Utils
             return null;
         }
 
-        public static XmlNode GetSwimStyleNode(XmlNode node)
+        public static XmlNode? GetSwimStyleNode(XmlNode node)
         {
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -227,7 +227,7 @@ namespace RelayCalculator.Api.Utils
             return null;
         }
 
-        private static string GetAttributeValue(this XmlNode node, string attributeName)
+        private static string? GetAttributeValue(this XmlNode node, string attributeName)
         {
             return node.Attributes?[attributeName]?.Value;
         }

@@ -7,7 +7,7 @@ namespace RelayCalculator.Api.Services.Models
 {
     public class CalculationModel
     {
-        public List<Swimmer> Swimmers
+        public List<Swimmer>? Swimmers
         {
             get;
             set;
@@ -38,7 +38,7 @@ namespace RelayCalculator.Api.Services.Models
         }
 
         [JsonIgnore]
-        public IBestTeamCalculationService RelayCalculation
+        public IBestTeamCalculationService? RelayCalculation
         {
             get
             {

@@ -62,9 +62,9 @@ namespace RelayCalculator.Api.Services
                 var course = meet.SelectSingleNode(".//td[@class='course']").InnerText == "25m" ? Enums.Course.Short : Enums.Course.Long;
 
 
-                var meetQueryPar = city.SelectSingleNode("a").Attributes.FirstOrDefault(a => a.Name == "href").Value.Split("&amp;");
-                var meetId = meetQueryPar[1].Split("=")[1];
-                var clubId = meetQueryPar[2].Split("=")[1];
+                var meetQueryPar = city?.SelectSingleNode("a")?.Attributes?.FirstOrDefault(a => a.Name == "href")?.Value.Split("&amp;");
+                var meetId = meetQueryPar?[1].Split("=")[1];
+                var clubId = meetQueryPar?[2].Split("=")[1];
                 var meetPage = await GetMeetPage(meetId, clubId);
                 var meetModel = new Meet() { Course = course, Date = date, MeetId = int.Parse(meetId), City = city.InnerText }; 
 

@@ -6,6 +6,6 @@ namespace RelayCalculator.Api.Services.Interfaces
 {
     public interface IRecordService
     {
-        Task<List<Record>> GetRelayRecords();
+        List<Record> GetRelayRecords();
     }
 }

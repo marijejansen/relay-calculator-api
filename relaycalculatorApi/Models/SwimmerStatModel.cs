@@ -8,19 +8,19 @@ namespace RelayCalculator.Api.Models
     {
         public int SwimmerId { get; set; }
 
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
-        public string LastName { get; set; }
-        public string ClubName { get; set; }
+        public string? LastName { get; set; }
+        public string? ClubName { get; set; }
 
         public int BirthYear { get; set; }
 
         public Gender Gender { get; set; }
 
-        public CourseTimes ShortCoursePbs { get; set; }
+        public CourseTimes? ShortCoursePbs { get; set; }
 
-        public CourseTimes LongCoursePbs { get; set; }
+        public CourseTimes? LongCoursePbs { get; set; }
 
-        public IEnumerable<Meet> Meets { get; set; }
+        public IEnumerable<Meet>? Meets { get; set; }
     }
 }
