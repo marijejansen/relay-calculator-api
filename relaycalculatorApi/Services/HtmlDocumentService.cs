@@ -1,9 +1,8 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using RelayCalculator.Api.Services.Interfaces;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
-using Newtonsoft.Json.Linq;
-using RelayCalculator.Api.Services.Interfaces;
 
 namespace RelayCalculator.Api.Services
 {
@@ -12,14 +11,14 @@ namespace RelayCalculator.Api.Services
         public async Task<HtmlDocument> GetHtmlPerStroke(int id, int style)
         {
             var url = $"https://www.swimrankings.net/index.php?page=athleteDetail&athleteId={id}&styleId={style}";
-            
+
             return await GetHtmlDocumentByUrl(url);
         }
 
         public async Task<HtmlDocument> GetSearchResultsPage(string firstName, string lastName)
         {
             var url = $"https://www.swimrankings.net/index.php?&internalRequest=athleteFind&athlete_clubId=-1&athlete_gender=-1&athlete_lastname={lastName}&athlete_firstname={firstName}";
-            
+
             return await GetHtmlDocumentByUrl(url);
         }
 
@@ -50,6 +49,11 @@ namespace RelayCalculator.Api.Services
         {
             url = url.Replace("&amp;", "&");
             var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:142.0) Gecko/20100101 Firefox/142.0");
+            client.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+            client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br, zstd");
+            client.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
+
             var response = await client.GetStringAsync(url);
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(response);
