@@ -33,7 +33,10 @@ jobs:
         with:
           include-prerelease: True
           dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
-          
+      - name: Setup .NET 6.0 for Tools
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'       
       - name: Set Storage Connection String as Environment Variable
         shell: bash
         run: |
